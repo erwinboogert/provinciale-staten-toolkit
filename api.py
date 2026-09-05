@@ -299,10 +299,29 @@ def haal_documenten_notubiz(meeting_id: str) -> list[dict]:
 
 IBABS_ENDPOINT = "https://wcf.ibabs.eu/api/Public.svc"
 IBABS_NS = "http://tempuri.org/"
+IBABS_BASE_NS = "http://schemas.datacontract.org/2004/07/iBabsWCFObjects.Base"
+
+
+class IbabsFout(Exception):
+    """De iBabs SOAP API gaf een Status=ERR terug (bijv. ongeldige sitename of IP-blokkade).
+
+    Een "Invalid site!" of "IPaddress X has no access to site Y!"-melding
+    betekent meestal dat dit IP-adres nog niet is whitelist bij iBabs — dit
+    geldt ook voor overduidelijk juiste sitenamen. Zie het README
+    ("Bekende beperking: iBabs vereist IP-whitelisting") voor hoe je dat
+    aanvraagt bij support@ibabs.eu.
+    """
 
 
 def ibabs_soap(methode: str, body_xml: str) -> ET.Element:
-    """Doe een SOAP-verzoek naar de iBabs API en geef het root-element terug."""
+    """Doe een SOAP-verzoek naar de iBabs API en geef het root-element terug.
+
+    De iBabs API antwoordt met HTTP 200 zelfs bij een fout (ongeldige sitename,
+    IP niet toegestaan, etc.) — de fout zit in <Status>ERR</Status> /
+    <Message> binnen de body. Zonder expliciete check hierop lijkt zo'n fout
+    identiek aan "geen resultaten gevonden". Deze functie zet die fout om in
+    een IbabsFout zodat aanroepers hem niet per ongeluk als lege lijst lezen.
+    """
     envelope = (
         '<?xml version="1.0" encoding="utf-8"?>'
         '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"'
@@ -324,7 +343,14 @@ def ibabs_soap(methode: str, body_xml: str) -> ET.Element:
         },
     )
     with urllib.request.urlopen(req, timeout=30) as r:
-        return ET.fromstring(r.read())
+        root = ET.fromstring(r.read())
+
+    status = root.find(f".//{{{IBABS_BASE_NS}}}Status")
+    if status is not None and (status.text or "").strip().upper() == "ERR":
+        bericht = root.find(f".//{{{IBABS_BASE_NS}}}Message")
+        raise IbabsFout((bericht.text or "onbekende fout").strip() if bericht is not None else "onbekende fout")
+
+    return root
 
 
 def ibabs_tekst(el: ET.Element, tag: str) -> str:
@@ -345,6 +371,9 @@ def haal_vergadertypen_ibabs(sitename: str) -> dict[str, str]:
             if mt_id:
                 result[mt_id] = mt_naam
         return result
+    except IbabsFout as e:
+        log(f"  ! iBabs-fout bij GetMeetingtypes voor '{sitename}': {e}")
+        return {}
     except Exception as e:
         log(f"  ! GetMeetingtypes mislukt: {e}")
         return {}
@@ -367,7 +396,11 @@ def haal_vergaderingen_ibabs(sitename: str, vergadertypen: dict[str, bool],
         f"<tns:EndDate>{date_to}</tns:EndDate>"
         "<tns:MetaDataOnly>false</tns:MetaDataOnly>"
     )
-    root = ibabs_soap("GetMeetingsByDateRange", body)
+    try:
+        root = ibabs_soap("GetMeetingsByDateRange", body)
+    except IbabsFout as e:
+        log(f"  ! iBabs-fout bij GetMeetingsByDateRange voor '{sitename}': {e}")
+        return []
 
     vergaderingen = []
     for meeting in root.iter(f"{{{IBABS_NS}}}iBabsMeeting"):

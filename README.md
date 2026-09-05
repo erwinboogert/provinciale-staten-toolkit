@@ -134,6 +134,28 @@ Wil je de documenten ergens anders opslaan dan `~/Documents/provinciale-staten/`
 }
 ```
 
+### Bekende beperking: iBabs vereist IP-whitelisting
+
+Regelingen met een `ibabs_naam` (in plaats van `notubiz_id` of `ori_index`)
+werken alleen als het IP-adres van de machine die het script draait vooraf is
+whitelist bij iBabs — dit geldt zelfs voor overduidelijk juiste sitenamen.
+Zonder whitelisting antwoordt de iBabs-API met een foutmelding zoals
+`Invalid site!` of `IPaddress X has no access to site Y!`, die `scraper_gr.py`
+expliciet logt (in plaats van hem stil als "0 vergaderingen gevonden" te
+melden).
+
+Om dit op te lossen: mail **support@ibabs.eu** (of via
+https://www.ibabs.com/en/contact/support/) met het **vaste** IP-adres van de
+machine waarop je structureel draait — niet een tijdelijk cloud-IP — en de
+specifieke sitenamen die je nodig hebt. Let op: de iBabs-documentatie omschrijft
+de Public WCF-service expliciet als "only accessible to iBabs customers"; het
+is dus niet gegarandeerd dat een verzoek van een onafhankelijk project wordt
+gehonoreerd zonder dat er een gemeente of GR (als iBabs-klant) achter zit.
+
+Zolang whitelisting niet geregeld is, blijven regelingen die alléén via iBabs
+publiceren (geen Notubiz- of ORI-alternatief) noodgedwongen `"geverifieerd": false`
+in `regelingen.json` — de scraper kan de koppeling niet automatisch bevestigen.
+
 ## Bron
 
 Vergaderstukken van Provinciale Staten zijn openbare overheidsinformatie. Deze tool haalt ze op via de publieke [Open Raadsinformatie API](https://openraadsinformatie.nl) (Open State Foundation) en de publieke Notubiz-API — dezelfde bronnen die de provincies zelf gebruiken om hun stukken te publiceren.
