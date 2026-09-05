@@ -64,6 +64,17 @@ def log(msg):
 
 # ── Vergaderfilter ───────────────────────────────────────────────────────────
 
+# Sommige organisaties noemen vergaderingen bij hun afkorting in plaats van de
+# volledige naam (bijv. "AB-vergadering OPENBAAR" i.p.v. "algemeen bestuur").
+# Zonder deze afkortingen als los woord (\b) te herkennen, filtert
+# wil_vergadering zulke — verder identieke — vergaderingen stil weg.
+_VERGADERTYPE_AFKORTINGEN = {
+    "algemeen bestuur": r"\bab\b",
+    "dagelijks bestuur": r"\bdb\b",
+    "portefeuillehoudersoverleg": r"\bpho\b",
+}
+
+
 def wil_vergadering(naam: str, vergadertypen: dict[str, bool],
                     skip_vervallen: bool = True) -> bool:
     """Controleer of een vergadering gedownload moet worden op basis van type."""
@@ -71,7 +82,12 @@ def wil_vergadering(naam: str, vergadertypen: dict[str, bool],
     if skip_vervallen and "vervallen" in naam_lower:
         return False
     for sleutel, actief in vergadertypen.items():
-        if actief and sleutel in naam_lower:
+        if not actief:
+            continue
+        if sleutel in naam_lower:
+            return True
+        afkorting = _VERGADERTYPE_AFKORTINGEN.get(sleutel)
+        if afkorting and re.search(afkorting, naam_lower):
             return True
     return False
 
