@@ -10,7 +10,7 @@ Dit is een afgeslankte, standalone afsplitsing van de bredere [lokaalbestuur-too
 
 **Gemeenschappelijke regelingen** (`scraper_gr.py`) — 166 samenwerkingsverbanden tussen gemeenten, verdeeld over alle 12 provincies: omgevingsdiensten, GGD'en, sociale werkvoorzieningsschappen, jeugdzorgregio's, vervoersautoriteiten, afvalinzameling, belastingsamenwerkingen, archieven en meer. Veiligheidsregio's en waterschappen zijn geen onderdeel van deze catalogus (aparte organen met een eigen wettelijk kader). Welke GRs bij een provincie horen wordt bepaald via de deelnemende gemeenten en/of een expliciete provincie-koppeling in `bronnen/regelingen.json`.
 
-**Belangrijk voorbehoud over de GR-catalogus:** 9 regelingen (de oorspronkelijke Rotterdam/Zeeland/Foodvalley-selectie) zijn **geverifieerd** — met een echte, geteste Notubiz-koppeling. De overige ~157 zijn samengesteld via AI-onderzoek op basis van CVDR/overheid.nl-vindplaatsen en organisatiewebsites, **zonder dat de brontekst zelf kon worden ingezien** tijdens dat onderzoek. Namen, deelnemende gemeenten en vooral eventuele bronvermeldingen bij die regelingen zijn dus niet geverifieerd: controleer een regeling voordat je erop vertrouwt, en gebruik `--zoek <naam>` om een Notubiz-ID zelf te bevestigen. Zie het `_opmerking`-veld in `regelingen.json` en het `geverifieerd`-veld per regeling.
+**Belangrijk voorbehoud over de GR-catalogus:** de volledige catalogus is in september 2026 provincie voor provincie handmatig gecontroleerd tegen primaire bronnen (CVDR, organisaties.overheid.nl, organisatiewebsites). 60 van de 163 regelingen zijn **geverifieerd** — bevestigd met een echte, geteste Notubiz- of iBabs-koppeling, of door de vergaderstukkenpagina van de organisatie zelf te lezen. De overige ~103 zijn oorspronkelijk samengesteld via AI-onderzoek en konden nog geen bevestigd portaal krijgen: soms omdat er geen enkel openbaar portaal vindbaar was, soms omdat de stukken alleen verspreid over de iBabs-sites van individuele deelnemende gemeenten staan (niet bruikbaar voor deze scraper), en soms omdat een portaal wél bevestigd bestaat maar de iBabs-whitelisting dit (nog) blokkeert (zie hieronder). Voor die ~103 geldt: **bezoek zelf het `website`-veld van de regeling en zoek daar handmatig naar de vergaderstukken** — probeer je het via `scraper_gr.py <naam>` te draaien, dan wijst het script je daar ook expliciet naar. Zie het `_opmerking`-veld in `regelingen.json` en het `geverifieerd`-veld per regeling voor de details.
 
 ## Installatie
 
@@ -46,6 +46,8 @@ python3 scraper_gr.py --zoek jeugdhulp           # zoek een GR-organisatie in No
 ```
 
 Documenten komen terecht in `~/Documents/provinciale-staten/provincies/<naam>/` en `~/Documents/provinciale-staten/regelingen/<naam>/`.
+
+Staat een GR niet op `"geverifieerd": true` in `regelingen.json`? Dan heeft `scraper_gr.py` geen automatische bron voor die regeling en stopt hij met een foutmelding die naar het `website`-veld verwijst. Dat is geen bug: bezoek in dat geval die website zelf en zoek daar handmatig naar de vergaderstukken.
 
 ## Downloaden én analyseren via een AI
 
