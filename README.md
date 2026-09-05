@@ -47,6 +47,79 @@ python3 scraper_gr.py --zoek jeugdhulp           # zoek een GR-organisatie in No
 
 Documenten komen terecht in `~/Documents/provinciale-staten/provincies/<naam>/` en `~/Documents/provinciale-staten/regelingen/<naam>/`.
 
+## Downloaden én analyseren via een AI
+
+Deze toolkit regelt het downloaden; wat je daarna met de stukken doet, is een
+tweede, losstaand proces waarvoor je zelf een AI kiest.
+
+### Downloaden: vraag het in gewone taal
+
+Je hoeft de commando's hierboven niet zelf te onthouden of te typen. Open deze
+map met een AI-assistent die bestanden kan lezen en terminal-commando's kan
+uitvoeren — zoals [Claude Code](https://claude.ai/code) — en stel je vraag
+gewoon in normale taal, bijvoorbeeld:
+
+- "Download de Statenstukken van Zuid-Holland van het afgelopen jaar."
+- "Welke gemeenschappelijke regelingen horen bij Gelderland?"
+- "Zoek uit of GGD Hart voor Brabant via Notubiz publiceert, en download de
+  stukken als dat kan."
+
+De AI vertaalt dit zelf naar de juiste `scraper_provincie.py`- en
+`scraper_gr.py`-commando's, controleert de uitvoer, en legt uit wat er
+gevonden is. Dat is vooral nuttig bij de GR-catalogus (zie het voorbehoud
+hierboven): je kunt de AI eerst een regeling laten verifiëren — bijvoorbeeld
+met `--zoek <naam>` en een proefdraai via `--droog` — voordat je hem
+daadwerkelijk downloadt.
+
+### Doorzoeken: een tweede, apart proces
+
+Downloaden is niet hetzelfde als doorzoeken. Deze toolkit levert de
+vergaderstukken af als PDF's in een mappenstructuur
+(`~/Documents/provinciale-staten/...`) en bevat zelf geen zoekindex of
+analysefunctie. Voor het daadwerkelijk doorzoeken en analyseren van de inhoud
+kies je een AI die met documenten kan werken — dat kan, maar hoeft niet,
+dezelfde AI te zijn waarmee je hebt gedownload:
+
+- **Dezelfde terminal-AI (bijv. Claude Code)** — omdat die al toegang heeft
+  tot je bestandssysteem, kun je in hetzelfde gesprek doorgaan en vragen
+  stellen over de zojuist gedownloade map, bijvoorbeeld: "Wat staat er in de
+  laatste vergaderstukken van Omgevingsdienst Utrecht over stikstof?" De AI
+  leest de PDF's dan rechtstreeks van schijf, zonder dat je iets hoeft te
+  uploaden.
+- **NotebookLM (Google)** — upload de gedownloade PDF's (of de hele map) als
+  bronnen in een notebook. NotebookLM beantwoordt vragen uitsluitend op basis
+  van die documenten en geeft per antwoord een citaat met verwijzing naar de
+  bronpagina, wat nuttig is als herleidbaarheid belangrijk is.
+- **Claude via de webapp of Cowork (claude.ai)** — upload de PDF's in een
+  project of gesprek en stel je vragen daar. Handig als je niet vanaf de
+  terminal wilt werken, of als je de analyse wilt delen met anderen binnen
+  een team.
+- **ChatGPT (OpenAI)** — upload de PDF's rechtstreeks in een gesprek, of, met
+  een betaald abonnement, in een "Project" zodat de bestanden voor meerdere
+  gesprekken beschikbaar blijven. ChatGPT leest de inhoud binnen dat gesprek,
+  maar geeft — anders dan NotebookLM — niet standaard een citaat met
+  paginaverwijzing per antwoord; vraag daar expliciet om als herleidbaarheid
+  belangrijk is. Bij een groot aantal documenten werkt het prettiger om per
+  dossier of onderwerp een apart gesprek of project te openen dan alles in
+  één keer te uploaden.
+
+In alle gevallen geldt: hoe specifieker de vraag, hoe bruikbaarder het
+antwoord. Concrete voorbeelden, aansluitend bij dossiers die op het moment
+van schrijven in deze drie provincies spelen:
+
+- **Groningen** — "Welke argumenten gebruiken Provinciale Staten in hun
+  moties tegen de komst van een kerncentrale bij de Eemshaven, en wat is de
+  reactie van Gedeputeerde Staten daarop?"
+- **Zeeland** — "Welke partijen stemden vóór en tegen de motie tegen
+  kerncentrales in de Paulinapolder, en welke alternatieve locaties worden
+  in de vergaderstukken genoemd?"
+- **Utrecht** — "Wat betekent de vernietiging van het Tracébesluit Ring
+  Utrecht (A27/A12) voor de woningbouwplannen in de regio, volgens de meest
+  recente Statenstukken?"
+
+Dit soort vragen werkt beter dan "vat dit samen": ze vragen om een concreet
+feit, verband of afweging dat in de brontekst te herleiden is.
+
 ## Configuratie
 
 De catalogus van provincies staat in `bronnen/provincies.json`: naam, brontype (ORI-index of Notubiz-ID), gemeentenlijst en eventueel afwijkende vergadertypen.
