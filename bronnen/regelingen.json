@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 68 van de 162 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 103 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. NABRANDER (na afronding van de provinciecontrole): een bug in wil_vergadering() (api.py) filterde vergaderingen stil weg als de organisatie afkortingen gebruikte (\"AB-vergadering\" i.p.v. \"algemeen bestuur\") — inmiddels gefixt met woordgrens-matching op ab/db/pho. Bij het testen daarvan bleek dat van de 9 oorspronkelijke, nooit door deze controle aangeraakte \"geverifieerd\"-regelingen er 3 alsnog fout bleken: hoeksche-waard is verwijderd (opgeheven per 1-1-2019, gefuseerd tot 1 gemeente, geen samenwerking meer), en orionis-walcheren/meerinzicht hadden een notubiz_id dat al jaren 0 vergaderingen teruggeeft (Orionis publiceert alleen op aanvraag per mail; voor Meerinzicht is geen alternatief portaal gevonden) — beide teruggezet naar niet-geverifieerd. Les: \"geverifieerd\" op enig moment betekent niet blijvend correct; periodieke herverificatie blijft nodig.",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 69 van de 162 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 103 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. NABRANDER (na afronding van de provinciecontrole): een bug in wil_vergadering() (api.py) filterde vergaderingen stil weg als de organisatie afkortingen gebruikte (\"AB-vergadering\" i.p.v. \"algemeen bestuur\") — inmiddels gefixt met woordgrens-matching op ab/db/pho. Bij het testen daarvan bleek dat van de 9 oorspronkelijke, nooit door deze controle aangeraakte \"geverifieerd\"-regelingen er 3 alsnog fout bleken: hoeksche-waard is verwijderd (opgeheven per 1-1-2019, gefuseerd tot 1 gemeente, geen samenwerking meer), en orionis-walcheren/meerinzicht hadden een notubiz_id dat al jaren 0 vergaderingen teruggeeft (Orionis publiceert alleen op aanvraag per mail; voor Meerinzicht is geen alternatief portaal gevonden) — beide teruggezet naar niet-geverifieerd. Les: \"geverifieerd\" op enig moment betekent niet blijvend correct; periodieke herverificatie blijft nodig.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -1134,18 +1134,20 @@
     "bron_register": "haarlemmermeer.bestuurlijkeinformatie.nl"
   },
   "wnk-noord-kennemerland": {
-    "naam": "Gemeenschappelijke Regeling Werkvoorzieningsschap Noord-Kennemerland (WNK)",
+    "naam": "Gemeenschappelijke Regeling Zaffier (per 2022 fusie van Werkvoorzieningsschap Noord-Kennemerland/WNK, Halte Werk en delen van werkorganisatie BUCH)",
     "gemeenten": [
       "alkmaar",
       "bergen-nh",
       "castricum",
       "dijk-en-waard",
-      "heiloo"
+      "heiloo",
+      "uitgeest"
     ],
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "almanak.overheid.nl/24961445"
+    "bron_register": "almanak.overheid.nl/24961445",
+    "website": "https://www.zaffier.nl/"
   },
   "gesubsidieerde-arbeid-kop-van-noord-holland": {
     "naam": "Gemeenschappelijke regeling Gesubsidieerde arbeid Kop van Noord-Holland",
@@ -1896,7 +1898,8 @@
       "noord-brabant"
     ],
     "website": "https://www.omwb.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR622562"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR622562",
+    "ibabs_naam": "omwb"
   },
   "ggd-hart-voor-brabant": {
     "naam": "Gemeenschappelijke regeling GGD Hart voor Brabant",
@@ -2087,7 +2090,8 @@
       "noord-brabant"
     ],
     "website": "https://bs-ob.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR736429"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR736429",
+    "ibabs_naam": "bsob"
   },
   "belastingsamenwerking-west-brabant": {
     "naam": "Gemeenschappelijke Regeling Belastingsamenwerking West-Brabant (BWB)",
@@ -2788,8 +2792,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.ecal.nu/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439993/2"
+    "website": "https://www.ecal.nu/over-ons/bestuur/notulen-ab",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439993/2",
+    "geverifieerd": true
   },
   "regionaal-archief-nijmegen": {
     "naam": "Gemeenschappelijke regeling Regionaal Archief Nijmegen",
