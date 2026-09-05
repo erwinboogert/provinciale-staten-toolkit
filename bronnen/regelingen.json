@@ -1,0 +1,3036 @@
+{
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: alleen regelingen met 'geverifieerd': true zijn met een echte download getest. De overige regelingen zijn via AI-onderzoek (webzoekopdrachten) samengesteld uit CVDR/overheid.nl-vindplaatsen en organisatiewebsites, ZONDER dat de brontekst zelf kon worden ingezien (de onderzoeksomgeving blokkeerde directe paginatoegang). Namen, deelnemende gemeenten en vooral eventuele notubiz_id/ibabs_naam-velden bij die regelingen zijn dus niet geverifieerd en verdienen een steekproefcontrole voor je erop vertrouwt. Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen.",
+  "_vergadertypen_standaard": [
+    "algemeen bestuur",
+    "dagelijks bestuur",
+    "portefeuillehoudersoverleg"
+  ],
+  "nieuw-reijerwaard": {
+    "naam": "Gemeenschappelijke Regeling Nieuw Reijerwaard",
+    "geverifieerd": true,
+    "gemeenten": [
+      "barendrecht",
+      "ridderkerk",
+      "rotterdam"
+    ],
+    "notubiz_id": 1659
+  },
+  "ggd-rotterdam-rijnmond": {
+    "naam": "GGD Rotterdam-Rijnmond",
+    "geverifieerd": true,
+    "gemeenten": [
+      "albrandswaard",
+      "barendrecht",
+      "capelle-aan-den-ijssel",
+      "krimpen-aan-den-ijssel",
+      "lansingerland",
+      "maassluis",
+      "ridderkerk",
+      "rotterdam",
+      "schiedam",
+      "vlaardingen"
+    ],
+    "notubiz_id": 4049
+  },
+  "jeugdzorg-rijnmond": {
+    "naam": "Gemeenschappelijke Regeling Jeugdzorg Rijnmond",
+    "geverifieerd": true,
+    "gemeenten": [
+      "albrandswaard",
+      "barendrecht",
+      "capelle-aan-den-ijssel",
+      "krimpen-aan-den-ijssel",
+      "lansingerland",
+      "maassluis",
+      "ridderkerk",
+      "rotterdam",
+      "schiedam",
+      "vlaardingen"
+    ],
+    "notubiz_id": 4073
+  },
+  "mrdh": {
+    "naam": "Metropoolregio Rotterdam Den Haag",
+    "geverifieerd": true,
+    "gemeenten": [
+      "albrandswaard",
+      "barendrecht",
+      "capelle-aan-den-ijssel",
+      "delft",
+      "den-haag",
+      "krimpen-aan-den-ijssel",
+      "lansingerland",
+      "leidschendam-voorburg",
+      "maassluis",
+      "midden-delfland",
+      "nissewaard",
+      "pijnacker-nootdorp",
+      "ridderkerk",
+      "rijswijk",
+      "rotterdam",
+      "schiedam",
+      "vlaardingen",
+      "voorne-aan-zee",
+      "wassenaar",
+      "westland",
+      "zoetermeer"
+    ],
+    "notubiz_id": 3341
+  },
+  "hoeksche-waard": {
+    "naam": "Samenwerkingsorgaan Hoeksche Waard",
+    "geverifieerd": true,
+    "gemeenten": [
+      "hoeksche-waard"
+    ],
+    "notubiz_id": 937
+  },
+  "meerinzicht": {
+    "naam": "Samenwerkingsverband Meerinzicht",
+    "geverifieerd": true,
+    "gemeenten": [
+      "apeldoorn",
+      "epe",
+      "hattem",
+      "heerde"
+    ],
+    "notubiz_id": 1982
+  },
+  "ggd-zeeland": {
+    "naam": "Gemeenschappelijke Regeling GGD Zeeland",
+    "geverifieerd": true,
+    "gemeenten": [
+      "borsele",
+      "goes",
+      "hulst",
+      "kapelle",
+      "middelburg",
+      "noord-beveland",
+      "reimerswaal",
+      "schouwen-duiveland",
+      "sluis",
+      "terneuzen",
+      "tholen",
+      "veere",
+      "vlissingen"
+    ],
+    "notubiz_id": 3816
+  },
+  "orionis-walcheren": {
+    "naam": "Orionis Walcheren",
+    "geverifieerd": true,
+    "gemeenten": [
+      "middelburg",
+      "veere",
+      "vlissingen"
+    ],
+    "notubiz_id": 2993
+  },
+  "regio-foodvalley": {
+    "naam": "Gemeenschappelijke Regeling Regio Foodvalley",
+    "geverifieerd": true,
+    "gemeenten": [
+      "barneveld",
+      "ede",
+      "nijkerk",
+      "renswoude",
+      "rhenen",
+      "scherpenzeel",
+      "veenendaal",
+      "wageningen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "notubiz_id": 3973,
+    "website": "https://www.regiofoodvalley.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR107741"
+  },
+  "omgevingsdienst-groningen": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Groningen",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "website": "https://www.od-groningen.nl/over-ons/leden-bestuur-2/vergaderstukken/vergaderstukken-algemeen-bestuur",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR305146"
+  },
+  "publieke-gezondheid-zorg-groningen": {
+    "naam": "Gemeenschappelijke regeling Publieke Gezondheid & Zorg Groningen (GGD Groningen)",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR327602/1"
+  },
+  "havenschap-groningen-seaports": {
+    "naam": "Gemeenschappelijke Regeling Havenschap Groningen Seaports",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "website": "https://www.groningen-seaports.com",
+    "bron_register": "https://organisaties.overheid.nl/24966326/Gemeenschappelijke_Regeling_Havenschap_Groningen_Seaports/"
+  },
+  "wedeka-bedrijven": {
+    "naam": "Gemeenschappelijke regeling Wedeka Bedrijven",
+    "gemeenten": [
+      "borger-odoorn",
+      "midden-groningen",
+      "stadskanaal",
+      "veendam",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR676213/1"
+  },
+  "afvalbeheer-regio-centraal-groningen": {
+    "naam": "Gemeenschappelijke regeling Afvalbeheer Regio Centraal Groningen (ARCG)",
+    "gemeenten": [
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "westerkwartier"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR409753/1"
+  },
+  "regio-groningen-assen": {
+    "naam": "Gemeenschappelijke regeling Regio Groningen-Assen",
+    "gemeenten": [
+      "assen",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "noordenveld",
+      "tynaarlo",
+      "westerkwartier"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "website": "https://regiogroningenassen.nl",
+    "bron_register": "https://organisaties.overheid.nl/samenwerkingen"
+  },
+  "publiek-vervoer-groningen-drenthe": {
+    "naam": "Gemeenschappelijke Regeling Samenwerkingsorganisatie Publiek Vervoer Groningen Drenthe",
+    "gemeenten": [
+      "groningen"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR626479"
+  },
+  "jeugdregio-groningen": {
+    "naam": "Centrumregeling Jeugdregio Groningen",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "gemeenteraad.groningen.nl-documenten"
+  },
+  "beschermd-wonen-groningen": {
+    "naam": "Centrumregeling beschermd wonen, opvang en inloopvoorziening GGz Groningen 2024",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723159/1"
+  },
+  "veilig-thuis-groningen": {
+    "naam": "Gemeenschappelijke Regeling voor Veilig Thuis Groningen",
+    "gemeenten": [
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-groningen",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
+    ],
+    "provincies": [
+      "groningen"
+    ],
+    "bron_register": "gemeente Westerkwartier besluitenlijsten"
+  },
+  "fumo": {
+    "naam": "Gemeenschappelijke regeling Fryske Utfieringstsjinst Miljeu en Omjouwing (FUMO)",
+    "gemeenten": [
+      "achtkarspelen",
+      "ameland",
+      "dantumadiel",
+      "de-fryske-marren",
+      "harlingen",
+      "heerenveen",
+      "leeuwarden",
+      "noardeast-fryslan",
+      "ooststellingwerf",
+      "opsterland",
+      "schiermonnikoog",
+      "smallingerland",
+      "sudwest-fryslan",
+      "terschelling",
+      "tytsjerksteradiel",
+      "vlieland",
+      "waadhoeke",
+      "weststellingwerf"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "website": "https://www.fumo.nl/vergaderstukken",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR338805"
+  },
+  "marrekrite": {
+    "naam": "Gemeenschappelijke Regeling Recreatieschap voor het Friese water en land De Marrekrite",
+    "gemeenten": [
+      "achtkarspelen",
+      "dantumadiel",
+      "de-fryske-marren",
+      "harlingen",
+      "heerenveen",
+      "leeuwarden",
+      "noardeast-fryslan",
+      "opsterland",
+      "smallingerland",
+      "sudwest-fryslan",
+      "terschelling",
+      "tytsjerksteradiel",
+      "waadhoeke"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "website": "https://www.marrekrite.frl/marrekrite/over-ons/documenten",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR333508/1"
+  },
+  "werkvoorzieningschap-fryslan-west": {
+    "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Fryslân-West 2023",
+    "gemeenten": [
+      "de-fryske-marren",
+      "harlingen",
+      "sudwest-fryslan",
+      "waadhoeke"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR690787"
+  },
+  "sw-fryslan": {
+    "naam": "Gemeenschappelijke Regeling Sociale Werkvoorziening 'Fryslân'",
+    "gemeenten": [
+      "achtkarspelen",
+      "heerenveen",
+      "leeuwarden",
+      "ooststellingwerf",
+      "opsterland",
+      "smallingerland",
+      "tytsjerksteradiel",
+      "weststellingwerf"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR444457"
+  },
+  "sozawe-noardwest-fryslan": {
+    "naam": "Gemeenschappelijke regeling Dienst Sociale Zaken en Werkgelegenheid Noardwest Fryslân 2022",
+    "gemeenten": [
+      "harlingen",
+      "terschelling",
+      "vlieland",
+      "waadhoeke"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR672217/2"
+  },
+  "sociaal-domein-fryslan": {
+    "naam": "Centrumregeling samenwerking Sociaal Domein Fryslân 2022",
+    "gemeenten": [
+      "achtkarspelen",
+      "ameland",
+      "dantumadiel",
+      "de-fryske-marren",
+      "harlingen",
+      "heerenveen",
+      "leeuwarden",
+      "noardeast-fryslan",
+      "ooststellingwerf",
+      "opsterland",
+      "schiermonnikoog",
+      "smallingerland",
+      "sudwest-fryslan",
+      "terschelling",
+      "tytsjerksteradiel",
+      "vlieland",
+      "waadhoeke",
+      "weststellingwerf"
+    ],
+    "provincies": [
+      "fryslan"
+    ],
+    "bron_register": "sudwestfryslan.nl-context"
+  },
+  "omgevingsdienst-drenthe": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Drenthe (voorheen RUD Drenthe)",
+    "gemeenten": [
+      "aa-en-hunze",
+      "assen",
+      "borger-odoorn",
+      "coevorden",
+      "de-wolden",
+      "emmen",
+      "hoogeveen",
+      "meppel",
+      "midden-drenthe",
+      "noordenveld",
+      "tynaarlo",
+      "westerveld"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "website": "https://oddrenthe.nl/publicaties/algemeen-bestuur/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR724781/1"
+  },
+  "ggd-drenthe": {
+    "naam": "Gemeenschappelijke Regeling GGD Drenthe",
+    "gemeenten": [
+      "aa-en-hunze",
+      "assen",
+      "borger-odoorn",
+      "coevorden",
+      "de-wolden",
+      "emmen",
+      "hoogeveen",
+      "meppel",
+      "midden-drenthe",
+      "noordenveld",
+      "tynaarlo",
+      "westerveld"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "website": "https://www.ggddrenthe.nl/over-ons/directie-bestuur/bestuursvergaderingen/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR477546/1"
+  },
+  "werkplein-drentsche-aa": {
+    "naam": "Gemeenschappelijke regeling Werkplein Drentsche Aa 2019",
+    "gemeenten": [
+      "aa-en-hunze",
+      "assen",
+      "tynaarlo"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "website": "https://www.wpda.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR613353"
+  },
+  "stark": {
+    "naam": "Gemeenschappelijke Regeling Stark",
+    "gemeenten": [
+      "de-wolden",
+      "hoogeveen",
+      "midden-drenthe"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR613168"
+  },
+  "emco-groep": {
+    "naam": "Gemeenschappelijke regeling EMCO-groep",
+    "gemeenten": [
+      "borger-odoorn",
+      "coevorden",
+      "emmen"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR477545"
+  },
+  "reestmond": {
+    "naam": "Gemeenschappelijke regeling Reestmond",
+    "gemeenten": [
+      "de-wolden",
+      "meppel",
+      "westerveld"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR484354/2"
+  },
+  "noordmidden-drentse-samenwerking": {
+    "naam": "Gemeenschappelijke regeling Noordmidden-Drentse samenwerking (NMD)",
+    "gemeenten": [
+      "aa-en-hunze",
+      "assen",
+      "midden-drenthe",
+      "noordenveld",
+      "tynaarlo"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR674270"
+  },
+  "gemeentelijke-kredietbank-drenthe": {
+    "naam": "Gemeenschappelijke Regeling Gemeentelijke Kredietbank Drenthe",
+    "gemeenten": [
+      "assen",
+      "hoogeveen",
+      "meppel"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "bron_register": "https://organisaties.overheid.nl/27223376/Gemeenschappelijke_Regeling_Gemeentelijke_Kredietbank_Drenthe"
+  },
+  "drents-archief": {
+    "naam": "Gemeenschappelijke regeling Regionaal Historisch Centrum Drents Archief",
+    "gemeenten": [
+      "assen",
+      "emmen",
+      "midden-drenthe",
+      "tynaarlo",
+      "westerveld"
+    ],
+    "provincies": [
+      "drenthe"
+    ],
+    "website": "https://www.drentsarchief.nl",
+    "bron_register": "rijksoverheid.nl documenten wijzigingen gemeenschappelijke regelingen"
+  },
+  "omgevingsdienst-ijsselland": {
+    "naam": "Omgevingsdienst IJsselland",
+    "gemeenten": [
+      "dalfsen",
+      "deventer",
+      "hardenberg",
+      "kampen",
+      "olst-wijhe",
+      "ommen",
+      "raalte",
+      "staphorst",
+      "steenwijkerland",
+      "zwartewaterland",
+      "zwolle"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "website": "https://www.odijsselland.nl/vergaderstukken/",
+    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen"
+  },
+  "omgevingsdienst-twente": {
+    "naam": "Omgevingsdienst Twente",
+    "gemeenten": [
+      "almelo",
+      "borne",
+      "dinkelland",
+      "enschede",
+      "haaksbergen",
+      "hellendoorn",
+      "hengelo",
+      "hof-van-twente",
+      "losser",
+      "oldenzaal",
+      "rijssen-holten",
+      "tubbergen",
+      "twenterand",
+      "wierden"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "website": "https://www.odtwente.nl/",
+    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen"
+  },
+  "samentwente": {
+    "naam": "SamenTwente (GGD Twente, OZJT, Veilig Thuis Twente) — rechtsopvolger van Regio Twente",
+    "gemeenten": [
+      "almelo",
+      "borne",
+      "dinkelland",
+      "enschede",
+      "haaksbergen",
+      "hellendoorn",
+      "hengelo",
+      "hof-van-twente",
+      "losser",
+      "oldenzaal",
+      "rijssen-holten",
+      "tubbergen",
+      "twenterand",
+      "wierden"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "website": "https://samentwente.nl/",
+    "bron_register": "https://organisaties.overheid.nl/28233840/Regeling_Regio_Twente/"
+  },
+  "ggd-ijsselland": {
+    "naam": "GGD IJsselland",
+    "gemeenten": [
+      "dalfsen",
+      "deventer",
+      "hardenberg",
+      "kampen",
+      "olst-wijhe",
+      "ommen",
+      "raalte",
+      "staphorst",
+      "steenwijkerland",
+      "zwartewaterland",
+      "zwolle"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "website": "https://www.ggdijsselland.nl/gemeenten/vergaderstukken/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR26093"
+  },
+  "ssc-ons": {
+    "naam": "Bedrijfsvoeringsorganisatie Shared Service Centrum ONS (SSC ONS)",
+    "gemeenten": [
+      "dalfsen",
+      "kampen",
+      "ommen",
+      "zwartewaterland",
+      "zwolle"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "bron_register": "https://destaatvan.overijssel.nl/jaarverslag-2024"
+  },
+  "gblt": {
+    "naam": "GBLT (Gemeenschappelijk Belastingkantoor Lococensus-Tricijn)",
+    "gemeenten": [
+      "dalfsen",
+      "dronten",
+      "nijkerk",
+      "ommen",
+      "zwolle"
+    ],
+    "provincies": [
+      "gelderland",
+      "overijssel"
+    ],
+    "website": "https://gblt.nl/besluiten-beleid",
+    "bron_register": "https://organisaties.overheid.nl/28266774/GBLT"
+  },
+  "regionaal-bedrijventerrein-twente": {
+    "naam": "Regionaal Bedrijventerrein Twente (RBT)",
+    "gemeenten": [
+      "almelo"
+    ],
+    "provincies": [
+      "overijssel"
+    ],
+    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025"
+  },
+  "ggd-flevoland": {
+    "naam": "GGD Flevoland",
+    "gemeenten": [
+      "almere",
+      "dronten",
+      "lelystad",
+      "noordoostpolder",
+      "urk",
+      "zeewolde"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "website": "https://www.ggdflevoland.nl/over-ggd/bestuur-en-directie/publicaties-ggd-flevoland/",
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+  },
+  "omgevingsdienst-flevoland-gooi-en-vechtstreek": {
+    "naam": "Omgevingsdienst Flevoland & Gooi en Vechtstreek (OFGV)",
+    "gemeenten": [
+      "almere",
+      "blaricum",
+      "dronten",
+      "gooise-meren",
+      "hilversum",
+      "huizen",
+      "laren",
+      "lelystad",
+      "noordoostpolder",
+      "urk",
+      "wijdemeren",
+      "zeewolde"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "website": "https://www.ofgv.nl/overons/bestuur/",
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+  },
+  "werkvoorzieningschap-ijsselmeergroep": {
+    "naam": "Werkvoorzieningschap IJsselmeergroep",
+    "gemeenten": [
+      "lelystad",
+      "noordoostpolder",
+      "urk",
+      "zeewolde"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+  },
+  "centrumregeling-sociaal-domein-flevoland": {
+    "naam": "Centrumregeling Sociaal Domein Flevoland",
+    "gemeenten": [
+      "almere",
+      "dronten",
+      "lelystad",
+      "noordoostpolder",
+      "urk"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+  },
+  "regionaal-historisch-centrum-flevoland": {
+    "naam": "Regionaal Historisch Centrum Flevoland (Erfgoedcentrum Nieuw Land)",
+    "gemeenten": [
+      "dronten",
+      "lelystad",
+      "noordoostpolder",
+      "urk",
+      "zeewolde"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+  },
+  "omgevingsdienst-rivierenland": {
+    "naam": "Omgevingsdienst Rivierenland",
+    "gemeenten": [
+      "buren",
+      "culemborg",
+      "maasdriel",
+      "neder-betuwe",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.odrivierenland.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR607926/2"
+  },
+  "omgevingsdienst-regio-nijmegen": {
+    "naam": "Omgevingsdienst Regio Nijmegen",
+    "gemeenten": [
+      "berg-en-dal",
+      "beuningen",
+      "druten",
+      "heumen",
+      "nijmegen",
+      "wijchen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "bron_register": "https://decentrale.regelgeving.overheid.nl/cvdr/xhtmloutput/Actueel/Gelderland/CVDR607921.html"
+  },
+  "omgevingsdienst-utrecht": {
+    "naam": "Omgevingsdienst Utrecht (ODU)",
+    "gemeenten": [
+      "amersfoort",
+      "baarn",
+      "bunnik",
+      "bunschoten",
+      "de-bilt",
+      "de-ronde-venen",
+      "eemnes",
+      "houten",
+      "ijsselstein",
+      "leusden",
+      "lopik",
+      "montfoort",
+      "nieuwegein",
+      "oudewater",
+      "renswoude",
+      "rhenen",
+      "soest",
+      "stichtse-vecht",
+      "utrecht",
+      "utrechtse-heuvelrug",
+      "veenendaal",
+      "vijfheerenlanden",
+      "wijk-bij-duurstede",
+      "woerden",
+      "woudenberg",
+      "zeist"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://www.odu.nl/",
+    "bron_register": "stateninformatie.provincie-utrecht.nl (Statenvoorstel fusie ODRU/RUD Utrecht tot ODU, 2025)"
+  },
+  "ggd-regio-utrecht": {
+    "naam": "Gemeenschappelijke regeling Gemeentelijke Gezondheidsdienst regio Utrecht (GGDrU)",
+    "gemeenten": [
+      "amersfoort",
+      "baarn",
+      "bunnik",
+      "bunschoten",
+      "de-bilt",
+      "de-ronde-venen",
+      "eemnes",
+      "houten",
+      "ijsselstein",
+      "leusden",
+      "lopik",
+      "montfoort",
+      "nieuwegein",
+      "oudewater",
+      "renswoude",
+      "rhenen",
+      "soest",
+      "stichtse-vecht",
+      "utrecht",
+      "utrechtse-heuvelrug",
+      "veenendaal",
+      "vijfheerenlanden",
+      "wijk-bij-duurstede",
+      "woerden",
+      "woudenberg",
+      "zeist"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://ggdru.nl/",
+    "bron_register": "CVDR622720"
+  },
+  "rdwi": {
+    "naam": "Regionale Dienst Werk en Inkomen Kromme Rijn Heuvelrug (RDWI)",
+    "gemeenten": [
+      "bunnik",
+      "de-bilt",
+      "utrechtse-heuvelrug",
+      "wijk-bij-duurstede",
+      "zeist"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "bron_register": "CVDR628622 / CVDR387507"
+  },
+  "wil-lekstroom": {
+    "naam": "Gemeenschappelijke regeling Werk en Inkomen Lekstroom (WIL)",
+    "gemeenten": [
+      "houten",
+      "ijsselstein",
+      "lopik",
+      "nieuwegein"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://www.wil-lekstroom.nl/",
+    "bron_register": "CVDR632182"
+  },
+  "avu": {
+    "naam": "Gemeenschappelijke Regeling Afvalverwijdering Utrecht (AVU)",
+    "gemeenten": [
+      "amersfoort",
+      "baarn",
+      "bunnik",
+      "bunschoten",
+      "de-bilt",
+      "de-ronde-venen",
+      "houten",
+      "ijsselstein",
+      "leusden",
+      "lopik",
+      "montfoort",
+      "nieuwegein",
+      "oudewater",
+      "renswoude",
+      "rhenen",
+      "soest",
+      "stichtse-vecht",
+      "utrecht",
+      "utrechtse-heuvelrug",
+      "veenendaal",
+      "vijfheerenlanden",
+      "wijk-bij-duurstede",
+      "woerden",
+      "woudenberg",
+      "zeist"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://www.avu.nl/",
+    "bron_register": "CVDR58817"
+  },
+  "bghu": {
+    "naam": "Gemeenschappelijke regeling Belastingsamenwerking gemeenten en hoogheemraadschap Utrecht (BghU)",
+    "gemeenten": [
+      "bunnik",
+      "de-bilt",
+      "houten",
+      "lopik",
+      "nieuwegein",
+      "utrecht",
+      "utrechtse-heuvelrug",
+      "zeist"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://www.bghu.nl/",
+    "bron_register": "CVDR245654"
+  },
+  "razu": {
+    "naam": "Regionaal Archief Zuid-Utrecht (RAZU)",
+    "gemeenten": [
+      "bunnik",
+      "houten",
+      "rhenen",
+      "utrechtse-heuvelrug",
+      "vijfheerenlanden",
+      "wijk-bij-duurstede"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "website": "https://www.razu.nl/",
+    "bron_register": "organisaties.overheid.nl/28361754"
+  },
+  "recreatieschap-stichtse-groenlanden": {
+    "naam": "Gemeenschappelijke regeling Recreatieschap Stichtse Groenlanden",
+    "gemeenten": [
+      "de-bilt",
+      "de-ronde-venen",
+      "houten",
+      "ijsselstein",
+      "lopik",
+      "nieuwegein",
+      "stichtse-vecht",
+      "utrecht",
+      "woerden"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "bron_register": "CVDR689701"
+  },
+  "plassenschap-loosdrecht": {
+    "naam": "Gemeenschappelijke regeling Plassenschap Loosdrecht e.o.",
+    "gemeenten": [
+      "stichtse-vecht",
+      "wijdemeren"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "bron_register": "CVDR629807"
+  },
+  "regionale-backoffice-lekstroom": {
+    "naam": "Regionale Backoffice Lekstroom (RBL, uitvoering Jeugdwet/Wmo)",
+    "gemeenten": [
+      "houten",
+      "ijsselstein",
+      "lopik",
+      "nieuwegein",
+      "vijfheerenlanden"
+    ],
+    "provincies": [
+      "utrecht"
+    ],
+    "bron_register": "houten.bestuurlijkeinformatie.nl"
+  },
+  "od-noord-holland-noord": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Noord-Holland Noord (OD NHN)",
+    "gemeenten": [
+      "alkmaar",
+      "bergen-nh",
+      "castricum",
+      "den-helder",
+      "dijk-en-waard",
+      "drechterland",
+      "enkhuizen",
+      "heiloo",
+      "hollands-kroon",
+      "hoorn",
+      "koggenland",
+      "medemblik",
+      "opmeer",
+      "schagen",
+      "stede-broec",
+      "texel"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.odnhn.nl/",
+    "bron_register": "CVDR625404 / CVDR656967"
+  },
+  "od-noordzeekanaalgebied": {
+    "naam": "Omgevingsdienst Noordzeekanaalgebied",
+    "gemeenten": [
+      "amsterdam",
+      "beverwijk",
+      "heemskerk",
+      "uitgeest",
+      "velsen",
+      "zaanstad"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://odnzkg.nl/",
+    "bron_register": "organisaties.overheid.nl/28600321"
+  },
+  "od-ijmond": {
+    "naam": "Omgevingsdienst IJmond",
+    "gemeenten": [
+      "beverwijk",
+      "heemskerk",
+      "uitgeest",
+      "velsen"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "noord-holland.nl/Loket/Contact/Omgevingsdiensten"
+  },
+  "cocensus": {
+    "naam": "Gemeenschappelijke regeling Cocensus",
+    "gemeenten": [
+      "alkmaar",
+      "bergen-nh",
+      "beverwijk",
+      "castricum",
+      "den-helder",
+      "dijk-en-waard",
+      "haarlem",
+      "haarlemmermeer",
+      "heiloo",
+      "hillegom",
+      "landsmeer",
+      "oostzaan",
+      "uitgeest",
+      "wormerland"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.cocensus.nl/",
+    "bron_register": "haarlemmermeer.bestuurlijkeinformatie.nl"
+  },
+  "wnk-noord-kennemerland": {
+    "naam": "Gemeenschappelijke Regeling Werkvoorzieningsschap Noord-Kennemerland (WNK)",
+    "gemeenten": [
+      "alkmaar",
+      "bergen-nh",
+      "castricum",
+      "dijk-en-waard",
+      "heiloo"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "almanak.overheid.nl/24961445"
+  },
+  "gesubsidieerde-arbeid-kop-van-noord-holland": {
+    "naam": "Gemeenschappelijke regeling Gesubsidieerde arbeid Kop van Noord-Holland",
+    "gemeenten": [
+      "den-helder",
+      "hollands-kroon",
+      "schagen"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/24963910"
+  },
+  "bel-combinatie": {
+    "naam": "Gemeenschappelijke regeling BEL Combinatie",
+    "gemeenten": [
+      "blaricum",
+      "eemnes",
+      "laren"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.belcombinatie.nl/",
+    "bron_register": "CVDR755343"
+  },
+  "regio-gooi-en-vechtstreek": {
+    "naam": "Gemeenschappelijke Regeling Regio Gooi en Vechtstreek",
+    "gemeenten": [
+      "blaricum",
+      "gooise-meren",
+      "hilversum",
+      "huizen",
+      "laren",
+      "wijdemeren"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.regiogv.nl/",
+    "bron_register": "CVDR651494"
+  },
+  "noord-hollands-archief": {
+    "naam": "Gemeenschappelijke Regeling Noord-Hollands Archief",
+    "gemeenten": [
+      "aalsmeer",
+      "beverwijk",
+      "bloemendaal",
+      "haarlem",
+      "haarlemmermeer",
+      "heemskerk",
+      "heemstede",
+      "uitgeest",
+      "uithoorn",
+      "velsen",
+      "zandvoort"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.noord-hollandsarchief.nl/",
+    "bron_register": "organisaties.overheid.nl/27620831"
+  },
+  "waterlands-archief": {
+    "naam": "Gemeenschappelijke Regeling Waterlands Archief",
+    "gemeenten": [
+      "edam-volendam",
+      "purmerend",
+      "waterland",
+      "wormerland"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/29927030"
+  },
+  "regionaal-archief-alkmaar": {
+    "naam": "Regionaal Archief Alkmaar",
+    "gemeenten": [
+      "alkmaar",
+      "bergen-nh",
+      "castricum",
+      "den-helder",
+      "dijk-en-waard",
+      "heiloo",
+      "hollands-kroon",
+      "schagen",
+      "texel"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://www.regionaalarchiefalkmaar.nl/",
+    "bron_register": "regionaalarchiefalkmaar.nl/over-ons/werkgebied"
+  },
+  "recreatieschap-twiske-waterland": {
+    "naam": "Recreatieschap Twiske-Waterland",
+    "gemeenten": [
+      "landsmeer",
+      "oostzaan",
+      "waterland",
+      "wormerland"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/25871741"
+  },
+  "recreatieschap-spaarnwoude": {
+    "naam": "Recreatieschap Spaarnwoude",
+    "gemeenten": [
+      "amsterdam",
+      "haarlem",
+      "haarlemmermeer",
+      "velsen"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "nl.wikipedia.org/wiki/Recreatieschap_Spaarnwoude"
+  },
+  "recreatieschap-geestmerambacht": {
+    "naam": "Recreatieschap Geestmerambacht",
+    "gemeenten": [
+      "alkmaar",
+      "dijk-en-waard"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "geestmerambacht.nl/over/over-de-organisatie"
+  },
+  "groengebied-amstelland": {
+    "naam": "Recreatieschap Groengebied Amstelland",
+    "gemeenten": [
+      "amstelveen",
+      "amsterdam",
+      "diemen",
+      "ouder-amstel"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/23055778"
+  },
+  "vervoerregio-amsterdam": {
+    "naam": "Gemeenschappelijke regeling Vervoerregio Amsterdam",
+    "gemeenten": [
+      "aalsmeer",
+      "amstelveen",
+      "amsterdam",
+      "diemen",
+      "edam-volendam",
+      "haarlemmermeer",
+      "landsmeer",
+      "oostzaan",
+      "ouder-amstel",
+      "purmerend",
+      "uithoorn",
+      "waterland",
+      "wormerland",
+      "zaanstad"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "website": "https://vervoerregio.notubiz.nl/",
+    "bron_register": "CVDR612548 / CVDR454913"
+  },
+  "ggd-amsterdam-amstelland": {
+    "naam": "Gemeenschappelijke regeling GGD Amsterdam-Amstelland",
+    "gemeenten": [
+      "aalsmeer",
+      "amstelveen",
+      "amsterdam",
+      "diemen",
+      "ouder-amstel",
+      "uithoorn"
+    ],
+    "provincies": [
+      "noord-holland"
+    ],
+    "bron_register": "programmabegroting2023.financielestukken.ouder-amstel.nl"
+  },
+  "dcmr-milieudienst-rijnmond": {
+    "naam": "DCMR Milieudienst Rijnmond",
+    "gemeenten": [
+      "albrandswaard",
+      "barendrecht",
+      "capelle-aan-den-ijssel",
+      "goeree-overflakkee",
+      "krimpen-aan-den-ijssel",
+      "lansingerland",
+      "maassluis",
+      "nissewaard",
+      "ridderkerk",
+      "rotterdam",
+      "schiedam",
+      "vlaardingen",
+      "voorne-aan-zee"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.dcmr.nl/",
+    "bron_register": "zuid-holland.nl/politiek-bestuur/gedeputeerde-staten/besluiten"
+  },
+  "omgevingsdienst-haaglanden": {
+    "naam": "Omgevingsdienst Haaglanden (ODH)",
+    "gemeenten": [
+      "delft",
+      "den-haag",
+      "leidschendam-voorburg",
+      "midden-delfland",
+      "pijnacker-nootdorp",
+      "rijswijk",
+      "wassenaar",
+      "westland",
+      "zoetermeer"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://omgevingsdiensthaaglanden.nl/",
+    "bron_register": "organisaties.overheid.nl/28539513"
+  },
+  "omgevingsdienst-midden-holland": {
+    "naam": "Omgevingsdienst Midden-Holland (ODMH)",
+    "gemeenten": [
+      "alphen-aan-den-rijn",
+      "bodegraven-reeuwijk",
+      "gouda",
+      "krimpenerwaard",
+      "waddinxveen",
+      "zuidplas"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.odmh.nl/",
+    "bron_register": "organisaties.overheid.nl/28147764"
+  },
+  "omgevingsdienst-west-holland": {
+    "naam": "Omgevingsdienst West-Holland (ODWH)",
+    "gemeenten": [
+      "hillegom",
+      "kaag-en-braassem",
+      "katwijk",
+      "leiden",
+      "leiderdorp",
+      "lisse",
+      "nieuwkoop",
+      "noordwijk",
+      "oegstgeest",
+      "teylingen",
+      "voorschoten",
+      "zoeterwoude"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.odwh.nl/",
+    "bron_register": "odwh.nl/werkgebied"
+  },
+  "omgevingsdienst-zuid-holland-zuid": {
+    "naam": "Omgevingsdienst Zuid-Holland Zuid (OZHZ)",
+    "gemeenten": [
+      "alblasserdam",
+      "dordrecht",
+      "gorinchem",
+      "hardinxveld-giessendam",
+      "hendrik-ido-ambacht",
+      "molenlanden",
+      "papendrecht",
+      "sliedrecht",
+      "zwijndrecht"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.ozhz.nl/",
+    "bron_register": "organisaties.overheid.nl/28093459"
+  },
+  "grd-drechtsteden": {
+    "naam": "Gemeenschappelijke Regeling Drechtsteden",
+    "gemeenten": [
+      "alblasserdam",
+      "dordrecht",
+      "hardinxveld-giessendam",
+      "hendrik-ido-ambacht",
+      "papendrecht",
+      "sliedrecht",
+      "zwijndrecht"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.drechtsteden.nl/",
+    "bron_register": "CVDR624700"
+  },
+  "sociale-dienst-drechtsteden": {
+    "naam": "Gemeenschappelijke Regeling Sociaal (Sociale Dienst Drechtsteden)",
+    "gemeenten": [
+      "alblasserdam",
+      "dordrecht",
+      "hardinxveld-giessendam",
+      "hendrik-ido-ambacht",
+      "papendrecht",
+      "sliedrecht",
+      "zwijndrecht"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.socialedienstdrechtsteden.nl/",
+    "bron_register": "CVDR668607"
+  },
+  "dienst-gezondheid-en-jeugd-zhz": {
+    "naam": "Dienst Gezondheid & Jeugd Zuid-Holland Zuid",
+    "gemeenten": [
+      "alblasserdam",
+      "dordrecht",
+      "gorinchem",
+      "hardinxveld-giessendam",
+      "hendrik-ido-ambacht",
+      "molenlanden",
+      "papendrecht",
+      "sliedrecht",
+      "zwijndrecht"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "CVDR601033 / CVDR636076"
+  },
+  "holland-rijnland": {
+    "naam": "Gemeenschappelijke regeling Regio Holland Rijnland",
+    "gemeenten": [
+      "alphen-aan-den-rijn",
+      "hillegom",
+      "kaag-en-braassem",
+      "katwijk",
+      "leiden",
+      "leiderdorp",
+      "lisse",
+      "nieuwkoop",
+      "noordwijk",
+      "oegstgeest",
+      "teylingen",
+      "voorschoten",
+      "zoeterwoude"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://hollandrijnland.nl/",
+    "bron_register": "CVDR745740"
+  },
+  "serviceorganisatie-zorg-holland-rijnland": {
+    "naam": "Gemeenschappelijke Regeling Serviceorganisatie Zorg Holland Rijnland",
+    "gemeenten": [
+      "alphen-aan-den-rijn",
+      "hillegom",
+      "kaag-en-braassem",
+      "katwijk",
+      "leiden",
+      "leiderdorp",
+      "lisse",
+      "nieuwkoop",
+      "noordwijk",
+      "oegstgeest",
+      "teylingen",
+      "voorschoten",
+      "zoeterwoude"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "CVDR674277"
+  },
+  "servicepunt71": {
+    "naam": "Gemeenschappelijke Regeling Servicepunt71",
+    "gemeenten": [
+      "leiden",
+      "leiderdorp",
+      "oegstgeest",
+      "zoeterwoude"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/26638992"
+  },
+  "svhw": {
+    "naam": "Gemeenschappelijke Regeling SVHW",
+    "gemeenten": [
+      "alblasserdam",
+      "albrandswaard",
+      "altena",
+      "barendrecht",
+      "goeree-overflakkee",
+      "hardinxveld-giessendam",
+      "hoeksche-waard",
+      "krimpenerwaard",
+      "lansingerland",
+      "nieuwkoop",
+      "ridderkerk",
+      "voorne-aan-zee"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.svhw.nl/",
+    "bron_register": "CVDR687094"
+  },
+  "groenalliantie-midden-holland": {
+    "naam": "Gemeenschappelijke Regeling Groenalliantie Midden-Holland en omstreken",
+    "gemeenten": [
+      "bodegraven-reeuwijk",
+      "gouda",
+      "krimpenerwaard",
+      "waddinxveen",
+      "zuidplas"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "CVDR720833"
+  },
+  "ijsselgemeenten": {
+    "naam": "Gemeenschappelijke regeling IJsselgemeenten",
+    "gemeenten": [
+      "capelle-aan-den-ijssel",
+      "krimpen-aan-den-ijssel",
+      "zuidplas"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.ijsselgemeenten.nl/",
+    "bron_register": "CVDR723778"
+  },
+  "recreatieschap-rottemeren": {
+    "naam": "Recreatieschap Rottemeren",
+    "gemeenten": [
+      "lansingerland",
+      "rotterdam",
+      "zuidplas"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://recreatieschaprottemeren.nl/",
+    "bron_register": "recreatieschaprottemeren.nl"
+  },
+  "recreatieschap-voorne-putten": {
+    "naam": "Recreatieschap Voorne-Putten",
+    "gemeenten": [
+      "nissewaard",
+      "voorne-aan-zee"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "organisaties.overheid.nl/24966707"
+  },
+  "erfgoed-leiden-en-omstreken": {
+    "naam": "Erfgoed Leiden en Omstreken (Regionaal Archief Leiden)",
+    "gemeenten": [
+      "alphen-aan-den-rijn",
+      "hillegom",
+      "katwijk",
+      "leiden",
+      "leiderdorp",
+      "nieuwkoop",
+      "noordwijk",
+      "oegstgeest",
+      "teylingen",
+      "zoeterwoude"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.erfgoedleiden.nl/",
+    "bron_register": "erfgoedleiden.nl"
+  },
+  "bar-organisatie": {
+    "naam": "BAR-organisatie (ambtelijke fusie Barendrecht, Albrandswaard, Ridderkerk)",
+    "gemeenten": [
+      "albrandswaard",
+      "barendrecht",
+      "ridderkerk"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "website": "https://www.bar-organisatie.nl/",
+    "bron_register": "eigen websites gemeenten BAR"
+  },
+  "ggd-hollands-midden": {
+    "naam": "GGD Hollands Midden",
+    "gemeenten": [
+      "alphen-aan-den-rijn",
+      "bodegraven-reeuwijk",
+      "gouda",
+      "hillegom",
+      "kaag-en-braassem",
+      "katwijk",
+      "krimpenerwaard",
+      "leiden",
+      "leiderdorp",
+      "lisse",
+      "nieuwkoop",
+      "noordwijk",
+      "oegstgeest",
+      "teylingen",
+      "voorschoten",
+      "waddinxveen",
+      "zoeterwoude",
+      "zuidplas"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "allecijfers.nl/ggd-regios/"
+  },
+  "avalex": {
+    "naam": "Gemeenschappelijke regeling Avalex (afvalinzameling)",
+    "gemeenten": [
+      "delft",
+      "midden-delfland",
+      "pijnacker-nootdorp",
+      "rijswijk",
+      "wassenaar"
+    ],
+    "provincies": [
+      "zuid-holland"
+    ],
+    "bron_register": "begrotingsstukken regio Haaglanden"
+  },
+  "rud-zeeland": {
+    "naam": "Gemeenschappelijke regeling Regionale Uitvoeringsdienst Zeeland",
+    "gemeenten": [
+      "borsele",
+      "goes",
+      "hulst",
+      "kapelle",
+      "middelburg",
+      "noord-beveland",
+      "reimerswaal",
+      "schouwen-duiveland",
+      "sluis",
+      "terneuzen",
+      "tholen",
+      "veere",
+      "vlissingen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "website": "https://rud-zeeland.nl/over-ons/bestuur/vergaderstukken-algemeen-bestuur",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR323798"
+  },
+  "zeeuws-archief": {
+    "naam": "Gemeenschappelijke Regeling Zeeuws Archief",
+    "gemeenten": [
+      "kapelle",
+      "middelburg",
+      "schouwen-duiveland",
+      "terneuzen",
+      "veere",
+      "vlissingen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR757385"
+  },
+  "olaz": {
+    "naam": "Openbaar Lichaam Afvalstoffenverwijdering Zeeland (OLAZ)",
+    "gemeenten": [
+      "borsele",
+      "goes",
+      "hulst",
+      "kapelle",
+      "middelburg",
+      "noord-beveland",
+      "reimerswaal",
+      "schouwen-duiveland",
+      "sluis",
+      "terneuzen",
+      "tholen",
+      "veere",
+      "vlissingen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "website": "https://www.olazzeeland.nl/documenten-links/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR96093"
+  },
+  "sabewa-zeeland": {
+    "naam": "Gemeenschappelijke Regeling Belastingsamenwerking SaBeWa Zeeland",
+    "gemeenten": [
+      "borsele",
+      "goes",
+      "hulst",
+      "kapelle",
+      "reimerswaal",
+      "sluis",
+      "terneuzen",
+      "tholen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "website": "https://www.sabewazeeland.nl/vergaderstukken-algemeen-bestuur",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR322158"
+  },
+  "dethon": {
+    "naam": "Gemeenschappelijke regeling Sociaal Werkvoorzieningsschap Zeeuwsch-Vlaanderen (Dethon)",
+    "gemeenten": [
+      "hulst",
+      "sluis",
+      "terneuzen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR78683"
+  },
+  "collectief-vervoer-zeeuws-vlaanderen": {
+    "naam": "Gemeenschappelijke regeling Collectief Vervoer Zeeuws-Vlaanderen",
+    "gemeenten": [
+      "hulst",
+      "sluis",
+      "terneuzen"
+    ],
+    "provincies": [
+      "zeeland"
+    ],
+    "bron_register": "provinciale wijzigingsstukken Zeeland"
+  },
+  "omgevingsdienst-brabant-noord": {
+    "naam": "Gemeenschappelijke Regeling Omgevingsdienst Brabant Noord (ODBN)",
+    "gemeenten": [
+      "bernheze",
+      "boekel",
+      "boxtel",
+      "land-van-cuijk",
+      "maashorst",
+      "meierijstad",
+      "oss",
+      "s-hertogenbosch",
+      "sint-michielsgestel",
+      "vught"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://odbn.nl/over-odbn/vergaderstukken",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR733614"
+  },
+  "omgevingsdienst-zuidoost-brabant": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Zuidoost-Brabant (ODZOB)",
+    "gemeenten": [
+      "asten",
+      "bergeijk",
+      "best",
+      "bladel",
+      "cranendonck",
+      "deurne",
+      "eersel",
+      "eindhoven",
+      "geldrop-mierlo",
+      "gemert-bakel",
+      "heeze-leende",
+      "helmond",
+      "laarbeek",
+      "nuenen",
+      "oirschot",
+      "reusel-de-mierden",
+      "someren",
+      "son-en-breugel",
+      "valkenswaard",
+      "veldhoven",
+      "waalre"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://odzob.nl/over/organisatie/algemeen-bestuur",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR733586"
+  },
+  "omgevingsdienst-midden-en-west-brabant": {
+    "naam": "Gemeenschappelijke Regeling Omgevingsdienst Midden- en West-Brabant (OMWB)",
+    "gemeenten": [
+      "alphen-chaam",
+      "altena",
+      "baarle-nassau",
+      "bergen-op-zoom",
+      "breda",
+      "dongen",
+      "drimmelen",
+      "etten-leur",
+      "geertruidenberg",
+      "gilze-en-rijen",
+      "goirle",
+      "halderberge",
+      "heusden",
+      "hilvarenbeek",
+      "loon-op-zand",
+      "moerdijk",
+      "oisterwijk",
+      "oosterhout",
+      "roosendaal",
+      "rucphen",
+      "steenbergen",
+      "tilburg",
+      "waalwijk",
+      "woensdrecht",
+      "zundert"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.omwb.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR622562"
+  },
+  "ggd-hart-voor-brabant": {
+    "naam": "Gemeenschappelijke regeling GGD Hart voor Brabant",
+    "gemeenten": [
+      "alphen-chaam",
+      "baarle-nassau",
+      "bernheze",
+      "boekel",
+      "boxtel",
+      "dongen",
+      "gilze-en-rijen",
+      "goirle",
+      "heusden",
+      "hilvarenbeek",
+      "land-van-cuijk",
+      "loon-op-zand",
+      "maashorst",
+      "meierijstad",
+      "oisterwijk",
+      "oss",
+      "s-hertogenbosch",
+      "sint-michielsgestel",
+      "tilburg",
+      "vught",
+      "waalwijk"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.ggdhvb.nl/over-de-ggd/publicaties/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR653569"
+  },
+  "ggd-west-brabant": {
+    "naam": "Gemeenschappelijke regeling GGD West-Brabant 2024",
+    "gemeenten": [
+      "alphen-chaam",
+      "altena",
+      "baarle-nassau",
+      "bergen-op-zoom",
+      "breda",
+      "drimmelen",
+      "etten-leur",
+      "geertruidenberg",
+      "halderberge",
+      "moerdijk",
+      "oosterhout",
+      "roosendaal",
+      "rucphen",
+      "steenbergen",
+      "woensdrecht",
+      "zundert"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.ggdwb.nl/over-de-ggd/bestuur/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723051"
+  },
+  "ggd-brabant-zuidoost": {
+    "naam": "Gemeenschappelijke regeling GGD Brabant-Zuidoost",
+    "gemeenten": [
+      "asten",
+      "bergeijk",
+      "best",
+      "bladel",
+      "cranendonck",
+      "deurne",
+      "eersel",
+      "eindhoven",
+      "geldrop-mierlo",
+      "gemert-bakel",
+      "heeze-leende",
+      "helmond",
+      "laarbeek",
+      "nuenen",
+      "oirschot",
+      "reusel-de-mierden",
+      "someren",
+      "son-en-breugel",
+      "valkenswaard",
+      "veldhoven",
+      "waalre"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.ggdbzo.nl/publicaties/vergaderstukken-ab-en-db/vergaderstukken-algemeen-bestuur-2025/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439850"
+  },
+  "metropoolregio-eindhoven": {
+    "naam": "Gemeenschappelijke Regeling Metropoolregio Eindhoven 2024",
+    "gemeenten": [
+      "asten",
+      "bergeijk",
+      "best",
+      "bladel",
+      "cranendonck",
+      "deurne",
+      "eersel",
+      "eindhoven",
+      "geldrop-mierlo",
+      "gemert-bakel",
+      "heeze-leende",
+      "helmond",
+      "laarbeek",
+      "nuenen",
+      "oirschot",
+      "reusel-de-mierden",
+      "someren",
+      "son-en-breugel",
+      "valkenswaard",
+      "veldhoven",
+      "waalre"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://metropoolregioeindhoven.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723136"
+  },
+  "regio-west-brabant": {
+    "naam": "Gemeenschappelijke regeling Regio West-Brabant (RWB)",
+    "gemeenten": [
+      "alphen-chaam",
+      "altena",
+      "baarle-nassau",
+      "bergen-op-zoom",
+      "breda",
+      "drimmelen",
+      "etten-leur",
+      "geertruidenberg",
+      "halderberge",
+      "moerdijk",
+      "oosterhout",
+      "roosendaal",
+      "rucphen",
+      "steenbergen",
+      "woensdrecht",
+      "zundert"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.west-brabant.eu/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR641200"
+  },
+  "regio-hart-van-brabant": {
+    "naam": "Gemeenschappelijke regeling Regio Hart van Brabant 2024",
+    "gemeenten": [
+      "alphen-chaam",
+      "baarle-nassau",
+      "dongen",
+      "gilze-en-rijen",
+      "goirle",
+      "heusden",
+      "hilvarenbeek",
+      "loon-op-zand",
+      "oisterwijk",
+      "tilburg",
+      "waalwijk"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.regio-hartvanbrabant.nl/over-regio-hart-van-brabant/gemeenschappelijke-regeling/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721591"
+  },
+  "belastingsamenwerking-oost-brabant": {
+    "naam": "Gemeenschappelijke Regeling Belastingsamenwerking Oost-Brabant (BSOB) 2024",
+    "gemeenten": [
+      "asten",
+      "bernheze",
+      "boekel",
+      "deurne",
+      "geldrop-mierlo",
+      "gemert-bakel",
+      "laarbeek",
+      "maashorst",
+      "nuenen",
+      "oss",
+      "someren",
+      "son-en-breugel"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://bs-ob.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR736429"
+  },
+  "belastingsamenwerking-west-brabant": {
+    "naam": "Gemeenschappelijke Regeling Belastingsamenwerking West-Brabant (BWB)",
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://bwbrabant.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393589"
+  },
+  "samenwerking-kempengemeenten": {
+    "naam": "Gemeenschappelijke Regeling Samenwerking Kempengemeenten",
+    "gemeenten": [
+      "bergeijk",
+      "bladel",
+      "eersel",
+      "oirschot",
+      "reusel-de-mierden"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR698973"
+  },
+  "kempenplus": {
+    "naam": "Gemeenschappelijke Regeling Bedrijfsvoeringsorganisatie Participatiebedrijf KempenPlus",
+    "gemeenten": [
+      "bergeijk",
+      "bladel",
+      "eersel",
+      "oirschot",
+      "reusel-de-mierden"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR664107"
+  },
+  "isd-brabantse-wal": {
+    "naam": "Gemeenschappelijke Regeling Intergemeentelijke Sociale Dienst Brabantse Wal",
+    "gemeenten": [
+      "bergen-op-zoom",
+      "steenbergen",
+      "woensdrecht"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR477676"
+  },
+  "werkplein-hart-van-west-brabant": {
+    "naam": "Gemeenschappelijke Regeling Intergemeentelijke Sociale Dienst Werkplein Hart van West-Brabant",
+    "gemeenten": [
+      "etten-leur",
+      "halderberge",
+      "moerdijk",
+      "roosendaal",
+      "rucphen",
+      "zundert"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.werkpleinhartvanwest-brabant.nl/programma-regelingen-besluiten-en-begrotingen",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR643615"
+  },
+  "west-brabants-archief": {
+    "naam": "Gemeenschappelijke Regeling West-Brabants Archief",
+    "gemeenten": [
+      "bergen-op-zoom",
+      "etten-leur",
+      "halderberge",
+      "moerdijk",
+      "roosendaal",
+      "rucphen",
+      "steenbergen",
+      "woensdrecht",
+      "zundert"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR486645"
+  },
+  "regionaal-archief-tilburg": {
+    "naam": "Gemeenschappelijke regeling Regionaal Archief Tilburg",
+    "gemeenten": [
+      "goirle",
+      "hilvarenbeek",
+      "loon-op-zand",
+      "oisterwijk",
+      "tilburg"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "nl.wikipedia.org/wiki/Regionaal_Archief_Tilburg"
+  },
+  "bhic": {
+    "naam": "Gemeenschappelijke Regeling Brabants Historisch Informatie Centrum (BHIC)",
+    "gemeenten": [
+      "bernheze",
+      "boekel",
+      "boxtel",
+      "land-van-cuijk",
+      "maashorst",
+      "meierijstad",
+      "oss",
+      "sint-michielsgestel",
+      "vught"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR392878"
+  },
+  "cure": {
+    "naam": "Gemeenschappelijke Regeling Cure",
+    "gemeenten": [
+      "eindhoven",
+      "geldrop-mierlo",
+      "valkenswaard"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "website": "https://www.cure-afvalbeheer.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722011"
+  },
+  "havenschap-moerdijk": {
+    "naam": "Gemeenschappelijke regeling bedrijfsvoeringsorganisatie Havenschap Moerdijk",
+    "gemeenten": [
+      "moerdijk"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR600774"
+  },
+  "werkvoorzieningschap-noordoost-brabant": {
+    "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Noordoost-Brabant (WSD/IBN)",
+    "gemeenten": [
+      "bernheze",
+      "boekel",
+      "land-van-cuijk",
+      "maashorst",
+      "meierijstad",
+      "oss"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR358154"
+  },
+  "wvs-groep": {
+    "naam": "Gemeenschappelijke regeling van het Werkvoorzieningsschap West Noord-Brabant (WVS-groep / Atea)",
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR386142"
+  },
+  "diamant-groep": {
+    "naam": "Gemeenschappelijke regeling Diamant-groep",
+    "gemeenten": [
+      "alphen-chaam",
+      "dongen",
+      "gilze-en-rijen",
+      "goirle",
+      "hilvarenbeek",
+      "tilburg"
+    ],
+    "provincies": [
+      "noord-brabant"
+    ],
+    "bron_register": "organisaties.overheid.nl/24967730"
+  },
+  "omgevingsdienst-zuid-limburg": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Zuid-Limburg",
+    "gemeenten": [
+      "beek",
+      "beekdaelen",
+      "brunssum",
+      "eijsden-margraten",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "maastricht",
+      "meerssen",
+      "simpelveld",
+      "sittard-geleen",
+      "stein",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://odzuidlimburg.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721885"
+  },
+  "omgevingsdienst-noord-en-midden-limburg": {
+    "naam": "Gemeenschappelijke regeling Omgevingsdienst Noord- en Midden-Limburg",
+    "gemeenten": [
+      "beesel",
+      "bergen-l",
+      "echt-susteren",
+      "gennep",
+      "horst-aan-de-maas",
+      "leudal",
+      "maasgouw",
+      "mook-en-middelaar",
+      "nederweert",
+      "peel-en-maas",
+      "roerdalen",
+      "roermond",
+      "venlo",
+      "venray",
+      "weert"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://odnml.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR760191"
+  },
+  "ggd-zuid-limburg": {
+    "naam": "Gemeenschappelijke regeling GGD Zuid Limburg",
+    "gemeenten": [
+      "beek",
+      "beekdaelen",
+      "brunssum",
+      "eijsden-margraten",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "maastricht",
+      "meerssen",
+      "simpelveld",
+      "sittard-geleen",
+      "stein",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.ggdzl.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR114354"
+  },
+  "bsgw": {
+    "naam": "Gemeenschappelijke regeling Belastingsamenwerking Gemeenten en Waterschappen Limburg (BsGW)",
+    "gemeenten": [
+      "beek",
+      "beekdaelen",
+      "beesel",
+      "bergen-l",
+      "brunssum",
+      "echt-susteren",
+      "eijsden-margraten",
+      "gennep",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "leudal",
+      "maasgouw",
+      "maastricht",
+      "meerssen",
+      "mook-en-middelaar",
+      "nederweert",
+      "peel-en-maas",
+      "roerdalen",
+      "roermond",
+      "simpelveld",
+      "sittard-geleen",
+      "stein",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://bsgw.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721927"
+  },
+  "maasveren-limburg-noord": {
+    "naam": "Gemeenschappelijke Regeling Maasveren Limburg-Noord",
+    "gemeenten": [
+      "beesel",
+      "horst-aan-de-maas",
+      "peel-en-maas",
+      "venlo"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.horstaandemaas.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR370891"
+  },
+  "mgr-sociaal-domein-limburg-noord": {
+    "naam": "Modulaire Gemeenschappelijke Regeling Sociaal Domein Limburg-Noord",
+    "gemeenten": [
+      "beesel",
+      "bergen-l",
+      "echt-susteren",
+      "gennep",
+      "horst-aan-de-maas",
+      "leudal",
+      "maasgouw",
+      "nederweert",
+      "peel-en-maas",
+      "roerdalen",
+      "roermond",
+      "venlo",
+      "venray",
+      "weert"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.sociaaldomein-limburgnoord.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR370891"
+  },
+  "regio-noord-limburg": {
+    "naam": "Gemeenschappelijke regeling Regio Noord-Limburg",
+    "gemeenten": [
+      "beesel",
+      "bergen-l",
+      "gennep",
+      "horst-aan-de-maas",
+      "mook-en-middelaar",
+      "peel-en-maas",
+      "venlo",
+      "venray"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://rn-l.nl/",
+    "bron_register": "organisaties.overheid.nl/samenwerkingen/30487002"
+  },
+  "omgevingsdienst-achterhoek": {
+    "naam": "Omgevingsdienst Achterhoek (ODA)",
+    "gemeenten": [
+      "aalten",
+      "berkelland",
+      "bronckhorst",
+      "doetinchem",
+      "lochem",
+      "montferland",
+      "oost-gelre",
+      "oude-ijsselstreek",
+      "winterswijk",
+      "zutphen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.odachterhoek.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721546/1"
+  },
+  "omgevingsdienst-groene-metropool": {
+    "naam": "Omgevingsdienst Groene Metropool (ODGM) — fusie van ODRA en ODRN per 1-1-2026",
+    "gemeenten": [
+      "arnhem",
+      "berg-en-dal",
+      "beuningen",
+      "doesburg",
+      "druten",
+      "duiven",
+      "heumen",
+      "lingewaard",
+      "nijmegen",
+      "overbetuwe",
+      "renkum",
+      "rheden",
+      "rozendaal",
+      "westervoort",
+      "wijchen",
+      "zevenaar"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.odgroenemetropool.nl/",
+    "bron_register": "https://www.gelderseomgevingsdiensten.nl/nieuws/omgevingsdienst-groene-metropool-van-start/"
+  },
+  "omgevingsdienst-veluwe": {
+    "naam": "Omgevingsdienst Veluwe (OD Veluwe) — fusie van ODNV en OVIJ per 1-1-2024",
+    "gemeenten": [
+      "apeldoorn",
+      "brummen",
+      "elburg",
+      "epe",
+      "ermelo",
+      "harderwijk",
+      "hattem",
+      "heerde",
+      "nunspeet",
+      "oldebroek",
+      "putten",
+      "voorst"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.odveluwe.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR708095/1"
+  },
+  "ggd-noord-en-oost-gelderland": {
+    "naam": "GGD Noord- en Oost-Gelderland (GGD NOG)",
+    "gemeenten": [
+      "aalten",
+      "apeldoorn",
+      "berkelland",
+      "bronckhorst",
+      "brummen",
+      "doetinchem",
+      "elburg",
+      "epe",
+      "ermelo",
+      "harderwijk",
+      "hattem",
+      "heerde",
+      "lochem",
+      "montferland",
+      "nunspeet",
+      "oldebroek",
+      "oost-gelre",
+      "oude-ijsselstreek",
+      "putten",
+      "voorst",
+      "winterswijk",
+      "zutphen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.ggdnog.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722940"
+  },
+  "ggd-gelderland-zuid": {
+    "naam": "Gemeenschappelijke regeling Gemeentelijke Gezondheidsdienst Gelderland-Zuid",
+    "gemeenten": [
+      "berg-en-dal",
+      "beuningen",
+      "buren",
+      "culemborg",
+      "druten",
+      "heumen",
+      "maasdriel",
+      "neder-betuwe",
+      "nijmegen",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal",
+      "wijchen",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://ggdgelderlandzuid.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR642683/2"
+  },
+  "werkzaak-rivierenland": {
+    "naam": "Gemeenschappelijke Regeling Werkzaak Rivierenland",
+    "gemeenten": [
+      "buren",
+      "culemborg",
+      "maasdriel",
+      "neder-betuwe",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.werkzaakrivierenland.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722332/"
+  },
+  "avri": {
+    "naam": "Gemeenschappelijke regeling Avri",
+    "gemeenten": [
+      "buren",
+      "culemborg",
+      "maasdriel",
+      "neder-betuwe",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.avri.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722701/1"
+  },
+  "delta": {
+    "naam": "Gemeenschappelijke Regeling Delta (sociale werkvoorziening)",
+    "gemeenten": [
+      "bronckhorst",
+      "brummen",
+      "lochem",
+      "voorst",
+      "zutphen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.deltawerkt.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR619631/1"
+  },
+  "presikhaaf-bedrijven": {
+    "naam": "Gemeenschappelijke Regeling Werkvoorziening Midden-Gelderland 'Presikhaaf Bedrijven' (in liquidatie)",
+    "gemeenten": [
+      "arnhem",
+      "doesburg",
+      "duiven",
+      "lingewaard",
+      "overbetuwe",
+      "renkum",
+      "rheden",
+      "rozendaal",
+      "westervoort",
+      "zevenaar"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "http://www.presikhaaf.org/",
+    "bron_register": "https://cedris.nl/nieuws/bestuur-presikhaaf-bedrijven-besluit-tot-liquidatie-voormalig-sw-bedrijf/"
+  },
+  "permar-ws": {
+    "naam": "Gemeenschappelijke Regeling Permar WS",
+    "gemeenten": [
+      "barneveld",
+      "ede",
+      "renkum",
+      "scherpenzeel",
+      "wageningen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.permar.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR424495"
+  },
+  "tribuut": {
+    "naam": "Tribuut belastingsamenwerking",
+    "gemeenten": [
+      "apeldoorn",
+      "brummen",
+      "epe",
+      "lochem",
+      "voorst",
+      "zutphen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.tribuut.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR634293"
+  },
+  "belastingsamenwerking-rivierenland": {
+    "naam": "Belastingsamenwerking Rivierenland (BSR)",
+    "gemeenten": [
+      "culemborg",
+      "maasdriel",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.bsr.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR743215/1"
+  },
+  "groene-metropoolregio-arnhem-nijmegen": {
+    "naam": "Groene Metropoolregio Arnhem-Nijmegen (GMR)",
+    "gemeenten": [
+      "arnhem",
+      "berg-en-dal",
+      "beuningen",
+      "doesburg",
+      "druten",
+      "duiven",
+      "heumen",
+      "lingewaard",
+      "mook-en-middelaar",
+      "nijmegen",
+      "overbetuwe",
+      "renkum",
+      "rheden",
+      "rozendaal",
+      "westervoort",
+      "wijchen",
+      "zevenaar"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.gmr.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR652219/2"
+  },
+  "regio-achterhoek": {
+    "naam": "Samenwerkingsregeling Regio Achterhoek (8RHK)",
+    "gemeenten": [
+      "aalten",
+      "berkelland",
+      "bronckhorst",
+      "doetinchem",
+      "montferland",
+      "oost-gelre",
+      "oude-ijsselstreek",
+      "winterswijk"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://8rhk.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR720603/1"
+  },
+  "regio-rivierenland": {
+    "naam": "Regeling Regio Rivierenland",
+    "gemeenten": [
+      "buren",
+      "culemborg",
+      "maasdriel",
+      "neder-betuwe",
+      "tiel",
+      "west-betuwe",
+      "west-maas-en-waal",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.regiorivierenland.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722222/1"
+  },
+  "samenwerkingsregeling-noord-veluwe": {
+    "naam": "Samenwerkingsregeling Noord-Veluwe",
+    "gemeenten": [
+      "elburg",
+      "ermelo",
+      "harderwijk",
+      "nijkerk",
+      "nunspeet",
+      "oldebroek",
+      "putten",
+      "zeewolde"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.regionoordveluwe.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR483495"
+  },
+  "sociale-dienst-veluwerand": {
+    "naam": "Gemeenschappelijke regeling Sociale Dienst Veluwerand",
+    "gemeenten": [
+      "ermelo",
+      "harderwijk",
+      "zeewolde"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.socialedienstveluwerand.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR55819"
+  },
+  "erfgoedcentrum-achterhoek-en-liemers": {
+    "naam": "Gemeenschappelijke Regeling Erfgoedcentrum Achterhoek en Liemers (ECAL)",
+    "gemeenten": [
+      "aalten",
+      "berkelland",
+      "bronckhorst",
+      "doetinchem",
+      "montferland",
+      "oost-gelre",
+      "oude-ijsselstreek",
+      "winterswijk"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.ecal.nu/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439993/2"
+  },
+  "regionaal-archief-nijmegen": {
+    "naam": "Gemeenschappelijke regeling Regionaal Archief Nijmegen",
+    "gemeenten": [
+      "berg-en-dal",
+      "beuningen",
+      "druten",
+      "heumen",
+      "nijmegen",
+      "wijchen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://regionaalarchiefnijmegen.nl/",
+    "bron_register": "CVDR275091"
+  },
+  "regionaal-archief-rivierenland": {
+    "naam": "Gemeenschappelijke Regeling Regionaal Archief Rivierenland",
+    "gemeenten": [
+      "buren",
+      "culemborg",
+      "maasdriel",
+      "neder-betuwe",
+      "tiel",
+      "west-betuwe",
+      "zaltbommel"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://regionaalarchiefrivierenland.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722169/1"
+  },
+  "gelders-archief": {
+    "naam": "Gemeenschappelijke regeling Gelders Archief",
+    "gemeenten": [
+      "arnhem",
+      "renkum",
+      "rheden",
+      "rozendaal"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.geldersarchief.nl/",
+    "bron_register": "organisaties.overheid.nl/24964242"
+  },
+  "mgr-rijk-van-nijmegen": {
+    "naam": "Modulaire Gemeenschappelijke Regeling Rijk van Nijmegen (MGR)",
+    "gemeenten": [
+      "berg-en-dal",
+      "beuningen",
+      "druten",
+      "heumen",
+      "mook-en-middelaar",
+      "nijmegen",
+      "wijchen"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "bron_register": "CVDR669794"
+  },
+  "1stroom": {
+    "naam": "Gemeenschappelijke regeling 1Stroom (ambtelijke fusieorganisatie Duiven-Westervoort)",
+    "gemeenten": [
+      "duiven",
+      "westervoort"
+    ],
+    "provincies": [
+      "gelderland"
+    ],
+    "website": "https://www.1stroom.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR603577/2"
+  },
+  "wozl": {
+    "naam": "Gemeenschappelijke Regeling Werkvoorzieningschap Oostelijk Zuid-Limburg (WOZL / WSP Parkstad)",
+    "gemeenten": [
+      "beekdaelen",
+      "brunssum",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "simpelveld",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.wspparkstad.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR407547"
+  },
+  "westrom": {
+    "naam": "Gemeenschappelijke Regeling Westrom",
+    "gemeenten": [
+      "echt-susteren",
+      "leudal",
+      "maasgouw",
+      "roerdalen",
+      "roermond"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.westrom.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR753716"
+  },
+  "kredietbank-limburg": {
+    "naam": "Gemeenschappelijke Regeling voor Sociale Kredietverlening en Schuldhulpverlening in Limburg (Kredietbank Limburg)",
+    "gemeenten": [
+      "brunssum",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "maastricht",
+      "sittard-geleen"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://kredietbanklimburg.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR391410/1"
+  },
+  "omnibuzz": {
+    "naam": "Gemeenschappelijke Regeling Omnibuzz",
+    "gemeenten": [
+      "beek",
+      "beekdaelen",
+      "beesel",
+      "bergen-l",
+      "brunssum",
+      "echt-susteren",
+      "eijsden-margraten",
+      "gennep",
+      "gulpen-wittem",
+      "heerlen",
+      "horst-aan-de-maas",
+      "kerkrade",
+      "landgraaf",
+      "leudal",
+      "maasgouw",
+      "maastricht",
+      "meerssen",
+      "nederweert",
+      "peel-en-maas",
+      "roerdalen",
+      "roermond",
+      "simpelveld",
+      "sittard-geleen",
+      "stein",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "venlo",
+      "venray",
+      "voerendaal",
+      "weert"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.omnibuzz.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR406749"
+  },
+  "rd4": {
+    "naam": "Gemeenschappelijke Regeling Reinigingsdiensten Rd4",
+    "gemeenten": [
+      "beekdaelen",
+      "brunssum",
+      "eijsden-margraten",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "simpelveld",
+      "vaals",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://rd4.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393625/1"
+  },
+  "reinigingsdienst-maasland": {
+    "naam": "Gemeenschappelijke Regeling Reinigingsdienst Maasland",
+    "gemeenten": [
+      "beesel",
+      "echt-susteren",
+      "horst-aan-de-maas",
+      "leudal",
+      "maasgouw",
+      "roerdalen"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.rdmaasland.nl/",
+    "bron_register": "https://organisaties.overheid.nl/29000609/Gemeenschappelijke_Regeling_Reinigingsdienst_Maasland/"
+  },
+  "parkstad-limburg": {
+    "naam": "Gemeenschappelijke Regeling Stadsregio Parkstad Limburg",
+    "gemeenten": [
+      "beekdaelen",
+      "brunssum",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "simpelveld",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.parkstad-limburg.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR409472"
+  },
+  "historisch-centrum-limburg": {
+    "naam": "Gemeenschappelijke Regeling Regionaal Historisch Centrum Limburg (HCL)",
+    "gemeenten": [
+      "beek",
+      "brunssum",
+      "eijsden-margraten",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "maastricht",
+      "meerssen",
+      "simpelveld",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://historischcentrumlimburg.nl/",
+    "bron_register": "https://wetten.overheid.nl/BWBR0039744/"
+  },
+  "ict-nml": {
+    "naam": "Gemeenschappelijke regeling ICT Noord- en Midden-Limburg (ICT NML)",
+    "gemeenten": [
+      "leudal",
+      "nederweert",
+      "roermond",
+      "venlo",
+      "weert"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.ictnml.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR714510/1"
+  },
+  "vidar-participatiebedrijf-westelijke-mijnstreek": {
+    "naam": "Centrumregeling Participatiebedrijf Westelijke Mijnstreek (Vidar)",
+    "gemeenten": [
+      "beek",
+      "sittard-geleen",
+      "stein"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.sittard-geleen.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR633844"
+  },
+  "werkvoorzieningschap-risse-groep": {
+    "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Risse Groep (grensoverschrijdend Limburg/Noord-Brabant)",
+    "gemeenten": [
+      "cranendonck",
+      "nederweert",
+      "weert"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://risse.nl/",
+    "bron_register": "https://organisaties.overheid.nl/28583334/Werkvoorzieningschap_Risse_Groep"
+  },
+  "centrumregeling-jeugdzorg-zuid-limburg": {
+    "naam": "Centrumregeling Inkoop/Verwerving Jeugdhulp regio Zuid-Limburg",
+    "gemeenten": [
+      "beek",
+      "beekdaelen",
+      "brunssum",
+      "eijsden-margraten",
+      "gulpen-wittem",
+      "heerlen",
+      "kerkrade",
+      "landgraaf",
+      "maastricht",
+      "meerssen",
+      "simpelveld",
+      "sittard-geleen",
+      "stein",
+      "vaals",
+      "valkenburg-aan-de-geul",
+      "voerendaal"
+    ],
+    "provincies": [
+      "limburg"
+    ],
+    "website": "https://www.jeugdhulpzuidlimburg.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR613649/1"
+  }
+}
