@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: alleen regelingen met 'geverifieerd': true zijn met een echte download getest. De overige regelingen zijn via AI-onderzoek (webzoekopdrachten) samengesteld uit CVDR/overheid.nl-vindplaatsen en organisatiewebsites, ZONDER dat de brontekst zelf kon worden ingezien (de onderzoeksomgeving blokkeerde directe paginatoegang). Namen, deelnemende gemeenten en vooral eventuele notubiz_id/ibabs_naam-velden bij die regelingen zijn dus niet geverifieerd en verdienen een steekproefcontrole voor je erop vertrouwt. Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen.",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 60 van de 163 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 103 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -164,7 +164,8 @@
       "groningen"
     ],
     "website": "https://www.od-groningen.nl/over-ons/leden-bestuur-2/vergaderstukken/vergaderstukken-algemeen-bestuur",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR305146"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR305146",
+    "geverifieerd": true
   },
   "publieke-gezondheid-zorg-groningen": {
     "naam": "Gemeenschappelijke regeling Publieke Gezondheid & Zorg Groningen (GGD Groningen)",
@@ -183,7 +184,9 @@
     "provincies": [
       "groningen"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR327602/1"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR327602/1",
+    "website": "https://www.ggdgroningen.nl/over-ggd-groningen/vergaderingen-algemeen-bestuur/",
+    "geverifieerd": true
   },
   "havenschap-groningen-seaports": {
     "naam": "Gemeenschappelijke Regeling Havenschap Groningen Seaports",
@@ -196,7 +199,8 @@
       "groningen"
     ],
     "website": "https://www.groningen-seaports.com",
-    "bron_register": "https://organisaties.overheid.nl/24966326/Gemeenschappelijke_Regeling_Havenschap_Groningen_Seaports/"
+    "bron_register": "https://organisaties.overheid.nl/24966326/Gemeenschappelijke_Regeling_Havenschap_Groningen_Seaports/",
+    "geverifieerd": true
   },
   "wedeka-bedrijven": {
     "naam": "Gemeenschappelijke regeling Wedeka Bedrijven",
@@ -245,12 +249,28 @@
   "publiek-vervoer-groningen-drenthe": {
     "naam": "Gemeenschappelijke Regeling Samenwerkingsorganisatie Publiek Vervoer Groningen Drenthe",
     "gemeenten": [
-      "groningen"
+      "aa-en-hunze",
+      "assen",
+      "eemsdelta",
+      "groningen",
+      "het-hogeland",
+      "midden-drenthe",
+      "midden-groningen",
+      "noordenveld",
+      "oldambt",
+      "pekela",
+      "stadskanaal",
+      "tynaarlo",
+      "veendam",
+      "westerkwartier",
+      "westerwolde"
     ],
     "provincies": [
-      "groningen"
+      "groningen",
+      "drenthe"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR626479"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR626479",
+    "website": "https://www.publiekvervoer.nl/"
   },
   "jeugdregio-groningen": {
     "naam": "Centrumregeling Jeugdregio Groningen",
@@ -269,7 +289,8 @@
     "provincies": [
       "groningen"
     ],
-    "bron_register": "gemeenteraad.groningen.nl-documenten"
+    "bron_register": "gemeenteraad.groningen.nl-documenten",
+    "geverifieerd": true
   },
   "beschermd-wonen-groningen": {
     "naam": "Centrumregeling beschermd wonen, opvang en inloopvoorziening GGz Groningen 2024",
@@ -288,7 +309,8 @@
     "provincies": [
       "groningen"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723159/1"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723159/1",
+    "geverifieerd": true
   },
   "veilig-thuis-groningen": {
     "naam": "Gemeenschappelijke Regeling voor Veilig Thuis Groningen",
@@ -335,7 +357,8 @@
       "fryslan"
     ],
     "website": "https://www.fumo.nl/vergaderstukken",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR338805"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR338805",
+    "geverifieerd": true
   },
   "marrekrite": {
     "naam": "Gemeenschappelijke Regeling Recreatieschap voor het Friese water en land De Marrekrite",
@@ -357,8 +380,9 @@
     "provincies": [
       "fryslan"
     ],
-    "website": "https://www.marrekrite.frl/marrekrite/over-ons/documenten",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR333508/1"
+    "website": "https://marrekrite.frl/over-marrekrite/documenten/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR333508/1",
+    "geverifieerd": true
   },
   "werkvoorzieningschap-fryslan-west": {
     "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Fryslân-West 2023",
@@ -371,7 +395,9 @@
     "provincies": [
       "fryslan"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR690787"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR690787",
+    "website": "https://www.empatec.nl/algemeen-bestuur/",
+    "geverifieerd": true
   },
   "sw-fryslan": {
     "naam": "Gemeenschappelijke Regeling Sociale Werkvoorziening 'Fryslân'",
@@ -388,7 +414,8 @@
     "provincies": [
       "fryslan"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR444457"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR444457",
+    "geverifieerd": true
   },
   "sozawe-noardwest-fryslan": {
     "naam": "Gemeenschappelijke regeling Dienst Sociale Zaken en Werkgelegenheid Noardwest Fryslân 2022",
@@ -428,7 +455,8 @@
     "provincies": [
       "fryslan"
     ],
-    "bron_register": "sudwestfryslan.nl-context"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR672302",
+    "geverifieerd": true
   },
   "omgevingsdienst-drenthe": {
     "naam": "Gemeenschappelijke regeling Omgevingsdienst Drenthe (voorheen RUD Drenthe)",
@@ -450,7 +478,8 @@
       "drenthe"
     ],
     "website": "https://oddrenthe.nl/publicaties/algemeen-bestuur/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR724781/1"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR724781/1",
+    "geverifieerd": true
   },
   "ggd-drenthe": {
     "naam": "Gemeenschappelijke Regeling GGD Drenthe",
@@ -472,7 +501,8 @@
       "drenthe"
     ],
     "website": "https://www.ggddrenthe.nl/over-ons/directie-bestuur/bestuursvergaderingen/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR477546/1"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR477546/1",
+    "geverifieerd": true
   },
   "werkplein-drentsche-aa": {
     "naam": "Gemeenschappelijke regeling Werkplein Drentsche Aa 2019",
@@ -484,8 +514,9 @@
     "provincies": [
       "drenthe"
     ],
-    "website": "https://www.wpda.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR613353"
+    "website": "https://www.wpda.nl/over-ons/resultaten-en-begroting",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR613353",
+    "geverifieerd": true
   },
   "stark": {
     "naam": "Gemeenschappelijke Regeling Stark",
@@ -535,7 +566,8 @@
     "provincies": [
       "drenthe"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR674270"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR674270",
+    "geverifieerd": true
   },
   "gemeentelijke-kredietbank-drenthe": {
     "naam": "Gemeenschappelijke Regeling Gemeentelijke Kredietbank Drenthe",
@@ -583,7 +615,8 @@
       "overijssel"
     ],
     "website": "https://www.odijsselland.nl/vergaderstukken/",
-    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen"
+    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen",
+    "geverifieerd": true
   },
   "omgevingsdienst-twente": {
     "naam": "Omgevingsdienst Twente",
@@ -606,8 +639,9 @@
     "provincies": [
       "overijssel"
     ],
-    "website": "https://www.odtwente.nl/",
-    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen"
+    "website": "https://www.odtwente.nl/over-ons/bestuur/",
+    "bron_register": "https://destaatvan.overijssel.nl/begroting-2025/programma/verbonden-partijen",
+    "geverifieerd": true
   },
   "samentwente": {
     "naam": "SamenTwente (GGD Twente, OZJT, Veilig Thuis Twente) — rechtsopvolger van Regio Twente",
@@ -630,8 +664,9 @@
     "provincies": [
       "overijssel"
     ],
-    "website": "https://samentwente.nl/",
-    "bron_register": "https://organisaties.overheid.nl/28233840/Regeling_Regio_Twente/"
+    "website": "https://samentwente.nl/samentwente/algemeen-bestuur/",
+    "bron_register": "https://organisaties.overheid.nl/28233840/Regeling_Regio_Twente/",
+    "geverifieerd": true
   },
   "ggd-ijsselland": {
     "naam": "GGD IJsselland",
@@ -652,7 +687,8 @@
       "overijssel"
     ],
     "website": "https://www.ggdijsselland.nl/gemeenten/vergaderstukken/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR26093"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR26093",
+    "geverifieerd": true
   },
   "ssc-ons": {
     "naam": "Bedrijfsvoeringsorganisatie Shared Service Centrum ONS (SSC ONS)",
@@ -687,7 +723,10 @@
   "regionaal-bedrijventerrein-twente": {
     "naam": "Regionaal Bedrijventerrein Twente (RBT)",
     "gemeenten": [
-      "almelo"
+      "almelo",
+      "borne",
+      "enschede",
+      "hengelo"
     ],
     "provincies": [
       "overijssel"
@@ -707,8 +746,9 @@
     "provincies": [
       "flevoland"
     ],
-    "website": "https://www.ggdflevoland.nl/over-ggd/bestuur-en-directie/publicaties-ggd-flevoland/",
-    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+    "website": "https://www.ggdflevoland.nl/over-ggd/bestuur-en-directie/agenda-algemeen-bestuur/",
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf",
+    "geverifieerd": true
   },
   "omgevingsdienst-flevoland-gooi-en-vechtstreek": {
     "naam": "Omgevingsdienst Flevoland & Gooi en Vechtstreek (OFGV)",
@@ -729,8 +769,9 @@
     "provincies": [
       "flevoland"
     ],
-    "website": "https://www.ofgv.nl/overons/bestuur/",
-    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+    "website": "https://www.ofgv.nl/overons/bestuur/agenda-verslagen-ab/",
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf",
+    "geverifieerd": true
   },
   "werkvoorzieningschap-ijsselmeergroep": {
     "naam": "Werkvoorzieningschap IJsselmeergroep",
@@ -752,26 +793,29 @@
       "dronten",
       "lelystad",
       "noordoostpolder",
-      "urk"
-    ],
-    "provincies": [
-      "flevoland"
-    ],
-    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
-  },
-  "regionaal-historisch-centrum-flevoland": {
-    "naam": "Regionaal Historisch Centrum Flevoland (Erfgoedcentrum Nieuw Land)",
-    "gemeenten": [
-      "dronten",
-      "lelystad",
-      "noordoostpolder",
       "urk",
       "zeewolde"
     ],
     "provincies": [
       "flevoland"
     ],
-    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf"
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf",
+    "geverifieerd": true
+  },
+  "regionaal-historisch-centrum-flevoland": {
+    "naam": "Gemeenschappelijke Regeling Regionaal Historisch Centrum Het Flevolands Archief",
+    "gemeenten": [
+      "dronten",
+      "lelystad",
+      "urk",
+      "zeewolde"
+    ],
+    "provincies": [
+      "flevoland"
+    ],
+    "bron_register": "https://www.flevoland.nl/getmedia/0aa3470b-6d80-45b8-92d0-62a9bdc7f19d/1806522-v5-Register-gemeenschappelijke-regelingen.pdf",
+    "website": "https://www.hetflevolandsarchief.nl/bestuursstukken",
+    "geverifieerd": true
   },
   "omgevingsdienst-rivierenland": {
     "naam": "Omgevingsdienst Rivierenland",
@@ -788,23 +832,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.odrivierenland.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR607926/2"
-  },
-  "omgevingsdienst-regio-nijmegen": {
-    "naam": "Omgevingsdienst Regio Nijmegen",
-    "gemeenten": [
-      "berg-en-dal",
-      "beuningen",
-      "druten",
-      "heumen",
-      "nijmegen",
-      "wijchen"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "bron_register": "https://decentrale.regelgeving.overheid.nl/cvdr/xhtmloutput/Actueel/Gelderland/CVDR607921.html"
+    "website": "https://www.odrivierenland.nl/agenda-algemeen-bestuur/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR607926/2",
+    "geverifieerd": true
   },
   "omgevingsdienst-utrecht": {
     "naam": "Omgevingsdienst Utrecht (ODU)",
@@ -840,7 +870,8 @@
       "utrecht"
     ],
     "website": "https://www.odu.nl/",
-    "bron_register": "stateninformatie.provincie-utrecht.nl (Statenvoorstel fusie ODRU/RUD Utrecht tot ODU, 2025)"
+    "bron_register": "stateninformatie.provincie-utrecht.nl (Statenvoorstel fusie ODRU/RUD Utrecht tot ODU, 2025)",
+    "geverifieerd": true
   },
   "ggd-regio-utrecht": {
     "naam": "Gemeenschappelijke regeling Gemeentelijke Gezondheidsdienst regio Utrecht (GGDrU)",
@@ -903,8 +934,9 @@
     "provincies": [
       "utrecht"
     ],
-    "website": "https://www.wil-lekstroom.nl/",
-    "bron_register": "CVDR632182"
+    "website": "https://www.wil-lekstroom.nl/over-wil/bestuur/stukken-algemeen-bestuur",
+    "bron_register": "CVDR632182",
+    "geverifieerd": true
   },
   "avu": {
     "naam": "Gemeenschappelijke Regeling Afvalverwijdering Utrecht (AVU)",
@@ -956,8 +988,9 @@
     "provincies": [
       "utrecht"
     ],
-    "website": "https://www.bghu.nl/",
-    "bron_register": "CVDR245654"
+    "website": "https://bghu.nl/vergaderingen-bestuur",
+    "bron_register": "CVDR245654",
+    "geverifieerd": true
   },
   "razu": {
     "naam": "Regionaal Archief Zuid-Utrecht (RAZU)",
@@ -991,7 +1024,9 @@
     "provincies": [
       "utrecht"
     ],
-    "bron_register": "CVDR689701"
+    "bron_register": "CVDR689701",
+    "website": "https://www.recreatieschapstichtsegroenlanden.nl/organisatie/vergaderingen/default.aspx",
+    "geverifieerd": true
   },
   "plassenschap-loosdrecht": {
     "naam": "Gemeenschappelijke regeling Plassenschap Loosdrecht e.o.",
@@ -1071,7 +1106,9 @@
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "noord-holland.nl/Loket/Contact/Omgevingsdiensten"
+    "bron_register": "noord-holland.nl/Loket/Contact/Omgevingsdiensten",
+    "website": "https://www.odijmond.nl/over-ons/bestuur/algemeen-bestuur/",
+    "geverifieerd": true
   },
   "cocensus": {
     "naam": "Gemeenschappelijke regeling Cocensus",
@@ -1203,7 +1240,8 @@
       "noord-holland"
     ],
     "website": "https://www.regionaalarchiefalkmaar.nl/",
-    "bron_register": "regionaalarchiefalkmaar.nl/over-ons/werkgebied"
+    "bron_register": "regionaalarchiefalkmaar.nl/over-ons/werkgebied",
+    "geverifieerd": true
   },
   "recreatieschap-twiske-waterland": {
     "naam": "Recreatieschap Twiske-Waterland",
@@ -1216,7 +1254,8 @@
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "organisaties.overheid.nl/25871741"
+    "bron_register": "organisaties.overheid.nl/25871741",
+    "website": "https://www.twiske-waterland.nl/beleid-en-bestuur/bestuur"
   },
   "recreatieschap-spaarnwoude": {
     "naam": "Recreatieschap Spaarnwoude",
@@ -1229,7 +1268,8 @@
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "nl.wikipedia.org/wiki/Recreatieschap_Spaarnwoude"
+    "bron_register": "nl.wikipedia.org/wiki/Recreatieschap_Spaarnwoude",
+    "website": "https://www.spaarnwoudepark.nl/beleid-en-bestuur/vergaderingen"
   },
   "recreatieschap-geestmerambacht": {
     "naam": "Recreatieschap Geestmerambacht",
@@ -1240,7 +1280,8 @@
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "geestmerambacht.nl/over/over-de-organisatie"
+    "bron_register": "geestmerambacht.nl/over/over-de-organisatie",
+    "website": "https://www.geestmerambacht.nl/beleid-en-bestuur/vergaderingen"
   },
   "groengebied-amstelland": {
     "naam": "Recreatieschap Groengebied Amstelland",
@@ -1253,7 +1294,8 @@
     "provincies": [
       "noord-holland"
     ],
-    "bron_register": "organisaties.overheid.nl/23055778"
+    "bron_register": "organisaties.overheid.nl/23055778",
+    "website": "https://www.groengebied-amstelland.nl/Bestuur/Vergaderingen"
   },
   "vervoerregio-amsterdam": {
     "naam": "Gemeenschappelijke regeling Vervoerregio Amsterdam",
@@ -1280,7 +1322,7 @@
     "bron_register": "CVDR612548 / CVDR454913"
   },
   "ggd-amsterdam-amstelland": {
-    "naam": "Gemeenschappelijke regeling GGD Amsterdam-Amstelland",
+    "naam": "Gemeenschappelijke regeling GGD Amsterdam-Amstelland (opgeheven 2022/2024; uitvoering overgegaan naar GGD Amsterdam via dienstverleningsovereenkomst)",
     "gemeenten": [
       "aalsmeer",
       "amstelveen",
@@ -1371,8 +1413,9 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://www.odwh.nl/",
-    "bron_register": "odwh.nl/werkgebied"
+    "website": "https://www.odwh.nl/over-odwh/wie-bestuurt-ons/agenda-en-bestuursvergaderingen/",
+    "bron_register": "odwh.nl/werkgebied",
+    "geverifieerd": true
   },
   "omgevingsdienst-zuid-holland-zuid": {
     "naam": "Omgevingsdienst Zuid-Holland Zuid (OZHZ)",
@@ -1390,28 +1433,12 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://www.ozhz.nl/",
-    "bron_register": "organisaties.overheid.nl/28093459"
-  },
-  "grd-drechtsteden": {
-    "naam": "Gemeenschappelijke Regeling Drechtsteden",
-    "gemeenten": [
-      "alblasserdam",
-      "dordrecht",
-      "hardinxveld-giessendam",
-      "hendrik-ido-ambacht",
-      "papendrecht",
-      "sliedrecht",
-      "zwijndrecht"
-    ],
-    "provincies": [
-      "zuid-holland"
-    ],
-    "website": "https://www.drechtsteden.nl/",
-    "bron_register": "CVDR624700"
+    "website": "https://www.ozhz.nl/vergaderstukken-algemeen-bestuur/",
+    "bron_register": "organisaties.overheid.nl/28093459",
+    "geverifieerd": true
   },
   "sociale-dienst-drechtsteden": {
-    "naam": "Gemeenschappelijke Regeling Sociaal (Sociale Dienst Drechtsteden)",
+    "naam": "Gemeenschappelijke Regeling Sociaal (GR Sociaal; fusie 2023 van Sociale Dienst Drechtsteden en Drechtwerk)",
     "gemeenten": [
       "alblasserdam",
       "dordrecht",
@@ -1424,7 +1451,7 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://www.socialedienstdrechtsteden.nl/",
+    "website": "https://bestuur.grsociaal.nl/Organisatie/Algemeen-bestuur",
     "bron_register": "CVDR668607"
   },
   "dienst-gezondheid-en-jeugd-zhz": {
@@ -1488,7 +1515,8 @@
     "provincies": [
       "zuid-holland"
     ],
-    "bron_register": "CVDR674277"
+    "bron_register": "CVDR674277",
+    "website": "https://serviceorganisatiezorghollandrijnland.nl/"
   },
   "servicepunt71": {
     "naam": "Gemeenschappelijke Regeling Servicepunt71",
@@ -1528,16 +1556,19 @@
   "groenalliantie-midden-holland": {
     "naam": "Gemeenschappelijke Regeling Groenalliantie Midden-Holland en omstreken",
     "gemeenten": [
+      "alphen-aan-den-rijn",
       "bodegraven-reeuwijk",
       "gouda",
+      "krimpen-aan-den-ijssel",
       "krimpenerwaard",
-      "waddinxveen",
-      "zuidplas"
+      "waddinxveen"
     ],
     "provincies": [
       "zuid-holland"
     ],
-    "bron_register": "CVDR720833"
+    "bron_register": "CVDR720833",
+    "website": "https://groenalliantiemiddenholland.nl/organisatie/vergaderingen/default.aspx",
+    "geverifieerd": true
   },
   "ijsselgemeenten": {
     "naam": "Gemeenschappelijke regeling IJsselgemeenten",
@@ -1562,8 +1593,9 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://recreatieschaprottemeren.nl/",
-    "bron_register": "recreatieschaprottemeren.nl"
+    "website": "https://www.recreatieschaprottemeren.nl/organisatie/vergaderingen/default.aspx",
+    "bron_register": "recreatieschaprottemeren.nl",
+    "geverifieerd": true
   },
   "recreatieschap-voorne-putten": {
     "naam": "Recreatieschap Voorne-Putten",
@@ -1574,7 +1606,9 @@
     "provincies": [
       "zuid-holland"
     ],
-    "bron_register": "organisaties.overheid.nl/24966707"
+    "bron_register": "organisaties.overheid.nl/24966707",
+    "website": "https://www.recreatieschapvoorneputten.nl/organisatie/vergaderingen/default.aspx",
+    "geverifieerd": true
   },
   "erfgoed-leiden-en-omstreken": {
     "naam": "Erfgoed Leiden en Omstreken (Regionaal Archief Leiden)",
@@ -1597,7 +1631,7 @@
     "bron_register": "erfgoedleiden.nl"
   },
   "bar-organisatie": {
-    "naam": "BAR-organisatie (ambtelijke fusie Barendrecht, Albrandswaard, Ridderkerk)",
+    "naam": "BAR-organisatie / De Bedrijfsvoeringspartner (bedrijfsvoeringsorganisatie Barendrecht, Albrandswaard, Ridderkerk)",
     "gemeenten": [
       "albrandswaard",
       "barendrecht",
@@ -1606,11 +1640,11 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://www.bar-organisatie.nl/",
+    "website": "https://www.debedrijfsvoeringspartner.nl/",
     "bron_register": "eigen websites gemeenten BAR"
   },
   "ggd-hollands-midden": {
-    "naam": "GGD Hollands Midden",
+    "naam": "Regionale Dienst Openbare Gezondheidszorg Hollands Midden (RDOG Hollands Midden; publieksnaam GGD Hollands Midden)",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "bodegraven-reeuwijk",
@@ -1671,12 +1705,12 @@
       "zeeland"
     ],
     "website": "https://rud-zeeland.nl/over-ons/bestuur/vergaderstukken-algemeen-bestuur",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR323798"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR323798",
+    "geverifieerd": true
   },
   "zeeuws-archief": {
-    "naam": "Gemeenschappelijke Regeling Zeeuws Archief",
+    "naam": "Gemeenschappelijke regeling Zeeuws Archief 2026",
     "gemeenten": [
-      "kapelle",
       "middelburg",
       "schouwen-duiveland",
       "terneuzen",
@@ -1686,10 +1720,12 @@
     "provincies": [
       "zeeland"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR757385"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR757385",
+    "website": "https://www.zeeuwsarchief.nl/over-ons/bestuur/",
+    "geverifieerd": true
   },
   "olaz": {
-    "naam": "Openbaar Lichaam Afvalstoffenverwijdering Zeeland (OLAZ)",
+    "naam": "Openbaar Lichaam Afvalstoffenverwerking Zeeland (OLAZ)",
     "gemeenten": [
       "borsele",
       "goes",
@@ -1708,8 +1744,10 @@
     "provincies": [
       "zeeland"
     ],
-    "website": "https://www.olazzeeland.nl/documenten-links/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR96093"
+    "website": "https://www.olazzeeland.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR96093",
+    "notubiz_id": 3617,
+    "geverifieerd": true
   },
   "sabewa-zeeland": {
     "naam": "Gemeenschappelijke Regeling Belastingsamenwerking SaBeWa Zeeland",
@@ -1727,7 +1765,8 @@
       "zeeland"
     ],
     "website": "https://www.sabewazeeland.nl/vergaderstukken-algemeen-bestuur",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR322158"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR322158",
+    "geverifieerd": true
   },
   "dethon": {
     "naam": "Gemeenschappelijke regeling Sociaal Werkvoorzieningsschap Zeeuwsch-Vlaanderen (Dethon)",
@@ -1739,19 +1778,31 @@
     "provincies": [
       "zeeland"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR78683"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR78683",
+    "website": "https://www.dethon.nl/over-dethon/bestuur-2/vergaderingen-algemeen-bestuur/",
+    "geverifieerd": true
   },
   "collectief-vervoer-zeeuws-vlaanderen": {
-    "naam": "Gemeenschappelijke regeling Collectief Vervoer Zeeuws-Vlaanderen",
+    "naam": "Gemeenschappelijke Regeling Publiek Vervoer Zeeland (opvolger van Collectief Vervoer Zeeuws-Vlaanderen per 01-01-2026)",
     "gemeenten": [
+      "borsele",
+      "goes",
       "hulst",
+      "kapelle",
+      "middelburg",
+      "noord-beveland",
+      "reimerswaal",
+      "schouwen-duiveland",
       "sluis",
-      "terneuzen"
+      "terneuzen",
+      "tholen",
+      "veere",
+      "vlissingen"
     ],
     "provincies": [
       "zeeland"
     ],
-    "bron_register": "provinciale wijzigingsstukken Zeeland"
+    "website": "https://reizendoorzeeland.nl/"
   },
   "omgevingsdienst-brabant-noord": {
     "naam": "Gemeenschappelijke Regeling Omgevingsdienst Brabant Noord (ODBN)",
@@ -1771,7 +1822,8 @@
       "noord-brabant"
     ],
     "website": "https://odbn.nl/over-odbn/vergaderstukken",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR733614"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR733614",
+    "ibabs_naam": "odbn"
   },
   "omgevingsdienst-zuidoost-brabant": {
     "naam": "Gemeenschappelijke regeling Omgevingsdienst Zuidoost-Brabant (ODZOB)",
@@ -1894,7 +1946,8 @@
       "noord-brabant"
     ],
     "website": "https://www.ggdwb.nl/over-de-ggd/bestuur/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723051"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723051",
+    "ibabs_naam": "ggdwestbrabant"
   },
   "ggd-brabant-zuidoost": {
     "naam": "Gemeenschappelijke regeling GGD Brabant-Zuidoost",
@@ -1925,7 +1978,8 @@
       "noord-brabant"
     ],
     "website": "https://www.ggdbzo.nl/publicaties/vergaderstukken-ab-en-db/vergaderstukken-algemeen-bestuur-2025/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439850"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR439850",
+    "geverifieerd": true
   },
   "metropoolregio-eindhoven": {
     "naam": "Gemeenschappelijke Regeling Metropoolregio Eindhoven 2024",
@@ -2032,8 +2086,9 @@
     "provincies": [
       "noord-brabant"
     ],
-    "website": "https://bwbrabant.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393589"
+    "website": "https://bwbrabant.nl/bwb/over-ons/hoe-ziet-onze-organisatie-eruit/algemeen-bestuur/vergaderstukken",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393589",
+    "geverifieerd": true
   },
   "samenwerking-kempengemeenten": {
     "naam": "Gemeenschappelijke Regeling Samenwerking Kempengemeenten",
@@ -2047,7 +2102,9 @@
     "provincies": [
       "noord-brabant"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR698973"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR698973",
+    "website": "https://www.kempengemeenten.nl/vergaderstukken-algemeen-bestuur-grsk",
+    "geverifieerd": true
   },
   "kempenplus": {
     "naam": "Gemeenschappelijke Regeling Bedrijfsvoeringsorganisatie Participatiebedrijf KempenPlus",
@@ -2089,7 +2146,8 @@
       "noord-brabant"
     ],
     "website": "https://www.werkpleinhartvanwest-brabant.nl/programma-regelingen-besluiten-en-begrotingen",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR643615"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR643615",
+    "geverifieerd": true
   },
   "west-brabants-archief": {
     "naam": "Gemeenschappelijke Regeling West-Brabants Archief",
@@ -2184,7 +2242,18 @@
     "provincies": [
       "noord-brabant"
     ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR386142"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR386142",
+    "gemeenten": [
+      "bergen-op-zoom",
+      "etten-leur",
+      "halderberge",
+      "moerdijk",
+      "roosendaal",
+      "rucphen",
+      "steenbergen",
+      "woensdrecht",
+      "zundert"
+    ]
   },
   "diamant-groep": {
     "naam": "Gemeenschappelijke regeling Diamant-groep",
@@ -2275,8 +2344,9 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://www.ggdzl.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR114354"
+    "website": "https://ggdzl.nl/over-de-ggd/bestuur/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR114354",
+    "geverifieerd": true
   },
   "bsgw": {
     "naam": "Gemeenschappelijke regeling Belastingsamenwerking Gemeenten en Waterschappen Limburg (BsGW)",
@@ -2351,7 +2421,7 @@
       "limburg"
     ],
     "website": "https://www.sociaaldomein-limburgnoord.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR370891"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721611/1"
   },
   "regio-noord-limburg": {
     "naam": "Gemeenschappelijke regeling Regio Noord-Limburg",
@@ -2388,8 +2458,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.odachterhoek.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721546/1"
+    "website": "https://www.odachterhoek.nl/archief-agenda-en-vergaderstukken/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721546/1",
+    "geverifieerd": true
   },
   "omgevingsdienst-groene-metropool": {
     "naam": "Omgevingsdienst Groene Metropool (ODGM) — fusie van ODRA en ODRN per 1-1-2026",
@@ -2414,8 +2485,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.odgroenemetropool.nl/",
-    "bron_register": "https://www.gelderseomgevingsdiensten.nl/nieuws/omgevingsdienst-groene-metropool-van-start/"
+    "website": "https://www.odgroenemetropool.nl/over-ons/bestuurlijke-agenda-vergaderstukken/",
+    "bron_register": "https://www.gelderseomgevingsdiensten.nl/nieuws/omgevingsdienst-groene-metropool-van-start/",
+    "geverifieerd": true
   },
   "omgevingsdienst-veluwe": {
     "naam": "Omgevingsdienst Veluwe (OD Veluwe) — fusie van ODNV en OVIJ per 1-1-2024",
@@ -2436,8 +2508,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.odveluwe.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR708095/1"
+    "website": "https://www.odveluwe.nl/bestuursinformatie/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR708095/1",
+    "geverifieerd": true
   },
   "ggd-noord-en-oost-gelderland": {
     "naam": "GGD Noord- en Oost-Gelderland (GGD NOG)",
@@ -2468,8 +2541,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.ggdnog.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722940"
+    "website": "https://www.ggdnog.nl/vergaderingen-algemeen-bestuur-2026",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722940",
+    "geverifieerd": true
   },
   "ggd-gelderland-zuid": {
     "naam": "Gemeenschappelijke regeling Gemeentelijke Gezondheidsdienst Gelderland-Zuid",
@@ -2492,8 +2566,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://ggdgelderlandzuid.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR642683/2"
+    "website": "https://ggdgelderlandzuid.nl/professionals/gemeenten/ggd-en-gemeente/bestuursoverleg-dbenab/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR642683/2",
+    "geverifieerd": true
   },
   "werkzaak-rivierenland": {
     "naam": "Gemeenschappelijke Regeling Werkzaak Rivierenland",
@@ -2535,15 +2610,12 @@
     "naam": "Gemeenschappelijke Regeling Delta (sociale werkvoorziening)",
     "gemeenten": [
       "bronckhorst",
-      "brummen",
       "lochem",
-      "voorst",
-      "zutphen"
+      "voorst"
     ],
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.deltawerkt.nl/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR619631/1"
   },
   "presikhaaf-bedrijven": {
@@ -2566,21 +2638,6 @@
     "website": "http://www.presikhaaf.org/",
     "bron_register": "https://cedris.nl/nieuws/bestuur-presikhaaf-bedrijven-besluit-tot-liquidatie-voormalig-sw-bedrijf/"
   },
-  "permar-ws": {
-    "naam": "Gemeenschappelijke Regeling Permar WS",
-    "gemeenten": [
-      "barneveld",
-      "ede",
-      "renkum",
-      "scherpenzeel",
-      "wageningen"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "website": "https://www.permar.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR424495"
-  },
   "tribuut": {
     "naam": "Tribuut belastingsamenwerking",
     "gemeenten": [
@@ -2594,8 +2651,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.tribuut.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR634293"
+    "website": "https://www.tribuut.nl/over-ons/bestuursvergaderingen",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR634293",
+    "geverifieerd": true
   },
   "belastingsamenwerking-rivierenland": {
     "naam": "Belastingsamenwerking Rivierenland (BSR)",
@@ -2636,7 +2694,7 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.gmr.nl/",
+    "website": "https://gmr.bestuurlijkeinformatie.nl/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR652219/2"
   },
   "regio-achterhoek": {
@@ -2676,7 +2734,7 @@
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722222/1"
   },
   "samenwerkingsregeling-noord-veluwe": {
-    "naam": "Samenwerkingsregeling Noord-Veluwe",
+    "naam": "Samenwerkingsregeling Noord-Veluwe (opgeheven per 01-09-2018; losse opvolger: Regio Noord-Veluwe, geen formele GR meer)",
     "gemeenten": [
       "elburg",
       "ermelo",
@@ -2690,7 +2748,6 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.regionoordveluwe.nl/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR483495"
   },
   "sociale-dienst-veluwerand": {
@@ -2755,7 +2812,9 @@
       "gelderland"
     ],
     "website": "https://regionaalarchiefrivierenland.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722169/1"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722169/1",
+    "notubiz_id": 3567,
+    "geverifieerd": true
   },
   "gelders-archief": {
     "naam": "Gemeenschappelijke regeling Gelders Archief",
@@ -2785,7 +2844,8 @@
     "provincies": [
       "gelderland"
     ],
-    "bron_register": "CVDR669794"
+    "bron_register": "CVDR669794",
+    "website": "https://regiorvn.bestuurlijkeinformatie.nl/"
   },
   "1stroom": {
     "naam": "Gemeenschappelijke regeling 1Stroom (ambtelijke fusieorganisatie Duiven-Westervoort)",
@@ -2820,7 +2880,7 @@
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR407547"
   },
   "westrom": {
-    "naam": "Gemeenschappelijke Regeling Westrom",
+    "naam": "Gemeenschappelijke Regeling Westrom (uitvoering per 2025 overgedragen aan Doon Roermond B.V.; GR zelf beëindigd als uitvoeringsorganisatie per 01-01-2026, functioneert nog als formeel werkgever Wsw-personeel)",
     "gemeenten": [
       "echt-susteren",
       "leudal",
