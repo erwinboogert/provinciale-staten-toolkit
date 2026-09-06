@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 71 van de 162 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 91 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. NABRANDER (na afronding van de provinciecontrole): een bug in wil_vergadering() (api.py) filterde vergaderingen stil weg als de organisatie afkortingen gebruikte (\"AB-vergadering\" i.p.v. \"algemeen bestuur\") — inmiddels gefixt met woordgrens-matching op ab/db/pho. Bij het testen daarvan bleek dat van de 9 oorspronkelijke, nooit door deze controle aangeraakte \"geverifieerd\"-regelingen er 3 alsnog fout bleken: hoeksche-waard is verwijderd (opgeheven per 1-1-2019, gefuseerd tot 1 gemeente, geen samenwerking meer), en orionis-walcheren/meerinzicht hadden een notubiz_id dat al jaren 0 vergaderingen teruggeeft — beide toen teruggezet naar niet-geverifieerd. Les: \"geverifieerd\" op enig moment betekent niet blijvend correct; periodieke herverificatie blijft nodig. VERVOLG (september 2026, tweede verificatieronde): orionis-walcheren is alsnog geverifieerd op 'handmatig' (notubiz_id verwijderd; op https://www.orioniswalcheren.nl/organisatie/bestuur staan wel degelijk directe PDF-downloadlinks van AB-verslagen, bevestigd door een PDF te downloaden — het eerdere 'alleen op aanvraag'-vermoeden klopte niet (meer)). meerinzicht bleek daarnaast een compleet foutieve gemeentenlijst te hebben (apeldoorn/epe/hattem/heerde in plaats van het echte ermelo/harderwijk/zeewolde) en het notubiz-org (1982) geeft 'documents_public: 0' terug — dus terecht niet-geverifieerd, nu met juiste gemeentenlijst. ggd-regio-utrecht is geverifieerd op 'handmatig' (ggdru.nl/over-de-ggd/bestuur/ heeft directe PDF-agenda's per AB-vergadering). gblt bleek een verhuizing naar iBabs te hebben ondergaan per juli 2026 (zelf aangekondigd als 'verhuisd naar gblt.bestuurlijkeinformatie.nl' op gblt.nl/agenda) en miste 2 van de 7 deelnemende gemeenten (bunschoten, leusden) — ibabs_naam 'gblt' toegevoegd maar niet geverifieerd (IP-blokkade, zie bekende beperking), gemeentenlijst en website wel gecorrigeerd. Diverse kleinere regelingen (wedeka-bedrijven, afvalbeheer-regio-centraal-groningen, regio-groningen-assen, publiek-vervoer-groningen-drenthe, veilig-thuis-groningen, sozawe-noardwest-fryslan, stark, emco-groep, reestmond, gemeentelijke-kredietbank-drenthe, ssc-ons, regionaal-bedrijventerrein-twente, werkvoorzieningschap-ijsselmeergroep, avu, razu, plassenschap-loosdrecht, regionale-backoffice-lekstroom, od-noordzeekanaalgebied, cocensus, wnk-noord-kennemerland, gesubsidieerde-arbeid-kop-van-noord-holland, bel-combinatie) onderzocht maar geen bruikbaar eigen AB-portaal gevonden — terecht niet-geverifieerd gelaten. NIEUW VELD 'reden' (vanaf deze batch): geeft bij niet-geverifieerde regelingen aan waarom er (nog) geen bruikbare bron is, met een van vaste waarden: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-vergaderarchief-alleen-jaarstukken' (de organisatie heeft een eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder een eigen publiek AB-vergadercircuit), 'ibabs-geblokkeerd-ip-whitelisting' (portaal en sitename wel bevestigd, maar kon nog niet getest worden door de bekende iBabs-blokkade — kandidaat om alsnog geverifieerd te worden zodra whitelisting geregeld is). Ontbreekt het 'reden'-veld bij een niet-geverifieerde regeling, dan is die nog helemaal niet onderzocht in deze verificatieronde. Dit veld is nog niet met terugwerkende kracht ingevuld voor de niet-geverifieerde regelingen uit eerdere batches (vóór september 2026) — dat kan bij gelegenheid alsnog gebeuren.",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen).\n\nSTATUS (september 2026, na twee volledige verificatierondes): van de oorspronkelijke 166 regelingen zijn er 9 verwijderd wegens opheffing/fusie zonder zelfstandige opvolger (hoeksche-waard, grd-drechtsteden, omgevingsdienst-regio-nijmegen, permar-ws, ggd-amsterdam-amstelland, delta, presikhaaf-bedrijven, samenwerkingsregeling-noord-veluwe, sociale-dienst-veluwerand). Van de resterende 157 zijn er 78 'geverifieerd': true (portaaltype echt getest met --droog, of een handmatige vergaderstukkenpagina met bevestigde directe downloadlinks). De overige 79 hebben een 'reden'-veld dat aangeeft waarom er (nog) geen bruikbare bron is: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'ibabs-geblokkeerd-ip-whitelisting' (sitename bevestigd op de eigen site van de organisatie, maar de iBabs SOAP-API blokkeert dit IP — kandidaat om alsnog geverifieerd te worden zodra whitelisting geregeld is, zie hieronder), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling/ambtelijke fusie die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder eigen publiek AB-vergadercircuit), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-vergaderarchief-alleen-jaarstukken' (eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-downloadbare-bijlagen' (vergaderpagina/-lijst bestaat, maar zonder confirmeerbare downloadbare documenten), 'portaal-blokkeert-onderzoek' (een portaal bestaat aantoonbaar, maar bot-/anti-scraping-bescherming verhinderde verder onderzoek naar de exacte sitename of inhoud — nog een keer proberen met een andere aanpak kan lonen). Ontbreekt zowel 'geverifieerd': true als 'reden', dan is die regeling nog niet onderzocht.\n\nBEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Zodra whitelisting geregeld is, kunnen alle 19 regelingen met reden 'ibabs-geblokkeerd-ip-whitelisting' in één moeite door opnieuw getest en (waarschijnlijk) op geverifieerd gezet worden — dat is de grootste directe winst die hierna te behalen valt.\n\nGebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. Let op: dit environment heeft geen werkende 'python3' voor dit script (macOS system Python 3.9 mist PEP 604-syntax) — gebruik expliciet python3.10+ (bijv. /opt/homebrew/bin/python3.12).\n\nLes uit eerdere rondes: 'geverifieerd' op enig moment betekent niet blijvend correct (zie hoeksche-waard, orionis-walcheren/meerinzicht die eerder ten onrechte via een dode notubiz_id geverifieerd stonden) — periodieke herverificatie blijft nodig. Vertrouw ook een eerdere '_opmerking'-conclusie niet blind: orionis-walcheren werd hier ooit als 'alleen op aanvraag per mail' bestempeld, wat bij hercontrole niet (meer) klopte — er stonden gewoon directe PDF-downloadlinks. Wees ook alert op AI-samenvattingen van zoekresultaten die een organisatie ten onrechte als 'opgeheven' bestempelen (gebeurde deze ronde bij waterlands-archief en havenschap-moerdijk, beide gewoon nog actief) — check zulke claims altijd tegen een tweede, specifiekere bron voordat je een regeling verwijdert.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -599,6 +599,8 @@
   },
   "drents-archief": {
     "naam": "Gemeenschappelijke regeling Regionaal Historisch Centrum Drents Archief",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "assen",
       "emmen",
@@ -1245,6 +1247,8 @@
   },
   "noord-hollands-archief": {
     "naam": "Gemeenschappelijke Regeling Noord-Hollands Archief",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "aalsmeer",
       "beverwijk",
@@ -1266,6 +1270,8 @@
   },
   "waterlands-archief": {
     "naam": "Gemeenschappelijke Regeling Waterlands Archief",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "edam-volendam",
       "purmerend",
@@ -1299,6 +1305,8 @@
   },
   "recreatieschap-twiske-waterland": {
     "naam": "Recreatieschap Twiske-Waterland",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "landsmeer",
       "oostzaan",
@@ -1314,6 +1322,8 @@
   },
   "recreatieschap-spaarnwoude": {
     "naam": "Recreatieschap Spaarnwoude",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "amsterdam",
       "haarlem",
@@ -1329,6 +1339,8 @@
   },
   "recreatieschap-geestmerambacht": {
     "naam": "Recreatieschap Geestmerambacht",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alkmaar",
       "dijk-en-waard"
@@ -1342,6 +1354,8 @@
   },
   "groengebied-amstelland": {
     "naam": "Recreatieschap Groengebied Amstelland",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "amstelveen",
       "amsterdam",
@@ -1357,6 +1371,8 @@
   },
   "vervoerregio-amsterdam": {
     "naam": "Gemeenschappelijke regeling Vervoerregio Amsterdam",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "aalsmeer",
       "amstelveen",
@@ -1376,23 +1392,9 @@
     "provincies": [
       "noord-holland"
     ],
-    "website": "https://vervoerregio.notubiz.nl/",
-    "bron_register": "CVDR612548 / CVDR454913"
-  },
-  "ggd-amsterdam-amstelland": {
-    "naam": "Gemeenschappelijke regeling GGD Amsterdam-Amstelland (opgeheven 2022/2024; uitvoering overgegaan naar GGD Amsterdam via dienstverleningsovereenkomst)",
-    "gemeenten": [
-      "aalsmeer",
-      "amstelveen",
-      "amsterdam",
-      "diemen",
-      "ouder-amstel",
-      "uithoorn"
-    ],
-    "provincies": [
-      "noord-holland"
-    ],
-    "bron_register": "programmabegroting2023.financielestukken.ouder-amstel.nl"
+    "website": "https://vervoerregio.bestuurlijkeinformatie.nl/",
+    "bron_register": "CVDR612548 / CVDR454913",
+    "ibabs_naam": "vervoerregio"
   },
   "dcmr-milieudienst-rijnmond": {
     "naam": "DCMR Milieudienst Rijnmond",
@@ -1500,6 +1502,8 @@
   },
   "sociale-dienst-drechtsteden": {
     "naam": "Gemeenschappelijke Regeling Sociaal (GR Sociaal; fusie 2023 van Sociale Dienst Drechtsteden en Drechtwerk)",
+    "geverifieerd": false,
+    "reden": "portaal-blokkeert-onderzoek",
     "gemeenten": [
       "alblasserdam",
       "dordrecht",
@@ -1517,6 +1521,8 @@
   },
   "dienst-gezondheid-en-jeugd-zhz": {
     "naam": "Dienst Gezondheid & Jeugd Zuid-Holland Zuid",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alblasserdam",
       "dordrecht",
@@ -1531,10 +1537,14 @@
     "provincies": [
       "zuid-holland"
     ],
-    "bron_register": "CVDR601033 / CVDR636076"
+    "website": "https://dgj.bestuurlijkeinformatie.nl/Calendar",
+    "bron_register": "CVDR601033 / CVDR636076",
+    "ibabs_naam": "dgj"
   },
   "holland-rijnland": {
     "naam": "Gemeenschappelijke regeling Regio Holland Rijnland",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "hillegom",
@@ -1553,11 +1563,14 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://hollandrijnland.nl/",
-    "bron_register": "CVDR745740"
+    "website": "https://hollandrijnland.bestuurlijkeinformatie.nl/",
+    "bron_register": "CVDR745740",
+    "ibabs_naam": "hollandrijnland"
   },
   "serviceorganisatie-zorg-holland-rijnland": {
     "naam": "Gemeenschappelijke Regeling Serviceorganisatie Zorg Holland Rijnland",
+    "geverifieerd": false,
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "hillegom",
@@ -1581,6 +1594,8 @@
   },
   "servicepunt71": {
     "naam": "Gemeenschappelijke Regeling Servicepunt71",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "leiden",
       "leiderdorp",
@@ -1594,6 +1609,8 @@
   },
   "svhw": {
     "naam": "Gemeenschappelijke Regeling SVHW",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "alblasserdam",
       "albrandswaard",
@@ -1633,6 +1650,8 @@
   },
   "ijsselgemeenten": {
     "naam": "Gemeenschappelijke regeling IJsselgemeenten",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "capelle-aan-den-ijssel",
       "krimpen-aan-den-ijssel",
@@ -1673,6 +1692,8 @@
   },
   "erfgoed-leiden-en-omstreken": {
     "naam": "Erfgoed Leiden en Omstreken (Regionaal Archief Leiden)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "hillegom",
@@ -1693,6 +1714,8 @@
   },
   "bar-organisatie": {
     "naam": "BAR-organisatie / De Bedrijfsvoeringspartner (bedrijfsvoeringsorganisatie Barendrecht, Albrandswaard, Ridderkerk)",
+    "geverifieerd": false,
+    "reden": "geen-downloadbare-bijlagen",
     "gemeenten": [
       "albrandswaard",
       "barendrecht",
@@ -1706,6 +1729,8 @@
   },
   "ggd-hollands-midden": {
     "naam": "Regionale Dienst Openbare Gezondheidszorg Hollands Midden (RDOG Hollands Midden; publieksnaam GGD Hollands Midden)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "bodegraven-reeuwijk",
@@ -1733,6 +1758,8 @@
   },
   "avalex": {
     "naam": "Gemeenschappelijke regeling Avalex (afvalinzameling)",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "delft",
       "midden-delfland",
@@ -1845,6 +1872,7 @@
   },
   "collectief-vervoer-zeeuws-vlaanderen": {
     "naam": "Gemeenschappelijke Regeling Publiek Vervoer Zeeland (opvolger van Collectief Vervoer Zeeuws-Vlaanderen per 01-01-2026)",
+    "geverifieerd": true,
     "gemeenten": [
       "borsele",
       "goes",
@@ -1863,10 +1891,12 @@
     "provincies": [
       "zeeland"
     ],
-    "website": "https://reizendoorzeeland.nl/"
+    "website": "https://reizendoorzeeland.nl/nl/over-ons/bestuur"
   },
   "omgevingsdienst-brabant-noord": {
     "naam": "Gemeenschappelijke Regeling Omgevingsdienst Brabant Noord (ODBN)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "bernheze",
       "boekel",
@@ -1888,6 +1918,7 @@
   },
   "omgevingsdienst-zuidoost-brabant": {
     "naam": "Gemeenschappelijke regeling Omgevingsdienst Zuidoost-Brabant (ODZOB)",
+    "geverifieerd": true,
     "gemeenten": [
       "asten",
       "bergeijk",
@@ -1919,6 +1950,8 @@
   },
   "omgevingsdienst-midden-en-west-brabant": {
     "naam": "Gemeenschappelijke Regeling Omgevingsdienst Midden- en West-Brabant (OMWB)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alphen-chaam",
       "altena",
@@ -1955,6 +1988,8 @@
   },
   "ggd-hart-voor-brabant": {
     "naam": "Gemeenschappelijke regeling GGD Hart voor Brabant",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alphen-chaam",
       "baarle-nassau",
@@ -1986,6 +2021,8 @@
   },
   "ggd-west-brabant": {
     "naam": "Gemeenschappelijke regeling GGD West-Brabant 2024",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "alphen-chaam",
       "altena",
@@ -2045,6 +2082,7 @@
   },
   "metropoolregio-eindhoven": {
     "naam": "Gemeenschappelijke Regeling Metropoolregio Eindhoven 2024",
+    "geverifieerd": true,
     "gemeenten": [
       "asten",
       "bergeijk",
@@ -2071,11 +2109,12 @@
     "provincies": [
       "noord-brabant"
     ],
-    "website": "https://metropoolregioeindhoven.nl/",
+    "website": "https://metropoolregioeindhoven.nl/netwerk/algemeen-bestuur",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR723136"
   },
   "regio-west-brabant": {
     "naam": "Gemeenschappelijke regeling Regio West-Brabant (RWB)",
+    "geverifieerd": true,
     "gemeenten": [
       "alphen-chaam",
       "altena",
@@ -2097,7 +2136,7 @@
     "provincies": [
       "noord-brabant"
     ],
-    "website": "https://www.west-brabant.eu/",
+    "website": "https://www.west-brabant.eu/over-rwb/bestuur-en-organisatie/verslagen-algemeen-bestuur-en-strategisch-beraad/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR641200"
   },
   "regio-hart-van-brabant": {
@@ -2124,6 +2163,8 @@
   },
   "belastingsamenwerking-oost-brabant": {
     "naam": "Gemeenschappelijke Regeling Belastingsamenwerking Oost-Brabant (BSOB) 2024",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "asten",
       "bernheze",
@@ -2172,6 +2213,8 @@
   },
   "kempenplus": {
     "naam": "Gemeenschappelijke Regeling Bedrijfsvoeringsorganisatie Participatiebedrijf KempenPlus",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "bergeijk",
       "bladel",
@@ -2186,6 +2229,8 @@
   },
   "isd-brabantse-wal": {
     "naam": "Gemeenschappelijke Regeling Intergemeentelijke Sociale Dienst Brabantse Wal",
+    "geverifieerd": false,
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "bergen-op-zoom",
       "steenbergen",
@@ -2215,6 +2260,8 @@
   },
   "west-brabants-archief": {
     "naam": "Gemeenschappelijke Regeling West-Brabants Archief",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "bergen-op-zoom",
       "etten-leur",
@@ -2233,6 +2280,8 @@
   },
   "regionaal-archief-tilburg": {
     "naam": "Gemeenschappelijke regeling Regionaal Archief Tilburg",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "goirle",
       "hilvarenbeek",
@@ -2247,6 +2296,8 @@
   },
   "bhic": {
     "naam": "Gemeenschappelijke Regeling Brabants Historisch Informatie Centrum (BHIC)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "bernheze",
       "boekel",
@@ -2265,6 +2316,8 @@
   },
   "cure": {
     "naam": "Gemeenschappelijke Regeling Cure",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "eindhoven",
       "geldrop-mierlo",
@@ -2278,6 +2331,8 @@
   },
   "havenschap-moerdijk": {
     "naam": "Gemeenschappelijke regeling bedrijfsvoeringsorganisatie Havenschap Moerdijk",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "moerdijk"
     ],
@@ -2288,6 +2343,8 @@
   },
   "werkvoorzieningschap-noordoost-brabant": {
     "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Noordoost-Brabant (WSD/IBN)",
+    "geverifieerd": false,
+    "reden": "geen-downloadbare-bijlagen",
     "gemeenten": [
       "bernheze",
       "boekel",
@@ -2303,6 +2360,8 @@
   },
   "wvs-groep": {
     "naam": "Gemeenschappelijke regeling van het Werkvoorzieningsschap West Noord-Brabant (WVS-groep / Atea)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "provincies": [
       "noord-brabant"
     ],
@@ -2321,6 +2380,7 @@
   },
   "diamant-groep": {
     "naam": "Gemeenschappelijke regeling Diamant-groep",
+    "geverifieerd": true,
     "gemeenten": [
       "alphen-chaam",
       "dongen",
@@ -2332,7 +2392,8 @@
     "provincies": [
       "noord-brabant"
     ],
-    "bron_register": "organisaties.overheid.nl/24967730"
+    "bron_register": "organisaties.overheid.nl/24967730",
+    "website": "https://diamant-groep.nl/over-ons/bestuur/bestuursverslagen/"
   },
   "omgevingsdienst-zuid-limburg": {
     "naam": "Gemeenschappelijke regeling Omgevingsdienst Zuid-Limburg",
@@ -2363,6 +2424,8 @@
   },
   "omgevingsdienst-noord-en-midden-limburg": {
     "naam": "Gemeenschappelijke regeling Omgevingsdienst Noord- en Midden-Limburg",
+    "geverifieerd": false,
+    "reden": "geen-downloadbare-bijlagen",
     "gemeenten": [
       "beesel",
       "bergen-l",
@@ -2415,6 +2478,8 @@
   },
   "bsgw": {
     "naam": "Gemeenschappelijke regeling Belastingsamenwerking Gemeenten en Waterschappen Limburg (BsGW)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "beek",
       "beekdaelen",
@@ -2447,11 +2512,14 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://bsgw.nl/",
+    "website": "https://bsgw.bestuurlijkeinformatie.nl/",
+    "ibabs_naam": "bsgw",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721927"
   },
   "maasveren-limburg-noord": {
     "naam": "Gemeenschappelijke Regeling Maasveren Limburg-Noord",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "beesel",
       "horst-aan-de-maas",
@@ -2466,6 +2534,8 @@
   },
   "mgr-sociaal-domein-limburg-noord": {
     "naam": "Modulaire Gemeenschappelijke Regeling Sociaal Domein Limburg-Noord",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beesel",
       "bergen-l",
@@ -2638,6 +2708,8 @@
   },
   "werkzaak-rivierenland": {
     "naam": "Gemeenschappelijke Regeling Werkzaak Rivierenland",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "buren",
       "culemborg",
@@ -2656,6 +2728,8 @@
   },
   "avri": {
     "naam": "Gemeenschappelijke regeling Avri",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "buren",
       "culemborg",
@@ -2669,40 +2743,9 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.avri.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722701/1"
-  },
-  "delta": {
-    "naam": "Gemeenschappelijke Regeling Delta (sociale werkvoorziening)",
-    "gemeenten": [
-      "bronckhorst",
-      "lochem",
-      "voorst"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR619631/1"
-  },
-  "presikhaaf-bedrijven": {
-    "naam": "Gemeenschappelijke Regeling Werkvoorziening Midden-Gelderland 'Presikhaaf Bedrijven' (in liquidatie)",
-    "gemeenten": [
-      "arnhem",
-      "doesburg",
-      "duiven",
-      "lingewaard",
-      "overbetuwe",
-      "renkum",
-      "rheden",
-      "rozendaal",
-      "westervoort",
-      "zevenaar"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "website": "http://www.presikhaaf.org/",
-    "bron_register": "https://cedris.nl/nieuws/bestuur-presikhaaf-bedrijven-besluit-tot-liquidatie-voormalig-sw-bedrijf/"
+    "website": "https://avri.bestuurlijkeinformatie.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722701/1",
+    "ibabs_naam": "avri"
   },
   "tribuut": {
     "naam": "Tribuut belastingsamenwerking",
@@ -2723,6 +2766,7 @@
   },
   "belastingsamenwerking-rivierenland": {
     "naam": "Belastingsamenwerking Rivierenland (BSR)",
+    "geverifieerd": true,
     "gemeenten": [
       "culemborg",
       "maasdriel",
@@ -2733,11 +2777,13 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.bsr.nl/",
+    "website": "https://www.bsr.nl/over-bsr/bekendmakingen/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR743215/1"
   },
   "groene-metropoolregio-arnhem-nijmegen": {
     "naam": "Groene Metropoolregio Arnhem-Nijmegen (GMR)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "arnhem",
       "berg-en-dal",
@@ -2761,10 +2807,13 @@
       "gelderland"
     ],
     "website": "https://gmr.bestuurlijkeinformatie.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR652219/2"
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR652219/2",
+    "ibabs_naam": "gmr"
   },
   "regio-achterhoek": {
     "naam": "Samenwerkingsregeling Regio Achterhoek (8RHK)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "aalten",
       "berkelland",
@@ -2783,6 +2832,8 @@
   },
   "regio-rivierenland": {
     "naam": "Regeling Regio Rivierenland",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "buren",
       "culemborg",
@@ -2798,36 +2849,6 @@
     ],
     "website": "https://www.regiorivierenland.nl/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722222/1"
-  },
-  "samenwerkingsregeling-noord-veluwe": {
-    "naam": "Samenwerkingsregeling Noord-Veluwe (opgeheven per 01-09-2018; losse opvolger: Regio Noord-Veluwe, geen formele GR meer)",
-    "gemeenten": [
-      "elburg",
-      "ermelo",
-      "harderwijk",
-      "nijkerk",
-      "nunspeet",
-      "oldebroek",
-      "putten",
-      "zeewolde"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR483495"
-  },
-  "sociale-dienst-veluwerand": {
-    "naam": "Gemeenschappelijke regeling Sociale Dienst Veluwerand",
-    "gemeenten": [
-      "ermelo",
-      "harderwijk",
-      "zeewolde"
-    ],
-    "provincies": [
-      "gelderland"
-    ],
-    "website": "https://www.socialedienstveluwerand.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR55819"
   },
   "erfgoedcentrum-achterhoek-en-liemers": {
     "naam": "Gemeenschappelijke Regeling Erfgoedcentrum Achterhoek en Liemers (ECAL)",
@@ -2850,6 +2871,8 @@
   },
   "regionaal-archief-nijmegen": {
     "naam": "Gemeenschappelijke regeling Regionaal Archief Nijmegen",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "berg-en-dal",
       "beuningen",
@@ -2885,6 +2908,7 @@
   },
   "gelders-archief": {
     "naam": "Gemeenschappelijke regeling Gelders Archief",
+    "geverifieerd": true,
     "gemeenten": [
       "arnhem",
       "renkum",
@@ -2894,11 +2918,13 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.geldersarchief.nl/",
+    "website": "https://www.geldersarchief.nl/over-ons/beleid/wet-open-overheid/actieve-openbaarmakingen",
     "bron_register": "organisaties.overheid.nl/24964242"
   },
   "mgr-rijk-van-nijmegen": {
     "naam": "Modulaire Gemeenschappelijke Regeling Rijk van Nijmegen (MGR)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "berg-en-dal",
       "beuningen",
@@ -2912,10 +2938,13 @@
       "gelderland"
     ],
     "bron_register": "CVDR669794",
-    "website": "https://regiorvn.bestuurlijkeinformatie.nl/"
+    "website": "https://regiorvn.bestuurlijkeinformatie.nl/",
+    "ibabs_naam": "regiorvn"
   },
   "1stroom": {
     "naam": "Gemeenschappelijke regeling 1Stroom (ambtelijke fusieorganisatie Duiven-Westervoort)",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "duiven",
       "westervoort"
@@ -2928,6 +2957,8 @@
   },
   "wozl": {
     "naam": "Gemeenschappelijke Regeling Werkvoorzieningschap Oostelijk Zuid-Limburg (WOZL / WSP Parkstad)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "beekdaelen",
       "brunssum",
@@ -2949,6 +2980,8 @@
   },
   "westrom": {
     "naam": "Gemeenschappelijke Regeling Westrom (uitvoering per 2025 overgedragen aan Doon Roermond B.V.; GR zelf beëindigd als uitvoeringsorganisatie per 01-01-2026, functioneert nog als formeel werkgever Wsw-personeel)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "echt-susteren",
       "leudal",
@@ -2964,6 +2997,8 @@
   },
   "kredietbank-limburg": {
     "naam": "Gemeenschappelijke Regeling voor Sociale Kredietverlening en Schuldhulpverlening in Limburg (Kredietbank Limburg)",
+    "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "brunssum",
       "heerlen",
@@ -2981,6 +3016,8 @@
   },
   "omnibuzz": {
     "naam": "Gemeenschappelijke Regeling Omnibuzz",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beek",
       "beekdaelen",
@@ -3021,6 +3058,8 @@
   },
   "rd4": {
     "naam": "Gemeenschappelijke Regeling Reinigingsdiensten Rd4",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beekdaelen",
       "brunssum",
@@ -3041,6 +3080,8 @@
   },
   "reinigingsdienst-maasland": {
     "naam": "Gemeenschappelijke Regeling Reinigingsdienst Maasland",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beesel",
       "echt-susteren",
@@ -3075,6 +3116,8 @@
   },
   "historisch-centrum-limburg": {
     "naam": "Gemeenschappelijke Regeling Regionaal Historisch Centrum Limburg (HCL)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beek",
       "brunssum",
@@ -3098,6 +3141,8 @@
   },
   "ict-nml": {
     "naam": "Gemeenschappelijke regeling ICT Noord- en Midden-Limburg (ICT NML)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "leudal",
       "nederweert",
@@ -3113,6 +3158,8 @@
   },
   "vidar-participatiebedrijf-westelijke-mijnstreek": {
     "naam": "Centrumregeling Participatiebedrijf Westelijke Mijnstreek (Vidar)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "beek",
       "sittard-geleen",
@@ -3126,6 +3173,8 @@
   },
   "werkvoorzieningschap-risse-groep": {
     "naam": "Gemeenschappelijke regeling Werkvoorzieningschap Risse Groep (grensoverschrijdend Limburg/Noord-Brabant)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "cranendonck",
       "nederweert",
