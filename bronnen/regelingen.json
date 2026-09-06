@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 71 van de 162 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 91 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. NABRANDER (na afronding van de provinciecontrole): een bug in wil_vergadering() (api.py) filterde vergaderingen stil weg als de organisatie afkortingen gebruikte (\"AB-vergadering\" i.p.v. \"algemeen bestuur\") — inmiddels gefixt met woordgrens-matching op ab/db/pho. Bij het testen daarvan bleek dat van de 9 oorspronkelijke, nooit door deze controle aangeraakte \"geverifieerd\"-regelingen er 3 alsnog fout bleken: hoeksche-waard is verwijderd (opgeheven per 1-1-2019, gefuseerd tot 1 gemeente, geen samenwerking meer), en orionis-walcheren/meerinzicht hadden een notubiz_id dat al jaren 0 vergaderingen teruggeeft — beide toen teruggezet naar niet-geverifieerd. Les: \"geverifieerd\" op enig moment betekent niet blijvend correct; periodieke herverificatie blijft nodig. VERVOLG (september 2026, tweede verificatieronde): orionis-walcheren is alsnog geverifieerd op 'handmatig' (notubiz_id verwijderd; op https://www.orioniswalcheren.nl/organisatie/bestuur staan wel degelijk directe PDF-downloadlinks van AB-verslagen, bevestigd door een PDF te downloaden — het eerdere 'alleen op aanvraag'-vermoeden klopte niet (meer)). meerinzicht bleek daarnaast een compleet foutieve gemeentenlijst te hebben (apeldoorn/epe/hattem/heerde in plaats van het echte ermelo/harderwijk/zeewolde) en het notubiz-org (1982) geeft 'documents_public: 0' terug — dus terecht niet-geverifieerd, nu met juiste gemeentenlijst. ggd-regio-utrecht is geverifieerd op 'handmatig' (ggdru.nl/over-de-ggd/bestuur/ heeft directe PDF-agenda's per AB-vergadering). gblt bleek een verhuizing naar iBabs te hebben ondergaan per juli 2026 (zelf aangekondigd als 'verhuisd naar gblt.bestuurlijkeinformatie.nl' op gblt.nl/agenda) en miste 2 van de 7 deelnemende gemeenten (bunschoten, leusden) — ibabs_naam 'gblt' toegevoegd maar niet geverifieerd (IP-blokkade, zie bekende beperking), gemeentenlijst en website wel gecorrigeerd. Diverse kleinere regelingen (wedeka-bedrijven, afvalbeheer-regio-centraal-groningen, regio-groningen-assen, publiek-vervoer-groningen-drenthe, veilig-thuis-groningen, sozawe-noardwest-fryslan, stark, emco-groep, reestmond, gemeentelijke-kredietbank-drenthe, ssc-ons, regionaal-bedrijventerrein-twente, werkvoorzieningschap-ijsselmeergroep, avu, razu, plassenschap-loosdrecht, regionale-backoffice-lekstroom, od-noordzeekanaalgebied, cocensus, wnk-noord-kennemerland, gesubsidieerde-arbeid-kop-van-noord-holland, bel-combinatie) onderzocht maar geen bruikbaar eigen AB-portaal gevonden (verspreid via gemeentelijke iBabs-portalen, alleen jaarstukken/begroting zonder vergaderarchief, of geen governance-pagina) — terecht niet-geverifieerd gelaten.",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen). LET OP: de volledige catalogus (166 regelingen bij start) is in september 2026 provincie voor provincie handmatig gecontroleerd. 71 van de 162 regelingen zijn 'geverifieerd': true (portaaltype echt getest, meestal met --droog). De overige 91 zijn niet geverifieerd: soms omdat er geen enkel openbaar portaal vindbaar was binnen redelijke onderzoekstijd, soms omdat een portaal wél bestaat maar de download-test faalde (zie hieronder), en soms omdat de stukken alleen verspreid over de iBabs-portalen van individuele deelnemende gemeenten gepubliceerd worden in plaats van via één eigen GR-portaal (niet bruikbaar voor deze scraper zonder per-gemeente maatwerk). BEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Enkele regelingen (bijv. omgevingsdienst-brabant-noord, ggd-west-brabant) hebben een bevestigde, door de organisatie zelf gepubliceerde iBabs-sitename staan (dus geen gok), maar konden nog niet automatisch getest worden door deze blokkade. Tijdens de controle zijn 4 regelingen verwijderd wegens opheffing zonder opvolger (grd-drechtsteden, omgevingsdienst-regio-nijmegen [gefuseerd, al gedekt door omgevingsdienst-groene-metropool], permar-ws), en enkele andere zijn bijgewerkt na fusies/naamswijzigingen/uittredingen die tijdens onderzoek aan het licht kwamen (o.a. Delta, Westrom, Samenwerkingsregeling Noord-Veluwe, GGD Amsterdam-Amstelland, GGD Hollands Midden -> RDOG Hollands Midden). Gebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. NABRANDER (na afronding van de provinciecontrole): een bug in wil_vergadering() (api.py) filterde vergaderingen stil weg als de organisatie afkortingen gebruikte (\"AB-vergadering\" i.p.v. \"algemeen bestuur\") — inmiddels gefixt met woordgrens-matching op ab/db/pho. Bij het testen daarvan bleek dat van de 9 oorspronkelijke, nooit door deze controle aangeraakte \"geverifieerd\"-regelingen er 3 alsnog fout bleken: hoeksche-waard is verwijderd (opgeheven per 1-1-2019, gefuseerd tot 1 gemeente, geen samenwerking meer), en orionis-walcheren/meerinzicht hadden een notubiz_id dat al jaren 0 vergaderingen teruggeeft — beide toen teruggezet naar niet-geverifieerd. Les: \"geverifieerd\" op enig moment betekent niet blijvend correct; periodieke herverificatie blijft nodig. VERVOLG (september 2026, tweede verificatieronde): orionis-walcheren is alsnog geverifieerd op 'handmatig' (notubiz_id verwijderd; op https://www.orioniswalcheren.nl/organisatie/bestuur staan wel degelijk directe PDF-downloadlinks van AB-verslagen, bevestigd door een PDF te downloaden — het eerdere 'alleen op aanvraag'-vermoeden klopte niet (meer)). meerinzicht bleek daarnaast een compleet foutieve gemeentenlijst te hebben (apeldoorn/epe/hattem/heerde in plaats van het echte ermelo/harderwijk/zeewolde) en het notubiz-org (1982) geeft 'documents_public: 0' terug — dus terecht niet-geverifieerd, nu met juiste gemeentenlijst. ggd-regio-utrecht is geverifieerd op 'handmatig' (ggdru.nl/over-de-ggd/bestuur/ heeft directe PDF-agenda's per AB-vergadering). gblt bleek een verhuizing naar iBabs te hebben ondergaan per juli 2026 (zelf aangekondigd als 'verhuisd naar gblt.bestuurlijkeinformatie.nl' op gblt.nl/agenda) en miste 2 van de 7 deelnemende gemeenten (bunschoten, leusden) — ibabs_naam 'gblt' toegevoegd maar niet geverifieerd (IP-blokkade, zie bekende beperking), gemeentenlijst en website wel gecorrigeerd. Diverse kleinere regelingen (wedeka-bedrijven, afvalbeheer-regio-centraal-groningen, regio-groningen-assen, publiek-vervoer-groningen-drenthe, veilig-thuis-groningen, sozawe-noardwest-fryslan, stark, emco-groep, reestmond, gemeentelijke-kredietbank-drenthe, ssc-ons, regionaal-bedrijventerrein-twente, werkvoorzieningschap-ijsselmeergroep, avu, razu, plassenschap-loosdrecht, regionale-backoffice-lekstroom, od-noordzeekanaalgebied, cocensus, wnk-noord-kennemerland, gesubsidieerde-arbeid-kop-van-noord-holland, bel-combinatie) onderzocht maar geen bruikbaar eigen AB-portaal gevonden — terecht niet-geverifieerd gelaten. NIEUW VELD 'reden' (vanaf deze batch): geeft bij niet-geverifieerde regelingen aan waarom er (nog) geen bruikbare bron is, met een van vaste waarden: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-vergaderarchief-alleen-jaarstukken' (de organisatie heeft een eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder een eigen publiek AB-vergadercircuit), 'ibabs-geblokkeerd-ip-whitelisting' (portaal en sitename wel bevestigd, maar kon nog niet getest worden door de bekende iBabs-blokkade — kandidaat om alsnog geverifieerd te worden zodra whitelisting geregeld is). Ontbreekt het 'reden'-veld bij een niet-geverifieerde regeling, dan is die nog helemaal niet onderzocht in deze verificatieronde. Dit veld is nog niet met terugwerkende kracht ingevuld voor de niet-geverifieerde regelingen uit eerdere batches (vóór september 2026) — dat kan bij gelegenheid alsnog gebeuren.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -80,6 +80,7 @@
   "meerinzicht": {
     "naam": "Samenwerkingsverband Meerinzicht (bedrijfsvoeringsorganisatie)",
     "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "ermelo",
       "harderwijk",
@@ -195,6 +196,8 @@
   },
   "wedeka-bedrijven": {
     "naam": "Gemeenschappelijke regeling Wedeka Bedrijven",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "borger-odoorn",
       "midden-groningen",
@@ -210,6 +213,8 @@
   },
   "afvalbeheer-regio-centraal-groningen": {
     "naam": "Gemeenschappelijke regeling Afvalbeheer Regio Centraal Groningen (ARCG)",
+    "geverifieerd": false,
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "groningen",
       "het-hogeland",
@@ -222,6 +227,8 @@
   },
   "regio-groningen-assen": {
     "naam": "Gemeenschappelijke regeling Regio Groningen-Assen",
+    "geverifieerd": false,
+    "reden": "geen-vergaderarchief-alleen-jaarstukken",
     "gemeenten": [
       "assen",
       "groningen",
@@ -239,6 +246,8 @@
   },
   "publiek-vervoer-groningen-drenthe": {
     "naam": "Gemeenschappelijke Regeling Samenwerkingsorganisatie Publiek Vervoer Groningen Drenthe",
+    "geverifieerd": false,
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "aa-en-hunze",
       "assen",
@@ -305,6 +314,8 @@
   },
   "veilig-thuis-groningen": {
     "naam": "Gemeenschappelijke Regeling voor Veilig Thuis Groningen",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "eemsdelta",
       "groningen",
@@ -410,6 +421,8 @@
   },
   "sozawe-noardwest-fryslan": {
     "naam": "Gemeenschappelijke regeling Dienst Sociale Zaken en Werkgelegenheid Noardwest Fryslân 2022",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "harlingen",
       "terschelling",
@@ -511,6 +524,8 @@
   },
   "stark": {
     "naam": "Gemeenschappelijke Regeling Stark",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "de-wolden",
       "hoogeveen",
@@ -524,6 +539,8 @@
   },
   "emco-groep": {
     "naam": "Gemeenschappelijke regeling EMCO-groep",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "borger-odoorn",
       "coevorden",
@@ -537,6 +554,8 @@
   },
   "reestmond": {
     "naam": "Gemeenschappelijke regeling Reestmond",
+    "geverifieerd": false,
+    "reden": "geen-vergaderarchief-alleen-jaarstukken",
     "gemeenten": [
       "de-wolden",
       "meppel",
@@ -565,6 +584,8 @@
   },
   "gemeentelijke-kredietbank-drenthe": {
     "naam": "Gemeenschappelijke Regeling Gemeentelijke Kredietbank Drenthe",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "assen",
       "hoogeveen",
@@ -687,6 +708,8 @@
   },
   "ssc-ons": {
     "naam": "Bedrijfsvoeringsorganisatie Shared Service Centrum ONS (SSC ONS)",
+    "geverifieerd": false,
+    "reden": "geen-vergaderarchief-alleen-jaarstukken",
     "gemeenten": [
       "dalfsen",
       "kampen",
@@ -702,6 +725,7 @@
   "gblt": {
     "naam": "GBLT (Gemeenschappelijk Belastingkantoor Lococensus-Tricijn)",
     "geverifieerd": false,
+    "reden": "ibabs-geblokkeerd-ip-whitelisting",
     "gemeenten": [
       "bunschoten",
       "dalfsen",
@@ -723,6 +747,8 @@
   },
   "regionaal-bedrijventerrein-twente": {
     "naam": "Regionaal Bedrijventerrein Twente (RBT)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "almelo",
       "borne",
@@ -776,6 +802,8 @@
   },
   "werkvoorzieningschap-ijsselmeergroep": {
     "naam": "Werkvoorzieningschap IJsselmeergroep",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "lelystad",
       "noordoostpolder",
@@ -944,6 +972,8 @@
   },
   "avu": {
     "naam": "Gemeenschappelijke Regeling Afvalverwijdering Utrecht (AVU)",
+    "geverifieerd": false,
+    "reden": "geen-vergaderarchief-alleen-jaarstukken",
     "gemeenten": [
       "amersfoort",
       "baarn",
@@ -998,6 +1028,8 @@
   },
   "razu": {
     "naam": "Regionaal Archief Zuid-Utrecht (RAZU)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "bunnik",
       "houten",
@@ -1034,6 +1066,8 @@
   },
   "plassenschap-loosdrecht": {
     "naam": "Gemeenschappelijke regeling Plassenschap Loosdrecht e.o.",
+    "geverifieerd": false,
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "stichtse-vecht",
       "wijdemeren"
@@ -1045,6 +1079,8 @@
   },
   "regionale-backoffice-lekstroom": {
     "naam": "Regionale Backoffice Lekstroom (RBL, uitvoering Jeugdwet/Wmo)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "houten",
       "ijsselstein",
@@ -1086,6 +1122,8 @@
   },
   "od-noordzeekanaalgebied": {
     "naam": "Omgevingsdienst Noordzeekanaalgebied",
+    "geverifieerd": false,
+    "reden": "geen-vergaderarchief-alleen-jaarstukken",
     "gemeenten": [
       "amsterdam",
       "beverwijk",
@@ -1117,6 +1155,8 @@
   },
   "cocensus": {
     "naam": "Gemeenschappelijke regeling Cocensus",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "alkmaar",
       "bergen-nh",
@@ -1141,6 +1181,8 @@
   },
   "wnk-noord-kennemerland": {
     "naam": "Gemeenschappelijke Regeling Zaffier (per 2022 fusie van Werkvoorzieningsschap Noord-Kennemerland/WNK, Halte Werk en delen van werkorganisatie BUCH)",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "alkmaar",
       "bergen-nh",
@@ -1157,6 +1199,8 @@
   },
   "gesubsidieerde-arbeid-kop-van-noord-holland": {
     "naam": "Gemeenschappelijke regeling Gesubsidieerde arbeid Kop van Noord-Holland",
+    "geverifieerd": false,
+    "reden": "geen-portaal-gevonden",
     "gemeenten": [
       "den-helder",
       "hollands-kroon",
@@ -1169,6 +1213,8 @@
   },
   "bel-combinatie": {
     "naam": "Gemeenschappelijke regeling BEL Combinatie",
+    "geverifieerd": false,
+    "reden": "geen-eigen-algemeen-bestuur",
     "gemeenten": [
       "blaricum",
       "eemnes",
