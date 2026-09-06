@@ -4,7 +4,7 @@ Gedeelde API-functies voor de provinciale-staten-toolkit.
 Bevat alle herbruikbare logica voor:
   - Open Raadsinformatie (ORI) API
   - Notubiz API
-  - iBabs SOAP API
+  - iBabs Publieksportaal (HTML-scraping van bestuurlijkeinformatie.nl)
   - Bestandsnamen, downloads en logging
   - Configuratie (config.local.json)
 """
@@ -14,7 +14,6 @@ import logging
 import re
 import sys
 import urllib.request
-import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -311,146 +310,114 @@ def haal_documenten_notubiz(meeting_id: str) -> list[dict]:
     return documenten
 
 
-# ── iBabs SOAP API ───────────────────────────────────────────────────────────
+# ── iBabs Publieksportaal (HTML) ─────────────────────────────────────────────
+#
+# iBabs biedt naast de SOAP-API (Public.svc, vereist per-IP whitelisting door
+# iBabs zelf) ook een publiek, ongeauthenticeerd webportaal op
+# https://<sitename>.bestuurlijkeinformatie.nl/ — hetzelfde portaal waar
+# burgers vergaderstukken op inzien. Dat portaal is een gewone server-side
+# gerenderde site zonder inlog, dus we scrapen die HTML direct in plaats van
+# de SOAP-API aan te roepen: geen whitelisting nodig, en het is bovendien
+# precies de bron die voor *openbare* stukken bedoeld is.
 
-IBABS_ENDPOINT = "https://wcf.ibabs.eu/api/Public.svc"
-IBABS_NS = "http://tempuri.org/"
-IBABS_BASE_NS = "http://schemas.datacontract.org/2004/07/iBabsWCFObjects.Base"
+IBABS_PORTAAL = "https://{sitename}.bestuurlijkeinformatie.nl"
+
+_DUTCH_MAANDEN = {
+    "januari": 1, "februari": 2, "maart": 3, "april": 4, "mei": 5, "juni": 6,
+    "juli": 7, "augustus": 8, "september": 9, "oktober": 10, "november": 11,
+    "december": 12,
+}
 
 
-class IbabsFout(Exception):
-    """De iBabs SOAP API gaf een Status=ERR terug (bijv. ongeldige sitename of IP-blokkade).
-
-    Een "Invalid site!" of "IPaddress X has no access to site Y!"-melding
-    betekent meestal dat dit IP-adres nog niet is whitelist bij iBabs — dit
-    geldt ook voor overduidelijk juiste sitenamen. Zie het README
-    ("Bekende beperking: iBabs vereist IP-whitelisting") voor hoe je dat
-    aanvraagt bij support@ibabs.eu.
-    """
-
-
-def ibabs_soap(methode: str, body_xml: str) -> ET.Element:
-    """Doe een SOAP-verzoek naar de iBabs API en geef het root-element terug.
-
-    De iBabs API antwoordt met HTTP 200 zelfs bij een fout (ongeldige sitename,
-    IP niet toegestaan, etc.) — de fout zit in <Status>ERR</Status> /
-    <Message> binnen de body. Zonder expliciete check hierop lijkt zo'n fout
-    identiek aan "geen resultaten gevonden". Deze functie zet die fout om in
-    een IbabsFout zodat aanroepers hem niet per ongeluk als lege lijst lezen.
-    """
-    envelope = (
-        '<?xml version="1.0" encoding="utf-8"?>'
-        '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"'
-        ' xmlns:tns="http://tempuri.org/">'
-        "<soap:Body>"
-        f"<tns:{methode}>"
-        f"{body_xml}"
-        f"</tns:{methode}>"
-        "</soap:Body>"
-        "</soap:Envelope>"
-    )
-    req = urllib.request.Request(
-        IBABS_ENDPOINT,
-        data=envelope.encode("utf-8"),
-        headers={
-            "Content-Type": "text/xml; charset=utf-8",
-            "SOAPAction": f'"http://tempuri.org/IPublic/{methode}"',
-            "User-Agent": "Mozilla/5.0",
-        },
-    )
+def _ibabs_get(sitename: str, pad: str) -> str:
+    """Haal een pagina op van het publieke iBabs-portaal van een organisatie."""
+    url = f"{IBABS_PORTAAL.format(sitename=sitename)}{pad}"
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=30) as r:
-        root = ET.fromstring(r.read())
-
-    status = root.find(f".//{{{IBABS_BASE_NS}}}Status")
-    if status is not None and (status.text or "").strip().upper() == "ERR":
-        bericht = root.find(f".//{{{IBABS_BASE_NS}}}Message")
-        raise IbabsFout((bericht.text or "onbekende fout").strip() if bericht is not None else "onbekende fout")
-
-    return root
+        return r.read().decode("utf-8", errors="replace")
 
 
-def ibabs_tekst(el: ET.Element, tag: str) -> str:
-    """Haal tekst op van een child-element in de iBabs-namespace."""
-    child = el.find(f"{{{IBABS_NS}}}{tag}")
-    return (child.text or "").strip() if child is not None else ""
-
-
-def haal_vergadertypen_ibabs(sitename: str) -> dict[str, str]:
-    """Geeft {id: naam} voor alle vergadertypen van een iBabs-organisatie."""
-    body = f"<tns:Sitename>{sitename}</tns:Sitename>"
-    try:
-        root = ibabs_soap("GetMeetingtypes", body)
-        result = {}
-        for mt in root.iter(f"{{{IBABS_NS}}}iBabsMeetingtype"):
-            mt_id = ibabs_tekst(mt, "Id")
-            mt_naam = ibabs_tekst(mt, "Name")
-            if mt_id:
-                result[mt_id] = mt_naam
-        return result
-    except IbabsFout as e:
-        log(f"  ! iBabs-fout bij GetMeetingtypes voor '{sitename}': {e}")
-        return {}
-    except Exception as e:
-        log(f"  ! GetMeetingtypes mislukt: {e}")
-        return {}
+def haal_categorieen_ibabs(sitename: str) -> dict[str, str]:
+    """Geeft {agendatypeId: naam} van alle vergadercategorieën op het portaal."""
+    html = _ibabs_get(sitename, "/Calendar")
+    return dict(re.findall(r'href="/Calendar/OpenCategory/(\d+)"[^>]*>([^<]+)</a>', html))
 
 
 def haal_vergaderingen_ibabs(sitename: str, vergadertypen: dict[str, bool],
                               terugkijk_dagen: int = 730) -> list[dict]:
-    """Haal vergaderingen + documenten op via de iBabs SOAP API.
+    """Haal vergaderingen + documenten op via het publieke iBabs-portaal.
 
     Geeft [{id, naam, datum, documenten: [{naam, url}]}].
     """
-    date_from = (datetime.now() - timedelta(days=terugkijk_dagen)).strftime("%Y-%m-%dT00:00:00")
-    date_to = datetime.now().strftime("%Y-%m-%dT23:59:59")
-
-    vergadertypen_map = haal_vergadertypen_ibabs(sitename)
-
-    body = (
-        f"<tns:Sitename>{sitename}</tns:Sitename>"
-        f"<tns:StartDate>{date_from}</tns:StartDate>"
-        f"<tns:EndDate>{date_to}</tns:EndDate>"
-        "<tns:MetaDataOnly>false</tns:MetaDataOnly>"
-    )
     try:
-        root = ibabs_soap("GetMeetingsByDateRange", body)
-    except IbabsFout as e:
-        log(f"  ! iBabs-fout bij GetMeetingsByDateRange voor '{sitename}': {e}")
+        categorieen = haal_categorieen_ibabs(sitename)
+    except Exception as e:
+        log(f"  ! iBabs-portaal onbereikbaar voor '{sitename}': {e}")
         return []
 
+    relevante_categorieen = {
+        cat_id: naam.strip() for cat_id, naam in categorieen.items()
+        if wil_vergadering(naam, vergadertypen)
+    }
+    if not relevante_categorieen:
+        return []
+
+    vandaag = datetime.now()
+    vroegste = vandaag - timedelta(days=terugkijk_dagen)
+
     vergaderingen = []
-    for meeting in root.iter(f"{{{IBABS_NS}}}iBabsMeeting"):
-        mt_id = ibabs_tekst(meeting, "MeetingtypeId")
-        mt_naam = vergadertypen_map.get(mt_id, mt_id)
-
-        if not wil_vergadering(mt_naam, vergadertypen):
-            continue
-
-        meeting_id = ibabs_tekst(meeting, "Id")
-        datum_raw = ibabs_tekst(meeting, "MeetingDate")
-        datum = datum_raw[:10] if datum_raw else ""
-
-        documenten = []
-        for doc in meeting.iter(f"{{{IBABS_NS}}}iBabsDocument"):
-            confidential = ibabs_tekst(doc, "Confidential")
-            if confidential == "true":
+    for cat_id, cat_naam in relevante_categorieen.items():
+        for jaar in range(vroegste.year, vandaag.year + 1):
+            try:
+                jaar_html = _ibabs_get(
+                    sitename, f"/Agenda/RetrieveAgendasForYear?agendatypeId={cat_id}&year={jaar}")
+            except Exception as e:
+                log(f"  ! iBabs-fout bij ophalen {jaar} voor '{sitename}': {e}")
                 continue
-            url = ibabs_tekst(doc, "PublicDownloadURL")
-            if not url:
-                continue
-            bestandsnaam = ibabs_tekst(doc, "FileName") or ibabs_tekst(doc, "DisplayName")
-            if not bestandsnaam:
-                bestandsnaam = f"document-{ibabs_tekst(doc, 'Id')}.pdf"
-            if not bestandsnaam.lower().endswith(".pdf"):
-                bestandsnaam += ".pdf"
-            documenten.append({"naam": bestandsnaam, "url": url})
 
-        vergaderingen.append({
-            "id": meeting_id,
-            "naam": mt_naam,
-            "datum": datum,
-            "documenten": documenten,
-        })
+            for guid, dag, maand, jaartal in re.findall(
+                r'href="/Agenda/Index/([0-9a-f-]{36})"[^>]*>\s*'
+                r'<div class="agenda-link-title">\w+ (\d{1,2}) ([a-zA-Zéï]+) '
+                r'<span class="sr-only">(\d{4})</span></div>',
+                jaar_html,
+            ):
+                maand_nr = _DUTCH_MAANDEN.get(maand.lower())
+                if not maand_nr:
+                    continue
+                try:
+                    datum_obj = datetime(int(jaartal), maand_nr, int(dag))
+                except ValueError:
+                    continue
+                if not (vroegste <= datum_obj <= vandaag):
+                    continue
+
+                try:
+                    detail_html = _ibabs_get(sitename, f"/Agenda/Index/{guid}")
+                except Exception as e:
+                    log(f"  ! iBabs-fout bij ophalen vergadering {guid} voor '{sitename}': {e}")
+                    continue
+
+                documenten = []
+                for doc_id, ruwe_naam in re.findall(
+                    rf'href="/Agenda/Document/{re.escape(guid)}\?documentId='
+                    r'([0-9a-f-]{36})[^"]*"[^>]*>(?:\s*<span[^>]*></span>)?\s*(.*?)\s*<span class="badge',
+                    detail_html, re.DOTALL,
+                ):
+                    naam = " ".join(re.sub(r"<[^>]+>", "", ruwe_naam).split())
+                    if not naam:
+                        naam = f"document-{doc_id}"
+                    if not naam.lower().endswith(".pdf"):
+                        naam += ".pdf"
+                    url = (f"{IBABS_PORTAAL.format(sitename=sitename)}"
+                           f"/Document/LoadAgendaDocument/{doc_id}?agendaId={guid}")
+                    documenten.append({"naam": naam, "url": url})
+
+                vergaderingen.append({
+                    "id": guid,
+                    "naam": cat_naam,
+                    "datum": datum_obj.strftime("%Y-%m-%d"),
+                    "documenten": documenten,
+                })
 
     return vergaderingen
 

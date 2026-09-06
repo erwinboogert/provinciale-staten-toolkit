@@ -1,6 +1,6 @@
 """
 Scraper voor vergaderstukken van gemeenschappelijke regelingen (GRs)
-Bronnen: Open Raadsinformatie API (ORI), Notubiz API direct, of iBabs SOAP API
+Bronnen: Open Raadsinformatie API (ORI), Notubiz API direct, of het publieke iBabs-portaal
 
 Gemeenschappelijke regelingen zijn samenwerkingsverbanden tussen gemeenten
 (en soms de provincie): omgevingsdiensten, GGD'en, sociale
@@ -14,7 +14,7 @@ wordt afgeleid uit de overlap met de gemeentenlijst in bronnen/provincies.json.
 De scraper ondersteunt drie bronnen:
   - ORI API: GRs die als gemeente-index in ORI staan (ori_-prefix)
   - Notubiz API direct: elke GR met een notubiz_id in bronnen/regelingen.json
-  - iBabs SOAP API: elke GR met een ibabs_naam in bronnen/regelingen.json
+  - iBabs Publieksportaal: elke GR met een ibabs_naam in bronnen/regelingen.json
 
 Gebruik:
     python3 scraper_gr.py nieuw-reijerwaard          # download vergaderstukken
@@ -309,7 +309,7 @@ def main():
             vergaderingen, output_map, droog)
 
     elif ibabs_naam:
-        log(f"Bron: iBabs API (sitename={ibabs_naam})")
+        log(f"Bron: iBabs Publieksportaal (sitename={ibabs_naam})")
         vergaderingen = haal_vergaderingen_ibabs(
             ibabs_naam, vergadertypen, terugkijk_dagen=terugkijk_dagen)
         log(f"{len(vergaderingen)} vergaderingen gevonden")

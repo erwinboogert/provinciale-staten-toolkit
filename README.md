@@ -10,7 +10,7 @@ Dit is een afgeslankte, standalone afsplitsing van de bredere [lokaalbestuur-too
 
 **Gemeenschappelijke regelingen** (`scraper_gr.py`) — 157 samenwerkingsverbanden tussen gemeenten, verdeeld over alle 12 provincies: omgevingsdiensten, GGD'en, sociale werkvoorzieningsschappen, jeugdzorgregio's, vervoersautoriteiten, afvalinzameling, belastingsamenwerkingen, archieven en meer. Veiligheidsregio's en waterschappen zijn geen onderdeel van deze catalogus (aparte organen met een eigen wettelijk kader). Welke GRs bij een provincie horen wordt bepaald via de deelnemende gemeenten en/of een expliciete provincie-koppeling in `bronnen/regelingen.json`.
 
-**Belangrijk voorbehoud over de GR-catalogus:** de volledige catalogus (166 regelingen bij start, 9 inmiddels verwijderd wegens opheffing/fusie zonder opvolger) is in september 2026 provincie voor provincie handmatig gecontroleerd tegen primaire bronnen (CVDR, organisaties.overheid.nl, organisatiewebsites). 82 van de 157 regelingen zijn **geverifieerd** — bevestigd met een echte, geteste Notubiz- of iBabs-koppeling, of door de vergaderstukkenpagina van de organisatie zelf te lezen. De overige 75 hebben een `reden`-veld dat aangeeft waarom er (nog) geen bevestigd portaal is: geen enkel openbaar portaal vindbaar, stukken alleen verspreid over de iBabs-/Notubiz-sites van individuele deelnemende gemeenten (niet bruikbaar voor deze scraper), geen eigen algemeen bestuur (bedrijfsvoeringsorganisatie/centrumregeling), of een portaal dat wél bevestigd bestaat maar de iBabs-whitelisting dit (nog) blokkeert (zie hieronder — dat laatste geldt voor 19 regelingen en is de grootste directe verbeterkans). Voor alle niet-geverifieerde regelingen geldt: **bezoek zelf het `website`-veld van de regeling en zoek daar handmatig naar de vergaderstukken** — probeer je het via `scraper_gr.py <naam>` te draaien, dan wijst het script je daar ook expliciet naar. Zie het `_opmerking`-veld in `regelingen.json` voor de volledige uitleg van de `reden`-waarden.
+**Belangrijk voorbehoud over de GR-catalogus:** de volledige catalogus (166 regelingen bij start, 9 inmiddels verwijderd wegens opheffing/fusie zonder opvolger) is in september 2026 provincie voor provincie handmatig gecontroleerd tegen primaire bronnen (CVDR, organisaties.overheid.nl, organisatiewebsites). 98 van de 157 regelingen zijn **geverifieerd** — bevestigd met een echte, geteste Notubiz- of iBabs-koppeling, of door de vergaderstukkenpagina van de organisatie zelf te lezen. De overige 59 hebben een `reden`-veld dat aangeeft waarom er (nog) geen bevestigd portaal is: geen enkel openbaar portaal vindbaar, stukken alleen verspreid over de iBabs-/Notubiz-sites van individuele deelnemende gemeenten (niet bruikbaar voor deze scraper), geen eigen algemeen bestuur (bedrijfsvoeringsorganisatie/centrumregeling), of een enkel geval waar zelfs het publieke iBabs-portaal zelf de toegang blokkeert. Voor alle niet-geverifieerde regelingen geldt: **bezoek zelf het `website`-veld van de regeling en zoek daar handmatig naar de vergaderstukken** — probeer je het via `scraper_gr.py <naam>` te draaien, dan wijst het script je daar ook expliciet naar. Zie het `_opmerking`-veld in `regelingen.json` voor de volledige uitleg van de `reden`-waarden.
 
 ## Installatie
 
@@ -136,27 +136,23 @@ Wil je de documenten ergens anders opslaan dan `~/Documents/provinciale-staten/`
 }
 ```
 
-### Bekende beperking: iBabs vereist IP-whitelisting
+### Hoe iBabs-regelingen werken: het publieke portaal, niet de SOAP-API
 
-Regelingen met een `ibabs_naam` (in plaats van `notubiz_id` of `ori_index`)
-werken alleen als het IP-adres van de machine die het script draait vooraf is
-whitelist bij iBabs — dit geldt zelfs voor overduidelijk juiste sitenamen.
-Zonder whitelisting antwoordt de iBabs-API met een foutmelding zoals
-`Invalid site!` of `IPaddress X has no access to site Y!`, die `scraper_gr.py`
-expliciet logt (in plaats van hem stil als "0 vergaderingen gevonden" te
-melden).
+Regelingen met een `ibabs_naam` worden gescraped via het publieke, ongeauthenticeerde
+webportaal op `https://<sitename>.bestuurlijkeinformatie.nl/` — hetzelfde portaal
+waar burgers vergaderstukken op inzien. `scraper_gr.py` haalt daar de
+vergadercategorieën, de jaaroverzichten per categorie en de documentenlijst per
+vergadering van op, en downloadt de PDF's rechtstreeks.
 
-Om dit op te lossen: mail **support@ibabs.eu** (of via
-https://www.ibabs.com/en/contact/support/) met het **vaste** IP-adres van de
-machine waarop je structureel draait — niet een tijdelijk cloud-IP — en de
-specifieke sitenamen die je nodig hebt. Let op: de iBabs-documentatie omschrijft
-de Public WCF-service expliciet als "only accessible to iBabs customers"; het
-is dus niet gegarandeerd dat een verzoek van een onafhankelijk project wordt
-gehonoreerd zonder dat er een gemeente of GR (als iBabs-klant) achter zit.
+Dit is bewust *niet* de officiële iBabs SOAP-API (Public.svc): die vereist
+per-IP whitelisting door iBabs zelf (foutmeldingen als `Invalid site!` of
+`IPaddress X has no access to site Y!`), wat in de praktijk voor onafhankelijke
+projecten zelden rond te krijgen is. Het publieke portaal heeft die beperking
+niet en is bovendien precies de bron die voor *openbare* stukken bedoeld is.
 
-Zolang whitelisting niet geregeld is, blijven regelingen die alléén via iBabs
-publiceren (geen Notubiz- of ORI-alternatief) noodgedwongen `"geverifieerd": false`
-in `regelingen.json` — de scraper kan de koppeling niet automatisch bevestigen.
+Een enkele organisatie blokkeert ook het publieke portaal zelf (`Geen toegang
+tot iBabsOnline!` — zie `reden: "ibabs-portaal-geen-toegang"` in
+`regelingen.json`); daar is deze aanpak niet tegen bestand.
 
 ## Bron
 
