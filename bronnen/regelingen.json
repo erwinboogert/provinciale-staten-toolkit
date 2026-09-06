@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen).\n\nSTATUS (september 2026, na twee volledige verificatierondes): van de oorspronkelijke 166 regelingen zijn er 9 verwijderd wegens opheffing/fusie zonder zelfstandige opvolger (hoeksche-waard, grd-drechtsteden, omgevingsdienst-regio-nijmegen, permar-ws, ggd-amsterdam-amstelland, delta, presikhaaf-bedrijven, samenwerkingsregeling-noord-veluwe, sociale-dienst-veluwerand). Van de resterende 157 zijn er 78 'geverifieerd': true (portaaltype echt getest met --droog, of een handmatige vergaderstukkenpagina met bevestigde directe downloadlinks). De overige 79 hebben een 'reden'-veld dat aangeeft waarom er (nog) geen bruikbare bron is: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'ibabs-geblokkeerd-ip-whitelisting' (sitename bevestigd op de eigen site van de organisatie, maar de iBabs SOAP-API blokkeert dit IP — kandidaat om alsnog geverifieerd te worden zodra whitelisting geregeld is, zie hieronder), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling/ambtelijke fusie die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder eigen publiek AB-vergadercircuit), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-vergaderarchief-alleen-jaarstukken' (eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-downloadbare-bijlagen' (vergaderpagina/-lijst bestaat, maar zonder confirmeerbare downloadbare documenten), 'portaal-blokkeert-onderzoek' (een portaal bestaat aantoonbaar, maar bot-/anti-scraping-bescherming verhinderde verder onderzoek naar de exacte sitename of inhoud — nog een keer proberen met een andere aanpak kan lonen). Ontbreekt zowel 'geverifieerd': true als 'reden', dan is die regeling nog niet onderzocht.\n\nBEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Zodra whitelisting geregeld is, kunnen alle 19 regelingen met reden 'ibabs-geblokkeerd-ip-whitelisting' in één moeite door opnieuw getest en (waarschijnlijk) op geverifieerd gezet worden — dat is de grootste directe winst die hierna te behalen valt.\n\nGebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. Let op: dit environment heeft geen werkende 'python3' voor dit script (macOS system Python 3.9 mist PEP 604-syntax) — gebruik expliciet python3.10+ (bijv. /opt/homebrew/bin/python3.12).\n\nLes uit eerdere rondes: 'geverifieerd' op enig moment betekent niet blijvend correct (zie hoeksche-waard, orionis-walcheren/meerinzicht die eerder ten onrechte via een dode notubiz_id geverifieerd stonden) — periodieke herverificatie blijft nodig. Vertrouw ook een eerdere '_opmerking'-conclusie niet blind: orionis-walcheren werd hier ooit als 'alleen op aanvraag per mail' bestempeld, wat bij hercontrole niet (meer) klopte — er stonden gewoon directe PDF-downloadlinks. Wees ook alert op AI-samenvattingen van zoekresultaten die een organisatie ten onrechte als 'opgeheven' bestempelen (gebeurde deze ronde bij waterlands-archief en havenschap-moerdijk, beide gewoon nog actief) — check zulke claims altijd tegen een tweede, specifiekere bron voordat je een regeling verwijdert.",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert iBabs SOAP-scraping (sitename = subdomein van het vergaderportaal, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen).\n\nSTATUS (september 2026, na drie volledige verificatierondes): van de oorspronkelijke 166 regelingen zijn er 9 verwijderd wegens opheffing/fusie zonder zelfstandige opvolger (hoeksche-waard, grd-drechtsteden, omgevingsdienst-regio-nijmegen, permar-ws, ggd-amsterdam-amstelland, delta, presikhaaf-bedrijven, samenwerkingsregeling-noord-veluwe, sociale-dienst-veluwerand). Van de resterende 157 zijn er 82 'geverifieerd': true (portaaltype echt getest met --droog, of een handmatige vergaderstukkenpagina met bevestigde directe downloadlinks). De overige 75 hebben een 'reden'-veld dat aangeeft waarom er (nog) geen bruikbare bron is: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'ibabs-geblokkeerd-ip-whitelisting' (sitename bevestigd op de eigen site van de organisatie, maar de iBabs SOAP-API blokkeert dit IP — kandidaat om alsnog geverifieerd te worden zodra whitelisting geregeld is, zie hieronder), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling/ambtelijke fusie die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder eigen publiek AB-vergadercircuit), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-vergaderarchief-alleen-jaarstukken' (eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-downloadbare-bijlagen' (vergaderpagina/-lijst bestaat, maar zonder confirmeerbare downloadbare documenten), 'portaal-blokkeert-onderzoek' (een portaal bestaat aantoonbaar, maar bot-/anti-scraping-bescherming verhinderde verder onderzoek naar de exacte sitename of inhoud — nog een keer proberen met een andere aanpak kan lonen). Ontbreekt zowel 'geverifieerd': true als 'reden', dan is die regeling nog niet onderzocht.\n\nBEKENDE BEPERKING: de iBabs SOAP-API (Public.svc) vereist per-IP whitelisting door iBabs zelf — zie README (\"Bekende beperking: iBabs vereist IP-whitelisting\") voor hoe je dat aanvraagt. Zodra whitelisting geregeld is, kunnen alle 19 regelingen met reden 'ibabs-geblokkeerd-ip-whitelisting' in één moeite door opnieuw getest en (waarschijnlijk) op geverifieerd gezet worden — dat is de grootste directe winst die hierna te behalen valt.\n\nGebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. Let op: dit environment heeft geen werkende 'python3' voor dit script (macOS system Python 3.9 mist PEP 604-syntax) — gebruik expliciet python3.10+ (bijv. /opt/homebrew/bin/python3.12).\n\nLes uit eerdere rondes: 'geverifieerd' op enig moment betekent niet blijvend correct (zie hoeksche-waard, orionis-walcheren/meerinzicht die eerder ten onrechte via een dode notubiz_id geverifieerd stonden) — periodieke herverificatie blijft nodig. Vertrouw ook een eerdere '_opmerking'-conclusie niet blind: orionis-walcheren werd hier ooit als 'alleen op aanvraag per mail' bestempeld, wat bij hercontrole niet (meer) klopte — er stonden gewoon directe PDF-downloadlinks. Wees ook alert op AI-samenvattingen van zoekresultaten die een organisatie ten onrechte als 'opgeheven' bestempelen (gebeurde deze ronde bij waterlands-archief en havenschap-moerdijk, beide gewoon nog actief) — check zulke claims altijd tegen een tweede, specifiekere bron voordat je een regeling verwijdert.\n\nRonde 3 (2026-09-06, gericht op de 'geen-portaal-gevonden'-groep): van de 39 regelingen met die reden zijn er 4 alsnog geverifieerd — regio-rivierenland (eigen Notubiz, notubiz_id 3016, --droog bevestigd echte documenten), rd4 (eigen iBabs Publieksportaal op rd4.bestuurlijkeinformatie.nl met bevestigde directe PDF-downloads, maar de iBabs SOAP-API zelf geeft 'Invalid site!' voor elke sitename-variant — dus alleen handmatig geverifieerd, geen werkende ibabs_naam), regio-achterhoek/8RHK en wnk-noord-kennemerland/Zaffier (beide eigen website met directe PDF-downloads van agenda/verslag AB, geen portaalkoppeling nodig). Daarnaast zijn 11 regelingen herclassificeerd van 'geen-portaal-gevonden' naar 'verspreid-via-gemeentelijke-portalen' zodra een zoekopdracht concreet liet zien dat hun AB-stukken wél bestaan maar uitsluitend als bijlage opduiken in het iBabs/Notubiz-portaal van een gastgemeente (havenschap-moerdijk, gemeentelijke-kredietbank-drenthe, noord-hollands-archief, ggd-hollands-midden, ict-nml, westrom, reinigingsdienst-maasland, drents-archief, waterlands-archief, gesubsidieerde-arbeid-kop-van-noord-holland, bhic) en 1 naar 'portaal-blokkeert-onderzoek' (west-brabants-archief, eigen 'Gepubliceerde documenten'-pagina bevestigd via zoekresultaten maar WebFetch kreeg consequent HTTP 403). Blijft 23 over als echt 'geen-portaal-gevonden' (geen enkele aanwijzing voor een bruikbare bron gevonden, zelfs niet via een gastgemeente) — voornamelijk kleine werkvoorzieningschappen/participatiebedrijven en archieven zonder duidelijke online voetafdruk. Methode-notitie: voor host-gemeente-portalen kun je met ibabs_soap('GetMeetingtypes', ...) snel onderscheiden tussen een echt niet-bestaande sitename ('Invalid site!') en een bestaande maar IP-geblokkeerde site ('IPaddress X has no access to site Y!' / 'iBabsWCFService has no access to site Y!') — dat laatste bevestigt dat de gastgemeente-sitename klopt, ook al kun je 'm nu niet testen.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -585,7 +585,7 @@
   "gemeentelijke-kredietbank-drenthe": {
     "naam": "Gemeenschappelijke Regeling Gemeentelijke Kredietbank Drenthe",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "assen",
       "hoogeveen",
@@ -600,7 +600,7 @@
   "drents-archief": {
     "naam": "Gemeenschappelijke regeling Regionaal Historisch Centrum Drents Archief",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "assen",
       "emmen",
@@ -1183,8 +1183,7 @@
   },
   "wnk-noord-kennemerland": {
     "naam": "Gemeenschappelijke Regeling Zaffier (per 2022 fusie van Werkvoorzieningsschap Noord-Kennemerland/WNK, Halte Werk en delen van werkorganisatie BUCH)",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "alkmaar",
       "bergen-nh",
@@ -1197,12 +1196,12 @@
       "noord-holland"
     ],
     "bron_register": "almanak.overheid.nl/24961445",
-    "website": "https://www.zaffier.nl/"
+    "website": "https://www.zaffier.nl/de-organisatie/bestuur-zaffier/algemeen-bestuur-ab/"
   },
   "gesubsidieerde-arbeid-kop-van-noord-holland": {
     "naam": "Gemeenschappelijke regeling Gesubsidieerde arbeid Kop van Noord-Holland",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "den-helder",
       "hollands-kroon",
@@ -1248,7 +1247,7 @@
   "noord-hollands-archief": {
     "naam": "Gemeenschappelijke Regeling Noord-Hollands Archief",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "aalsmeer",
       "beverwijk",
@@ -1271,7 +1270,7 @@
   "waterlands-archief": {
     "naam": "Gemeenschappelijke Regeling Waterlands Archief",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "edam-volendam",
       "purmerend",
@@ -1730,7 +1729,7 @@
   "ggd-hollands-midden": {
     "naam": "Regionale Dienst Openbare Gezondheidszorg Hollands Midden (RDOG Hollands Midden; publieksnaam GGD Hollands Midden)",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "alphen-aan-den-rijn",
       "bodegraven-reeuwijk",
@@ -2261,7 +2260,7 @@
   "west-brabants-archief": {
     "naam": "Gemeenschappelijke Regeling West-Brabants Archief",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "portaal-blokkeert-onderzoek",
     "gemeenten": [
       "bergen-op-zoom",
       "etten-leur",
@@ -2297,7 +2296,7 @@
   "bhic": {
     "naam": "Gemeenschappelijke Regeling Brabants Historisch Informatie Centrum (BHIC)",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "bernheze",
       "boekel",
@@ -2332,7 +2331,7 @@
   "havenschap-moerdijk": {
     "naam": "Gemeenschappelijke regeling bedrijfsvoeringsorganisatie Havenschap Moerdijk",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "moerdijk"
     ],
@@ -2812,8 +2811,7 @@
   },
   "regio-achterhoek": {
     "naam": "Samenwerkingsregeling Regio Achterhoek (8RHK)",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "aalten",
       "berkelland",
@@ -2827,13 +2825,13 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://8rhk.nl/",
+    "website": "https://8rhk.nl/regio-achterhoek/vergaderdata-agenda-en-verslagen-algemeen-bestuur-regio-achterhoek/",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR720603/1"
   },
   "regio-rivierenland": {
     "naam": "Regeling Regio Rivierenland",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
+    "notubiz_id": 3016,
     "gemeenten": [
       "buren",
       "culemborg",
@@ -2981,7 +2979,7 @@
   "westrom": {
     "naam": "Gemeenschappelijke Regeling Westrom (uitvoering per 2025 overgedragen aan Doon Roermond B.V.; GR zelf beëindigd als uitvoeringsorganisatie per 01-01-2026, functioneert nog als formeel werkgever Wsw-personeel)",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "echt-susteren",
       "leudal",
@@ -3058,8 +3056,7 @@
   },
   "rd4": {
     "naam": "Gemeenschappelijke Regeling Reinigingsdiensten Rd4",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "beekdaelen",
       "brunssum",
@@ -3075,13 +3072,14 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://rd4.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393625/1"
+    "website": "https://rd4.bestuurlijkeinformatie.nl/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR393625/1",
+    "_opmerking": "Eigen iBabs Publieksportaal met bevestigde directe PDF-downloads (agenda/besluitenlijst/verslag AB), maar de iBabs SOAP API (Public.svc) geeft 'Invalid site!' voor elke geprobeerde sitename-variant (rd4, Rd4, RD4, gr-rd4) — deze organisatie zit kennelijk niet (meer) achter de klassieke Public.svc-laag, dus alleen handmatig geverifieerd."
   },
   "reinigingsdienst-maasland": {
     "naam": "Gemeenschappelijke Regeling Reinigingsdienst Maasland",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "beesel",
       "echt-susteren",
@@ -3142,7 +3140,7 @@
   "ict-nml": {
     "naam": "Gemeenschappelijke regeling ICT Noord- en Midden-Limburg (ICT NML)",
     "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "reden": "verspreid-via-gemeentelijke-portalen",
     "gemeenten": [
       "leudal",
       "nederweert",
