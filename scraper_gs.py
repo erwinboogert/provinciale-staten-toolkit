@@ -37,8 +37,9 @@ import sys
 
 from api import (
     OUTPUT_BASIS, BRONNEN_MAP,
-    setup_logging, log, parse_jaren_arg,
+    setup_logging, log, log_samenvatting, parse_jaren_arg,
     haal_en_download_vergaderingen,
+    haal_besluiten_zuid_holland, download_vergaderingen_ibabs,
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -101,6 +102,8 @@ def lijst_provincies():
             bron = f"ibabs: {gs['ibabs_naam']}"
         elif gs.get("ori_index"):
             bron = f"ori: {gs['ori_index']}"
+        elif gs.get("backend"):
+            bron = f"eigen backend: {gs['backend']}"
         elif gs.get("dataset_url"):
             bron = f"open dataset (nog niet ondersteund): {gs['dataset_url']}"
         else:
@@ -135,7 +138,9 @@ def main():
         sys.exit(1)
 
     gs_config = provincie_config.get("gs", {})
-    if not any(gs_config.get(v) for v in ("notubiz_id", "ibabs_naam", "ori_index")):
+    heeft_bron = any(gs_config.get(v) for v in ("notubiz_id", "ibabs_naam", "ori_index"))
+    backend = gs_config.get("backend")
+    if not heeft_bron and backend != "zuid-holland-website":
         reden = gs_config.get("reden", "nog-niet-onderzocht")
         print(f"FOUT: van GS van '{naam}' is geen geautomatiseerde bron bekend (reden: {reden}).")
         if gs_config.get("dataset_url"):
@@ -143,7 +148,6 @@ def main():
             print("(deze scraper ondersteunt dat brontype nog niet — zie bronnen/provincies.json)")
         sys.exit(1)
 
-    vergadertypen = laad_vergadertypen(naam)
     output_map = OUTPUT_BASIS / "gs" / naam
     setup_logging(output_map)
 
@@ -156,6 +160,18 @@ def main():
 
     _, terugkijk_dagen = parse_jaren_arg()
 
+    if backend == "zuid-holland-website":
+        log("Bron: eigen website Provincie Zuid-Holland (geen vergaderportaal)")
+        log("Let op: traag — geen bulk-API, één verzoek per besluit voor de bijlagen.")
+        besluiten = haal_besluiten_zuid_holland(terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(besluiten)} besluiten gevonden")
+        if not besluiten:
+            log("Geen besluiten gevonden in dit tijdvenster.")
+        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(besluiten, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return
+
+    vergadertypen = laad_vergadertypen(naam)
     if haal_en_download_vergaderingen(gs_config, vergadertypen, terugkijk_dagen, output_map, droog):
         return
 

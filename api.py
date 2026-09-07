@@ -604,6 +604,84 @@ def haal_en_download_vergaderingen(config: dict, vergadertypen: dict[str, bool],
     return False
 
 
+# ── Provincie Zuid-Holland: GS-besluiten (eigen website, geen vergaderportaal) ─
+
+ZH_BESLUITEN_URL = "https://www.zuid-holland.nl/politiek-bestuur/gedeputeerde-staten/besluiten/"
+
+
+def _zh_get(url: str) -> str:
+    """Haal een pagina op van de Zuid-Holland GS-besluiten-website."""
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read().decode("utf-8", errors="replace")
+
+
+def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
+    """Haal GS-besluiten van Zuid-Holland op via hun eigen website.
+
+    Anders dan de andere provincies publiceert Zuid-Holland GS-besluiten niet
+    via een vergaderportaal maar als los doorzoekbare, individuele pagina's —
+    elk besluit met eigen bijlagen, geen vergaderdatum met meerdere
+    agendapunten. Geeft dezelfde [{id, naam, datum, documenten: [{naam, url}]}]
+    -vorm terug als de vergadering-gebaseerde bronnen (één 'besluit' per
+    item), zodat de bestaande downloadlus (download_vergaderingen_ibabs)
+    hergebruikt kan worden. Traag door het ontbreken van een bulk-API: één
+    verzoek per indexpagina (10 besluiten) plus één verzoek per besluit voor
+    de bijlagen — voor het standaard-tijdvenster van 2 jaar al gauw honderden
+    verzoeken.
+    """
+    date_from = (datetime.now() - timedelta(days=terugkijk_dagen)).strftime("%d-%m-%Y")
+
+    eerste_pagina = _zh_get(f"{ZH_BESLUITEN_URL}?date_from={date_from}")
+    laatste_pagina = max(
+        (int(p) for p in re.findall(r'data-page="(\d+)"', eerste_pagina)), default=0)
+
+    besluiten = []
+    for pagina in range(laatste_pagina + 1):
+        html = eerste_pagina if pagina == 0 else _zh_get(
+            f"{ZH_BESLUITEN_URL}?date_from={date_from}&pager_page={pagina}")
+
+        for url, titel, datum_tekst in re.findall(
+            r'<a class="siteLink" href="([^"]+)">([^<]+)</a>.*?'
+            r'class="iprox-content iprox-date date">([^<]+)</div>',
+            html, re.DOTALL,
+        ):
+            delen = datum_tekst.strip().split()
+            if len(delen) != 3:
+                continue
+            dag, maand_naam, jaar = delen
+            maand_nr = _DUTCH_MAANDEN.get(maand_naam.lower())
+            if not maand_nr:
+                continue
+            try:
+                datum_obj = datetime(int(jaar), maand_nr, int(dag))
+            except ValueError:
+                continue
+
+            try:
+                detail_html = _zh_get(url)
+            except Exception as e:
+                log(f"  ! FOUT bij ophalen besluit '{titel.strip()}': {e}")
+                continue
+
+            documenten = [
+                {
+                    "naam": pdf_url.rsplit("/", 1)[-1],
+                    "url": f"https://www.zuid-holland.nl{pdf_url}" if pdf_url.startswith("/") else pdf_url,
+                }
+                for pdf_url in re.findall(r'href="([^"]+\.pdf)"', detail_html, re.IGNORECASE)
+            ]
+
+            besluiten.append({
+                "id": url.rsplit("/", 1)[-1],
+                "naam": titel.strip(),
+                "datum": datum_obj.strftime("%Y-%m-%d"),
+                "documenten": documenten,
+            })
+
+    return besluiten
+
+
 def parse_jaren_arg(standaard_dagen: int = 730) -> tuple[str | None, int]:
     """Lees --jaren N uit sys.argv. Geeft (vanaf_datum, terugkijk_dagen).
 

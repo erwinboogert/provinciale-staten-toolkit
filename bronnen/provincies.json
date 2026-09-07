@@ -475,10 +475,9 @@
       "zwijndrecht"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "losse-bron-nog-niet-gebouwd",
-      "dataset_url": "https://data.overheid.nl/dataset/58755-besluiten-gedeputeerde-staten-zuid-holland",
-      "_opmerking": "GS-besluiten worden hier niet via een vergaderportaal gepubliceerd maar als losse, gestructureerde open dataset (sinds 2017, incl. toelichtingen en bijlagen). Vereist een eigen backend-functie (dataset/CKAN-achtig), niet de bestaande vergadering-scrapers. Nog niet gebouwd."
+      "backend": "zuid-holland-website",
+      "geverifieerd": true,
+      "_opmerking": "De open dataset op data.overheid.nl (dataset 58755) bleek niet meer te bestaan (404, ook via CKAN-zoek-API) — waarschijnlijk verwijderd of hernoemd sinds de eerdere vermelding daarvan werd gevonden. GS-besluiten staan wel gewoon op de eigen website: https://www.zuid-holland.nl/politiek-bestuur/gedeputeerde-staten/besluiten/ — een gepagineerde index (10 per pagina, filterbaar met date_from=dd-mm-jjjj) van individuele besluit-pagina's, elk met eigen PDF-bijlagen. 6034 besluiten in totaal (peildatum 2026-09-07). Custom backend haal_besluiten_zuid_holland() in api.py, want dit is geen vergaderportaal maar een besluiten-index — geen vergaderdatum met agendapunten, één besluit is één item. Bevestigd met --droog --jaren 0.15: 3 besluiten, 6 echte PDF-bijlagen. Let op prestatie: standaard 2 jaar terugkijken vraagt honderden individuele HTTP-verzoeken (één per besluit) — gebruik --jaren voor een kleiner venster bij een eerste test."
     }
   }
 }
