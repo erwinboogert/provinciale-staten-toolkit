@@ -13,6 +13,7 @@ import json
 import logging
 import re
 import sys
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -604,16 +605,16 @@ def haal_en_download_vergaderingen(config: dict, vergadertypen: dict[str, bool],
     return False
 
 
-# ── Provincie Zuid-Holland: GS-besluiten (eigen website, geen vergaderportaal) ─
-
-ZH_BESLUITEN_URL = "https://www.zuid-holland.nl/politiek-bestuur/gedeputeerde-staten/besluiten/"
-
-
-def _zh_get(url: str) -> str:
-    """Haal een pagina op van de Zuid-Holland GS-besluiten-website."""
+def _http_get_text(url: str) -> str:
+    """Haal een pagina op als tekst (gebruikt door de losse GS-website-backends)."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read().decode("utf-8", errors="replace")
+
+
+# ── Provincie Zuid-Holland: GS-besluiten (eigen website, geen vergaderportaal) ─
+
+ZH_BESLUITEN_URL = "https://www.zuid-holland.nl/politiek-bestuur/gedeputeerde-staten/besluiten/"
 
 
 def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
@@ -632,13 +633,13 @@ def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
     """
     date_from = (datetime.now() - timedelta(days=terugkijk_dagen)).strftime("%d-%m-%Y")
 
-    eerste_pagina = _zh_get(f"{ZH_BESLUITEN_URL}?date_from={date_from}")
+    eerste_pagina = _http_get_text(f"{ZH_BESLUITEN_URL}?date_from={date_from}")
     laatste_pagina = max(
         (int(p) for p in re.findall(r'data-page="(\d+)"', eerste_pagina)), default=0)
 
     besluiten = []
     for pagina in range(laatste_pagina + 1):
-        html = eerste_pagina if pagina == 0 else _zh_get(
+        html = eerste_pagina if pagina == 0 else _http_get_text(
             f"{ZH_BESLUITEN_URL}?date_from={date_from}&pager_page={pagina}")
 
         for url, titel, datum_tekst in re.findall(
@@ -659,7 +660,7 @@ def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
                 continue
 
             try:
-                detail_html = _zh_get(url)
+                detail_html = _http_get_text(url)
             except Exception as e:
                 log(f"  ! FOUT bij ophalen besluit '{titel.strip()}': {e}")
                 continue
@@ -680,6 +681,108 @@ def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
             })
 
     return besluiten
+
+
+# ── Provincies met een simpele besluitenlijst-PDF-index (geen vergaderportaal) ─
+#
+# Sommige provincies publiceren GS-besluitenlijsten niet via een
+# vergaderportaal of een per-besluit-pagina (zoals Zuid-Holland), maar als
+# een simpel overzicht met directe PDF-links (bijv. Flevoland, Groningen).
+# Deze generieke scraper is bedoeld voor dat patroon.
+
+def _besluitenlijst_datum(tekst: str) -> str:
+    """Best-effort datum-extractie uit een bestandsnaam/linktekst.
+
+    Probeert 'dd-maandnaam-yyyy', 'dd-mm-yyyy' en 'yyyy ... week nn' (ISO-
+    weeknummer, maandag als datum). Geeft 'YYYY-MM-DD', of 'onbekende-datum'
+    als niets herkend wordt — het document wordt dan alsnog gedownload,
+    alleen niet op datum gegroepeerd.
+    """
+    tekst_laag = tekst.lower()
+    maandpatroon = "|".join(_DUTCH_MAANDEN.keys())
+
+    m = re.search(rf'(\d{{1,2}})[-_](' + maandpatroon + r')[-_](\d{4})', tekst_laag)
+    if m:
+        dag, maand_naam, jaar = m.groups()
+        try:
+            return datetime(int(jaar), _DUTCH_MAANDEN[maand_naam], int(dag)).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+    m = re.search(r'(\d{1,2})-(\d{1,2})-(\d{4})', tekst)
+    if m:
+        dag, maand, jaar = m.groups()
+        try:
+            return datetime(int(jaar), int(maand), int(dag)).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+    m = re.search(r'(\d{4}).*?week[_\s-]*(\d{1,2})', tekst_laag)
+    if m:
+        jaar, week = int(m.group(1)), int(m.group(2))
+        try:
+            return datetime.fromisocalendar(jaar, week, 1).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+    return "onbekende-datum"
+
+
+def haal_besluiten_pdf_index(basis_url: str, terugkijk_dagen: int = 730,
+                              pagina_param: str | None = None) -> list[dict]:
+    """Haal GS-besluiten op van een simpele PDF-index-pagina.
+
+    Groepeert alle gevonden PDF-links per herkende datum tot 'vergadering'-
+    achtige items ({id, naam, datum, documenten}), zodat de bestaande
+    downloadlus (download_vergaderingen_ibabs) hergebruikt kan worden.
+
+    Als pagina_param is gegeven (bijv. 'tx_bwibabs_overview[currentPage]'),
+    wordt doorgebladerd (pagina=2, 3, ...) totdat een pagina geen documenten
+    meer oplevert binnen het tijdvenster — dit gaat ervan uit dat de index
+    nieuwste-eerst gesorteerd is, zoals bij de bekende gevallen.
+    """
+    vroegste = datetime.now() - timedelta(days=terugkijk_dagen)
+    per_datum: dict[str, list[dict]] = {}
+
+    pagina = 1
+    while True:
+        if pagina == 1 or not pagina_param:
+            url = basis_url
+        else:
+            sep = "&" if "?" in basis_url else "?"
+            url = f"{basis_url}{sep}{urllib.parse.quote(pagina_param)}={pagina}"
+
+        html = _http_get_text(url)
+
+        nieuw_binnen_venster = 0
+        for match in re.finditer(r'<a\s+[^>]*href="([^"]+\.pdf)"[^>]*>(.*?)</a>',
+                                  html, re.IGNORECASE | re.DOTALL):
+            href, binnentekst = match.groups()
+            titel_attr = re.search(r'title="([^"]*)"', match.group(0))
+            binnentekst_schoon = re.sub(r"<[^>]+>", " ", binnentekst).strip()
+            bestandsnaam = href.rsplit("/", 1)[-1]
+            datum_bron = " ".join(filter(None, [
+                titel_attr.group(1) if titel_attr else "", binnentekst_schoon, bestandsnaam]))
+            datum = _besluitenlijst_datum(datum_bron)
+
+            if datum != "onbekende-datum":
+                if datetime.strptime(datum, "%Y-%m-%d") < vroegste:
+                    continue
+                nieuw_binnen_venster += 1
+
+            volledige_url = urllib.parse.urljoin(url, href)
+            per_datum.setdefault(datum, []).append({"naam": bestandsnaam, "url": volledige_url})
+
+        if not pagina_param or nieuw_binnen_venster == 0:
+            break
+        pagina += 1
+        if pagina > 100:
+            break
+
+    return [
+        {"id": datum, "naam": "GS-besluiten", "datum": datum, "documenten": docs}
+        for datum, docs in per_datum.items()
+    ]
 
 
 def parse_jaren_arg(standaard_dagen: int = 730) -> tuple[str | None, int]:

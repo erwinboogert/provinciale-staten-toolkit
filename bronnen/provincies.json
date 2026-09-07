@@ -41,10 +41,10 @@
       "zeewolde"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "eigen-website-nog-niet-gebouwd",
-      "website": "https://www.flevoland.nl/loket/openbare-documenten/overzicht-openbare-documenten/besluitenlijsten-gedeputeerde-staten",
-      "_opmerking": "Bevestigd echt: overzichtspagina met 31 directe PDF-links naar besluitenlijsten (sinds juni 2023 ook agenda's). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd."
+      "backend": "pdf-index",
+      "index_url": "https://www.flevoland.nl/loket/openbare-documenten/overzicht-openbare-documenten/besluitenlijsten-gedeputeerde-staten",
+      "geverifieerd": true,
+      "_opmerking": "Overzichtspagina met directe PDF-links naar besluitenlijsten en concept-agenda's (sinds juni 2023 ook agenda's). Geen paginering gevonden — deze ene pagina bevat kennelijk alle historie die zij tonen. Gebruikt de generieke haal_besluiten_pdf_index() backend."
     }
   },
   "fryslan": {
@@ -157,10 +157,11 @@
       "westerwolde"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "eigen-website-nog-niet-gebouwd",
-      "website": "https://www.provinciegroningen.nl/actueel/besluitenlijsten-gedeputeerde-staten/",
-      "_opmerking": "Bevestigd echt: overzichtspagina met 15 directe PDF-links naar besluitenlijsten, per jaar/week georganiseerd (GS vergadert wekelijks op dinsdag, behalve schoolvakanties). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd."
+      "backend": "pdf-index",
+      "index_url": "https://www.provinciegroningen.nl/actueel/besluitenlijsten-gedeputeerde-staten/",
+      "pagina_param": "tx_bwibabs_overview[currentPage]",
+      "geverifieerd": true,
+      "_opmerking": "Overzichtspagina met wekelijkse besluitenlijst-PDF's (GS vergadert elke dinsdag, behalve schoolvakanties), TYPO3-gepagineerd via tx_bwibabs_overview[currentPage] (cHash bleek niet vereist voor deze actie). Gebruikt de generieke haal_besluiten_pdf_index() backend."
     }
   },
   "limburg": {
