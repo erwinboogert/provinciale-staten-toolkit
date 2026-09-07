@@ -167,6 +167,19 @@ Een enkele organisatie blokkeert ook het publieke portaal zelf (`Geen toegang
 tot iBabsOnline!` — zie `reden: "ibabs-portaal-geen-toegang"` in
 `regelingen.json`); daar is deze aanpak niet tegen bestand.
 
+## Onderhoud: periodieke controle van de bronnen
+
+Portalen migreren, feeds vallen soms stil zonder foutmelding (zie het geval
+Noord-Brabant in `_opmerking` van `bronnen/provincies.json`), en organisaties
+kunnen alsnog een bron publiceren die eerder niet gevonden werd. Het is
+daarom verstandig om elk kwartaal een grondige hercontrole te draaien: alle
+provincies (PS + GS) en alle geverifieerde gemeenschappelijke regelingen
+opnieuw met `--droog` testen, en steekproefsgewijs de niet-geverifieerde
+bronnen (het `reden`-veld) opnieuw proberen. Er is geen los script voor —
+vraag een AI-assistent (zie hierboven) om deze controle voor je uit te
+voeren en te rapporteren wat er kapot is, wat nog werkt, en wat inmiddels
+alsnog gevonden kan worden.
+
 ## Bron
 
 Vergaderstukken van Provinciale Staten zijn openbare overheidsinformatie. Deze tool haalt ze op via de publieke [Open Raadsinformatie API](https://openraadsinformatie.nl) (Open State Foundation), de publieke Notubiz-API, en het publieke iBabs-portaal (bestuurlijkeinformatie.nl) — dezelfde bronnen die de provincies zelf gebruiken om hun stukken te publiceren.

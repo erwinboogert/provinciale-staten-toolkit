@@ -71,7 +71,7 @@ Voor een redactie die dit soort tools inzet is de les: een eenmalige verificatie
 
 ## Concrete dossiers om nu al te volgen
 
-Tien actuele dossiers waarbij GS een centrale rol speelt (vergunningen, grondaankoop, aandeelhouderschap) en waarvoor de GS-bron van de betrokken provincie geverifieerd en structureel raadpleegbaar is via deze toolkit. Overijssel ontbreekt bewust — GS is daar niet automatiseerbaar (zie Bevinding 4).
+Elf actuele dossiers waarbij GS een centrale rol speelt (vergunningen, grondaankoop, aandeelhouderschap) en waarvoor de GS-bron van de betrokken provincie geverifieerd en structureel raadpleegbaar is via deze toolkit. Overijssel ontbreekt bewust — GS is daar niet automatiseerbaar (zie Bevinding 4).
 
 - **Groningen** — de kerncentrale-plannen bij de Eemshaven: GS-besluiten over vergunningen en grondposities zijn nu via `scraper_gs.py groningen` te volgen.
 - **Zeeland** — de kerncentrale-discussie rond de Paulinapolder: Zeeland's GS-bron (Woo-index) is geverifieerd en doorzoekbaar.
@@ -83,8 +83,7 @@ Tien actuele dossiers waarbij GS een centrale rol speelt (vergunningen, grondaan
 - **Noord-Brabant** — GS verleende in maart 2026 een zeldzame stikstofvergunning aan ASML (Brainport Industries Campus) via de uitzonderingsroute van de ADC-toets, een expliciete en aanvechtbare GS-beslissing. ([Omroep Brabant](https://www.omroepbrabant.nl/nieuws/6004735/asml-krijgt-zeldzame-stikstofvergunning-provincie-maakt-uitzondering))
 - **Noord-Holland** — Tata Steel: GS informeert PS doorlopend over de procedure tot intrekken van de vergunningen voor kooksgasfabrieken 1 en 2, en over de vertraging van het "Groen Staal"-besluit tot 2027. ([noord-holland.nl](https://www.noord-holland.nl/Actueel/Archief/2026/Juni_2026/Procedure_intrekken_Kooksgasfabrieken_1_en_2_Tata_Steel))
 - **Zuid-Holland** — Chemours/PFAS in Dordrecht: de provincie (via omgevingsdienst DCMR) buigt zich in 2026 over een nieuwe vergunningaanvraag (TFA-emissie) en onderzoekt tegelijk of eerdere vergunningen ingetrokken kunnen worden. ([Rijnmond](https://www.rijnmond.nl/nieuws/1718309/provincie-is-klaar-met-uitstoot-pfas-maar-kan-chemours-niet-sluiten-wel-onderzoek-naar-intrekken-vergunning))
-
-Flevoland is bewust buiten dit overzicht gelaten: voor deze provincie kon geen even scherp gedocumenteerd, actueel GS-besluit worden bevestigd op het moment van schrijven — alleen oudere of algemenere energiebeleidsstukken.
+- **Flevoland** — GS weigerde op 4 maart 2026 een omgevingsvergunning voor een Natura 2000-activiteit: zandwinning bij de vaargeulverbreding UDO-VAL in het IJsselmeer, na een ontwerpbesluit van 9 januari 2026 — een expliciet vergunning-weigeringsbesluit van het dagelijks bestuur, onderdeel van een reeks vergelijkbare zandwinningsbesluiten in het IJsselmeer. ([Provincie Flevoland](https://www.flevoland.nl/loket/ter-inzage/definitief-besluit-(positieve)-weigering-omgevings))
 
 ## Methode en beperkingen
 
