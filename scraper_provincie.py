@@ -5,8 +5,8 @@ Bronnen: Open Raadsinformatie API (osi_-prefix) en Notubiz API
 Provinciale Staten zijn het democratisch gekozen bestuursorgaan van een provincie,
 verantwoordelijk voor onder meer ruimtelijke ordening, natuur, infrastructuur en
 regionaal economisch beleid. Hun vergaderingen zijn openbaar. 8 van de 12 provincies
-zijn ontsloten via de ORI API, 2 via Notubiz, en 2 (Drenthe, Zeeland) hebben geen
-geautomatiseerde bron.
+zijn ontsloten via de ORI API, 2 via Notubiz, 1 (Zeeland) via het publieke
+iBabs-portaal, en alleen Drenthe heeft geen geautomatiseerde bron.
 
 Gebruik:
     python3 scraper_provincie.py zuid-holland           # download vergaderstukken
@@ -28,8 +28,8 @@ from api import (
     OUTPUT_BASIS, BRONNEN_MAP,
     setup_logging, log, log_samenvatting, parse_jaren_arg,
     alle_indices,
-    haal_vergaderingen_ori, haal_vergaderingen_notubiz,
-    download_vergaderingen_ori, download_vergaderingen_notubiz,
+    haal_vergaderingen_ori, haal_vergaderingen_notubiz, haal_vergaderingen_ibabs,
+    download_vergaderingen_ori, download_vergaderingen_notubiz, download_vergaderingen_ibabs,
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -104,6 +104,8 @@ def lijst_provincies():
             bron = f"ori: osi_{data['ori_index']}"
         elif "notubiz_id" in data:
             bron = f"notubiz: id {data['notubiz_id']}"
+        elif "ibabs_naam" in data:
+            bron = f"ibabs: {data['ibabs_naam']}"
         else:
             bron = data.get("brontype", "geen")
         print(f"  {slug:<25} {naam:<30} ({bron})")
@@ -187,6 +189,23 @@ def main():
             log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
 
         nieuw, overgeslagen, fouten = download_vergaderingen_notubiz(
+            vergaderingen, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        toon_gerelateerde_regelingen(naam)
+        return
+
+    # iBabs Publieksportaal
+    ibabs_naam = config.get("ibabs_naam")
+    if ibabs_naam:
+        log(f"Bron: iBabs Publieksportaal (sitename={ibabs_naam})")
+        vergaderingen = haal_vergaderingen_ibabs(
+            ibabs_naam, vergadertypen, terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(vergaderingen)} vergaderingen gevonden")
+        if not vergaderingen:
+            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
+            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
+
+        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(
             vergaderingen, output_map, droog)
         log_samenvatting(nieuw, overgeslagen, fouten, output_map)
         toon_gerelateerde_regelingen(naam)

@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Catalogus van alle 12 Nederlandse provincies. Bron: ORI API (osi_-prefix) of Notubiz API. Twee provincies (Drenthe, Zeeland) hebben geen geautomatiseerde bron.",
+  "_opmerking": "Catalogus van alle 12 Nederlandse provincies. Bron: ORI API (osi_-prefix), Notubiz API, of (Zeeland, sinds 2026-09-07) het publieke iBabs-portaal via 'ibabs_naam' (zie de iBabs Publieksportaal-uitleg in api.py/README.md). Alleen Drenthe heeft nog geen geautomatiseerde bron — vergaderstukken staan daar op een eigen, verouderd documentsysteem (drenthe.info/dvs/) zonder herkend patroon.",
   "_vergadertypen_standaard": [
     "provinciale staten",
     "statencommissie",
@@ -346,7 +346,7 @@
   },
   "zeeland": {
     "naam": "Provincie Zeeland",
-    "brontype": "geen",
+    "ibabs_naam": "zeeland",
     "gemeenten": [
       "borsele",
       "goes",
