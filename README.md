@@ -8,7 +8,9 @@ Dit is een afgeslankte, standalone afsplitsing van de bredere [lokaalbestuur-too
 
 **Provinciale Staten** (`scraper_provincie.py`) — standaard worden stukken van de **Provinciale Staten**, **Statencommissies** en overige **commissies** opgehaald (dus niet Gedeputeerde Staten, het dagelijks bestuur). 8 van de 12 provincies zijn ontsloten via de Open Raadsinformatie API (ORI), 1 (Gelderland) via de Notubiz API, en 2 (Zeeland, Noord-Brabant) via het publieke iBabs-portaal. Alleen Drenthe heeft geen geautomatiseerde bron (eigen verouderd documentsysteem, drenthe.info/dvs/) en moet handmatig worden geraadpleegd.
 
-**Gedeputeerde Staten** (`scraper_gs.py`, sinds 2026-09-07) — GS is het dagelijks bestuur van een provincie: vergunningen, subsidies, grondaankoop, contracten. Krijgt structureel minder aandacht dan Provinciale Staten, terwijl daar het feitelijke bestuur gebeurt. **Let op:** niet elk GS-besluit is openbaar (een deel kan vertrouwelijk zijn), dus deze scraper haalt op wat publiek gepubliceerd is en meldt dat expliciet — niet als complete besluitenlijst. De bron verschilt sterk per provincie: bij Gelderland zit GS in dezelfde Notubiz-feed als PS; Flevoland en Groningen publiceren een eenvoudige overzichtspagina met directe besluitenlijst-PDF's; Zuid-Holland heeft geen vergaderportaal maar een eigen, doorzoekbare besluiten-index op de website (6034 besluiten, elk met eigen bijlagen) — traag om te downloaden omdat elk besluit een apart verzoek vergt, gebruik `--jaren` voor een kleiner venster. Bij de overige provincies is de bron ofwel bevestigd afwezig/kapot, ofwel nog niet (volledig) uitgezocht (zie het `reden`-veld per provincie in `provincies.json`, sleutel `gs`). `--lijst` toont de status per provincie.
+**Gedeputeerde Staten** (`scraper_gs.py`, sinds 2026-09-07) — GS is het dagelijks bestuur van een provincie: vergunningen, subsidies, grondaankoop, contracten. Krijgt structureel minder aandacht dan Provinciale Staten, terwijl daar het feitelijke bestuur gebeurt. **Let op:** niet elk GS-besluit is openbaar (een deel kan vertrouwelijk zijn), dus deze scraper haalt op wat publiek gepubliceerd is en meldt dat expliciet — niet als complete besluitenlijst. **11 van de 12 provincies zijn geverifieerd**, elk via een andere bron: Gelderland (GS zit in dezelfde Notubiz-feed als PS), Limburg (aparte iBabs-instantie `limburggs.bestuurlijkeinformatie.nl`), Utrecht (besluitenlijst als platte tekst rechtstreeks op de vergaderpagina, geen PDF-bijlagen), Zuid-Holland (eigen doorzoekbare besluiten-index op de website, 6034 besluiten, elk met eigen bijlagen — traag om te downloaden, gebruik `--jaren` voor een kleiner venster), en Flevoland, Groningen, Drenthe, Fryslân, Noord-Brabant, Noord-Holland, Zeeland (elk een eigen PDF-overzichtspagina met besluitenlijsten op de provinciewebsite). `--lijst` toont de status per provincie.
+
+**Bekende, blijvende omissie: Overijssel.** Overijssel publiceert zijn GS-besluitenlijsten op `overijssel.notubiz.nl/modules/1/Ingekomen%20stukken` — een pagina die zonder inlog gewoon in een browser te bekijken is. Maar het hele domein zit achter een Cloudflare-controle die geautomatiseerde verzoeken (ook directe PDF-links) blokkeert met een JS-uitdaging (HTTP 403 voor alles behalve een echte browser). Deze toolkit omzeilt dat bewust niet — er wordt geen bot-detectie-bypass gebouwd, ook niet voor een legitiem journalistiek doel. Overijssel staat daarom in `provincies.json` met `reden: "cloudflare-bot-detectie"` en heeft geen geautomatiseerde GS-bron; de besluitenlijsten van Overijssel moeten handmatig via een browser geraadpleegd worden.
 
 **Gemeenschappelijke regelingen** (`scraper_gr.py`) — 157 samenwerkingsverbanden tussen gemeenten, verdeeld over alle 12 provincies: omgevingsdiensten, GGD'en, sociale werkvoorzieningsschappen, jeugdzorgregio's, vervoersautoriteiten, afvalinzameling, belastingsamenwerkingen, archieven en meer. Veiligheidsregio's en waterschappen zijn geen onderdeel van deze catalogus (aparte organen met een eigen wettelijk kader). Welke GRs bij een provincie horen wordt bepaald via de deelnemende gemeenten en/of een expliciete provincie-koppeling in `bronnen/regelingen.json`.
 
@@ -33,6 +35,7 @@ python3 scraper_provincie.py zuid-holland            # download Statenstukken
 python3 scraper_provincie.py zuid-holland --droog    # toon wat er gedownload zou worden
 python3 scraper_provincie.py zuid-holland --jaren 1  # alleen het afgelopen jaar
 python3 scraper_provincie.py --lijst-ori             # toon alle provincies in de ORI API
+python3 scraper_provincie.py --help                  # toon alle opties
 ```
 
 Na het downloaden van een provincie toont de scraper meteen welke gemeenschappelijke regelingen daar bij horen.
@@ -41,7 +44,7 @@ Na het downloaden van een provincie toont de scraper meteen welke gemeenschappel
 
 ```bash
 python3 scraper_gs.py --lijst              # toon GS-status per provincie
-python3 scraper_gs.py gelderland           # download GS-besluiten (enige geverifieerde provincie nu)
+python3 scraper_gs.py gelderland           # download GS-besluiten
 python3 scraper_gs.py gelderland --droog   # toon wat er gedownload zou worden
 ```
 

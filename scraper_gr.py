@@ -17,11 +17,23 @@ De scraper ondersteunt drie bronnen:
   - iBabs Publieksportaal: elke GR met een ibabs_naam in bronnen/regelingen.json
 
 Gebruik:
-    python3 scraper_gr.py nieuw-reijerwaard          # download vergaderstukken
+    python3 scraper_gr.py <regeling>                 # download vergaderstukken
     python3 scraper_gr.py nieuw-reijerwaard --droog  # droog uitvoeren
+    python3 scraper_gr.py nieuw-reijerwaard --jaren 1 # alleen het afgelopen jaar
     python3 scraper_gr.py --lijst                    # toon alle geconfigureerde GRs
+    python3 scraper_gr.py --lijst-ori                # toon alle gemeenten in ORI
     python3 scraper_gr.py --provincie zuid-holland   # toon GRs in die provincie
     python3 scraper_gr.py --zoek jeugdhulp           # zoek GR in Notubiz
+
+Opties:
+    <regeling>          Naam/slug van de regeling, zoals in --lijst (bijv. nieuw-reijerwaard)
+    --droog             Toon wat er gedownload zou worden, download niets echt
+    --jaren N           Kijk N jaar terug in plaats van de standaard 2 jaar (mag decimaal, bijv. 0.5)
+    --lijst             Toon alle geconfigureerde regelingen en hun brontype
+    --lijst-ori         Toon alle gemeente-indices die beschikbaar zijn in de ORI API
+    --provincie <naam>  Toon de regelingen waarvan gemeenten in deze provincie liggen
+    --zoek <term>       Zoek een organisatie op naam in de Notubiz-catalogus
+    --help, -h          Toon deze hulptekst
 
 Configuratie: bronnen/regelingen.json, bronnen/provincies.json
 Output: ~/Documents/provinciale-staten/regelingen/<naam>/
@@ -233,6 +245,10 @@ def zoek_notubiz_organisaties(zoekterm: str) -> list[dict]:
 # ── Hoofdprogramma ────────────────────────────────────────────────────────────
 
 def main():
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print(__doc__)
+        return
+
     args = sys.argv[1:]
     vlaggen = {a for a in args if a.startswith("--")}
     droog = "--droog" in vlaggen

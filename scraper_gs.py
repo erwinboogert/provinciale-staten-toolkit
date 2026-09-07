@@ -22,9 +22,17 @@ besluitenlijst-PDF's — als eenvoudige index met directe links (backend
 bronnen/provincies.json, en het "reden"-veld als er nog geen bron bekend is.
 
 Gebruik:
-    python3 scraper_gs.py gelderland          # download GS-besluiten
-    python3 scraper_gs.py gelderland --droog  # toon wat er gedownload zou worden
-    python3 scraper_gs.py --lijst             # toon GS-status per provincie
+    python3 scraper_gs.py <provincie>          # download GS-besluiten
+    python3 scraper_gs.py gelderland --droog   # toon wat er gedownload zou worden
+    python3 scraper_gs.py gelderland --jaren 1 # alleen het afgelopen jaar
+    python3 scraper_gs.py --lijst              # toon GS-status per provincie
+
+Opties:
+    <provincie>       Naam/slug van de provincie, zoals in --lijst (bijv. gelderland)
+    --droog           Toon wat er gedownload zou worden, download niets echt
+    --jaren N         Kijk N jaar terug in plaats van de standaard 2 jaar (mag decimaal, bijv. 0.5)
+    --lijst           Toon de GS-status per provincie (geverifieerd of reden waarom niet)
+    --help, -h        Toon deze hulptekst
 
 Configuratie: bronnen/provincies.json (geneste "gs"-sleutel per provincie)
 Output: ~/Documents/provinciale-staten/gs/<naam>/
@@ -121,6 +129,10 @@ def lijst_provincies():
 # ── Hoofdprogramma ────────────────────────────────────────────────────────────
 
 def main():
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print(__doc__)
+        return
+
     args = sys.argv[1:]
     vlaggen = {a for a in args if a.startswith("--")}
     droog = "--droog" in vlaggen

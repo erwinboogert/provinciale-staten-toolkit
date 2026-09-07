@@ -9,10 +9,19 @@ zijn ontsloten via de ORI API, 1 (Gelderland) via Notubiz, 2 (Zeeland, Noord-Bra
 via het publieke iBabs-portaal, en alleen Drenthe heeft geen geautomatiseerde bron.
 
 Gebruik:
-    python3 scraper_provincie.py zuid-holland           # download vergaderstukken
+    python3 scraper_provincie.py <provincie>            # download vergaderstukken
     python3 scraper_provincie.py zuid-holland --droog   # toon wat er gedownload zou worden
+    python3 scraper_provincie.py zuid-holland --jaren 1 # alleen het afgelopen jaar
     python3 scraper_provincie.py --lijst                # toon geconfigureerde provincies
     python3 scraper_provincie.py --lijst-ori             # toon alle provincies in ORI
+
+Opties:
+    <provincie>       Naam/slug van de provincie, zoals in --lijst (bijv. zuid-holland)
+    --droog           Toon wat er gedownload zou worden, download niets echt
+    --jaren N         Kijk N jaar terug in plaats van de standaard 2 jaar (mag decimaal, bijv. 0.5)
+    --lijst           Toon alle geconfigureerde provincies en hun brontype
+    --lijst-ori       Toon alle provincies die beschikbaar zijn in de ORI API
+    --help, -h        Toon deze hulptekst
 
 Configuratie: bronnen/provincies.json
 Output: ~/Documents/provinciale-staten/provincies/<naam>/
@@ -139,6 +148,10 @@ def lijst_ori_provincies():
 # ── Hoofdprogramma ────────────────────────────────────────────────────────────
 
 def main():
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print(__doc__)
+        return
+
     args = sys.argv[1:]
     vlaggen = {a for a in args if a.startswith("--")}
     droog = "--droog" in vlaggen
