@@ -6,7 +6,7 @@ Dit is een afgeslankte, standalone afsplitsing van de bredere [lokaalbestuur-too
 
 ## Wat wordt gedownload
 
-**Provinciale Staten** (`scraper_provincie.py`) — standaard worden stukken van de **Provinciale Staten**, **Statencommissies** en overige **commissies** opgehaald (dus niet Gedeputeerde Staten, het dagelijks bestuur). 8 van de 12 provincies zijn ontsloten via de Open Raadsinformatie API (ORI), 2 via de Notubiz API, en 1 (Zeeland) via het publieke iBabs-portaal. Alleen Drenthe heeft geen geautomatiseerde bron (eigen verouderd documentsysteem, drenthe.info/dvs/) en moet handmatig worden geraadpleegd.
+**Provinciale Staten** (`scraper_provincie.py`) — standaard worden stukken van de **Provinciale Staten**, **Statencommissies** en overige **commissies** opgehaald (dus niet Gedeputeerde Staten, het dagelijks bestuur). 8 van de 12 provincies zijn ontsloten via de Open Raadsinformatie API (ORI), 1 (Gelderland) via de Notubiz API, en 2 (Zeeland, Noord-Brabant) via het publieke iBabs-portaal. Alleen Drenthe heeft geen geautomatiseerde bron (eigen verouderd documentsysteem, drenthe.info/dvs/) en moet handmatig worden geraadpleegd.
 
 **Gemeenschappelijke regelingen** (`scraper_gr.py`) — 157 samenwerkingsverbanden tussen gemeenten, verdeeld over alle 12 provincies: omgevingsdiensten, GGD'en, sociale werkvoorzieningsschappen, jeugdzorgregio's, vervoersautoriteiten, afvalinzameling, belastingsamenwerkingen, archieven en meer. Veiligheidsregio's en waterschappen zijn geen onderdeel van deze catalogus (aparte organen met een eigen wettelijk kader). Welke GRs bij een provincie horen wordt bepaald via de deelnemende gemeenten en/of een expliciete provincie-koppeling in `bronnen/regelingen.json`.
 

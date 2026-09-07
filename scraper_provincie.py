@@ -5,8 +5,8 @@ Bronnen: Open Raadsinformatie API (osi_-prefix) en Notubiz API
 Provinciale Staten zijn het democratisch gekozen bestuursorgaan van een provincie,
 verantwoordelijk voor onder meer ruimtelijke ordening, natuur, infrastructuur en
 regionaal economisch beleid. Hun vergaderingen zijn openbaar. 8 van de 12 provincies
-zijn ontsloten via de ORI API, 2 via Notubiz, 1 (Zeeland) via het publieke
-iBabs-portaal, en alleen Drenthe heeft geen geautomatiseerde bron.
+zijn ontsloten via de ORI API, 1 (Gelderland) via Notubiz, 2 (Zeeland, Noord-Brabant)
+via het publieke iBabs-portaal, en alleen Drenthe heeft geen geautomatiseerde bron.
 
 Gebruik:
     python3 scraper_provincie.py zuid-holland           # download vergaderstukken
