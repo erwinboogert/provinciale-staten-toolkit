@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Catalogus van alle 12 Nederlandse provincies. Bron: ORI API (osi_-prefix), Notubiz API, of (Zeeland, Noord-Brabant, sinds 2026-09-07) het publieke iBabs-portaal via 'ibabs_naam' (zie de iBabs Publieksportaal-uitleg in api.py/README.md). Alleen Drenthe heeft nog geen geautomatiseerde bron — vergaderstukken staan daar op een eigen, verouderd documentsysteem (drenthe.info/dvs/) zonder herkend patroon. Les uit Noord-Brabant (2026-09-07): een 'notubiz_id' die ooit werkte kan alsnog stilvallen zonder foutmelding (0 vergaderingen, geen crash) als de organisatie naar een ander portaal migreert — periodieke --droog-controle van elke provincie blijft nodig, niet alleen van de GR-catalogus.",
+  "_opmerking": "Catalogus van alle 12 Nederlandse provincies. Bron: ORI API (osi_-prefix), Notubiz API, of (Zeeland, Noord-Brabant, sinds 2026-09-07) het publieke iBabs-portaal via 'ibabs_naam' (zie de iBabs Publieksportaal-uitleg in api.py/README.md). Alleen Drenthe heeft nog geen geautomatiseerde bron — vergaderstukken staan daar op een eigen, verouderd documentsysteem (drenthe.info/dvs/) zonder herkend patroon. Les uit Noord-Brabant (2026-09-07): een 'notubiz_id' die ooit werkte kan alsnog stilvallen zonder foutmelding (0 vergaderingen, geen crash) als de organisatie naar een ander portaal migreert — periodieke --droog-controle van elke provincie blijft nodig, niet alleen van de GR-catalogus. Sinds 2026-09-07 heeft elke provincie ook een geneste 'gs'-sleutel voor Gedeputeerde Staten (dagelijks bestuur), gebruikt door scraper_gs.py — zelfde velden als hierboven (notubiz_id/ibabs_naam/ori_index/vergadertypen/geverifieerd), plus 'reden' als er nog geen bron bekend is ('nog-niet-onderzocht', 'geen-gs-categorie-in-portaal' als het PS-portaal is gecheckt maar geen GS bevat, of 'losse-bron-nog-niet-gebouwd' als er wel een bron bekend is — bijv. een open dataset — maar de scraper dat brontype nog niet ondersteunt, zie 'dataset_url'). Gelderland is de eerste geverifieerde: GS-vergaderingen zitten daar gewoon in dezelfde Notubiz-feed als PS, alleen met een ander vergadertype ('gs-vergadering'). Let op bij GS, in tegenstelling tot PS: niet elk besluit is openbaar, dus 'geverifieerd' betekent hier 'de publiek beschikbare besluiten zijn bevestigd ophaalbaar', niet 'alle besluiten zijn zichtbaar'.",
   "_vergadertypen_standaard": [
     "provinciale staten",
     "statencommissie",
@@ -21,7 +21,11 @@
       "noordenveld",
       "tynaarlo",
       "westerveld"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "flevoland": {
     "naam": "Provincie Flevoland",
@@ -33,7 +37,11 @@
       "noordoostpolder",
       "urk",
       "zeewolde"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "fryslan": {
     "naam": "Provincie Fryslân",
@@ -57,7 +65,11 @@
       "vlieland",
       "waadhoeke",
       "weststellingwerf"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "gelderland": {
     "naam": "Provincie Gelderland",
@@ -114,7 +126,15 @@
       "zaltbommel",
       "zevenaar",
       "zutphen"
-    ]
+    ],
+    "gs": {
+      "notubiz_id": 1769,
+      "vergadertypen": [
+        "gs-vergadering",
+        "gs vergadering"
+      ],
+      "geverifieerd": true
+    }
   },
   "groningen": {
     "naam": "Provincie Groningen",
@@ -130,7 +150,11 @@
       "veendam",
       "westerkwartier",
       "westerwolde"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "limburg": {
     "naam": "Provincie Limburg",
@@ -167,12 +191,20 @@
       "venray",
       "voerendaal",
       "weert"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "noord-brabant": {
     "naam": "Provincie Noord-Brabant",
     "ibabs_naam": "noordbrabant",
-    "vergadertypen": ["statendagen", "thema", "commissie"],
+    "vergadertypen": [
+      "statendagen",
+      "thema",
+      "commissie"
+    ],
     "_opmerking": "was notubiz_id 576, maar die feed levert sinds onbekende datum 0 vergaderingen meer op (organisatie bestaat nog wel in Notubiz' eigen directory, maar events-API geeft niets terug) — provincie is kennelijk overgestapt naar het publieke iBabs-portaal. Eigen naamgeving wijkt af van de standaard: 'Statendagen' = Provinciale Staten (plenair), 'Thema <onderwerp>' = Statencommissies. Er is geen Gedeputeerde Staten-categorie op dit portaal.",
     "gemeenten": [
       "alphen-chaam",
@@ -231,7 +263,12 @@
       "waalwijk",
       "woensdrecht",
       "zundert"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "geen-gs-categorie-in-portaal",
+      "_opmerking": "Noord-Brabant heeft een eigen iBabs-portaal (noordbrabant.bestuurlijkeinformatie.nl, gebruikt voor PS), maar daar staat geen GS-categorie in — alleen Statendagen, Presidium en Thema-commissies."
+    }
   },
   "noord-holland": {
     "naam": "Provincie Noord-Holland",
@@ -282,7 +319,11 @@
       "wormerland",
       "zaanstad",
       "zandvoort"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "overijssel": {
     "naam": "Provincie Overijssel",
@@ -313,7 +354,11 @@
       "wierden",
       "zwartewaterland",
       "zwolle"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "utrecht": {
     "naam": "Provincie Utrecht",
@@ -344,7 +389,11 @@
       "woerden",
       "woudenberg",
       "zeist"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "nog-niet-onderzocht"
+    }
   },
   "zeeland": {
     "naam": "Provincie Zeeland",
@@ -363,7 +412,12 @@
       "tholen",
       "veere",
       "vlissingen"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "geen-gs-categorie-in-portaal",
+      "_opmerking": "Zeeland heeft een eigen iBabs-portaal (zeeland.bestuurlijkeinformatie.nl, gebruikt voor PS), maar daar staat geen GS-categorie in — alleen Provinciale Staten en Statencommissies."
+    }
   },
   "zuid-holland": {
     "naam": "Provincie Zuid-Holland",
@@ -419,6 +473,12 @@
       "zoeterwoude",
       "zuidplas",
       "zwijndrecht"
-    ]
+    ],
+    "gs": {
+      "geverifieerd": false,
+      "reden": "losse-bron-nog-niet-gebouwd",
+      "dataset_url": "https://data.overheid.nl/dataset/58755-besluiten-gedeputeerde-staten-zuid-holland",
+      "_opmerking": "GS-besluiten worden hier niet via een vergaderportaal gepubliceerd maar als losse, gestructureerde open dataset (sinds 2017, incl. toelichtingen en bijlagen). Vereist een eigen backend-functie (dataset/CKAN-achtig), niet de bestaande vergadering-scrapers. Nog niet gebouwd."
+    }
   }
 }

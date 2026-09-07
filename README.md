@@ -1,12 +1,14 @@
 # Provinciale Staten Toolkit
 
-Een journalistiek onderzoekstool die openbare vergaderstukken van de **Provinciale Staten** van Nederlandse provincies downloadt, plus de **gemeenschappelijke regelingen** (GRs) die binnen elke provincie actief zijn — lokaal, zonder account of API-sleutel.
+Een journalistiek onderzoekstool die openbare vergaderstukken van de **Provinciale Staten** van Nederlandse provincies downloadt, plus besluiten van **Gedeputeerde Staten** en de **gemeenschappelijke regelingen** (GRs) die binnen elke provincie actief zijn — lokaal, zonder account of API-sleutel.
 
 Dit is een afgeslankte, standalone afsplitsing van de bredere [lokaalbestuur-toolkit](https://github.com/erwinboogert/lokaalbestuur-toolkit) en bevat alleen wat nodig is om Staten- en GR-stukken op te halen: geen gemeenteraad-, waterschap- of veiligheidsregio-scrapers, geen analyse- of zoekindex-tooling.
 
 ## Wat wordt gedownload
 
 **Provinciale Staten** (`scraper_provincie.py`) — standaard worden stukken van de **Provinciale Staten**, **Statencommissies** en overige **commissies** opgehaald (dus niet Gedeputeerde Staten, het dagelijks bestuur). 8 van de 12 provincies zijn ontsloten via de Open Raadsinformatie API (ORI), 1 (Gelderland) via de Notubiz API, en 2 (Zeeland, Noord-Brabant) via het publieke iBabs-portaal. Alleen Drenthe heeft geen geautomatiseerde bron (eigen verouderd documentsysteem, drenthe.info/dvs/) en moet handmatig worden geraadpleegd.
+
+**Gedeputeerde Staten** (`scraper_gs.py`, sinds 2026-09-07) — GS is het dagelijks bestuur van een provincie: vergunningen, subsidies, grondaankoop, contracten. Krijgt structureel minder aandacht dan Provinciale Staten, terwijl daar het feitelijke bestuur gebeurt. **Let op:** niet elk GS-besluit is openbaar (een deel kan vertrouwelijk zijn), dus deze scraper haalt op wat publiek gepubliceerd is en meldt dat expliciet — niet als complete besluitenlijst. De bron verschilt sterk per provincie: bij Gelderland zit GS in dezelfde Notubiz-feed als PS (`--lijst` toont de status per provincie); bij de meeste andere provincies is dit nog niet uitgezocht (`"reden": "nog-niet-onderzocht"` in `provincies.json`), en Zuid-Holland publiceert GS-besluiten als losse open dataset die deze scraper nog niet ondersteunt.
 
 **Gemeenschappelijke regelingen** (`scraper_gr.py`) — 157 samenwerkingsverbanden tussen gemeenten, verdeeld over alle 12 provincies: omgevingsdiensten, GGD'en, sociale werkvoorzieningsschappen, jeugdzorgregio's, vervoersautoriteiten, afvalinzameling, belastingsamenwerkingen, archieven en meer. Veiligheidsregio's en waterschappen zijn geen onderdeel van deze catalogus (aparte organen met een eigen wettelijk kader). Welke GRs bij een provincie horen wordt bepaald via de deelnemende gemeenten en/of een expliciete provincie-koppeling in `bronnen/regelingen.json`.
 
@@ -35,6 +37,14 @@ python3 scraper_provincie.py --lijst-ori             # toon alle provincies in d
 
 Na het downloaden van een provincie toont de scraper meteen welke gemeenschappelijke regelingen daar bij horen.
 
+**Gedeputeerde Staten:**
+
+```bash
+python3 scraper_gs.py --lijst              # toon GS-status per provincie
+python3 scraper_gs.py gelderland           # download GS-besluiten (enige geverifieerde provincie nu)
+python3 scraper_gs.py gelderland --droog   # toon wat er gedownload zou worden
+```
+
 **Gemeenschappelijke regelingen:**
 
 ```bash
@@ -45,7 +55,7 @@ python3 scraper_gr.py nieuw-reijerwaard --droog  # toon wat er gedownload zou wo
 python3 scraper_gr.py --zoek jeugdhulp           # zoek een GR-organisatie in Notubiz
 ```
 
-Documenten komen terecht in `~/Documents/provinciale-staten/provincies/<naam>/` en `~/Documents/provinciale-staten/regelingen/<naam>/`.
+Documenten komen terecht in `~/Documents/provinciale-staten/provincies/<naam>/`, `~/Documents/provinciale-staten/gs/<naam>/` en `~/Documents/provinciale-staten/regelingen/<naam>/`.
 
 Staat een GR niet op `"geverifieerd": true` in `regelingen.json`? Dan heeft `scraper_gr.py` geen automatische bron voor die regeling en stopt hij met een foutmelding die naar het `website`-veld verwijst. Dat is geen bug: bezoek in dat geval die website zelf en zoek daar handmatig naar de vergaderstukken.
 
