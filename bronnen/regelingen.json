@@ -1,5 +1,5 @@
 {
-  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert scraping van het publieke iBabs-portaal (sitename = subdomein van bestuurlijkeinformatie.nl, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'); optioneel veld 'vergadertypen' (lijst van substrings) overschrijft de standaardfilter als het portaal meerdere organisaties/schappen deelt en per-organisatie categorienamen gebruikt (bijv. 'Twiske-Waterland vergadering AB' i.p.v. gewoon 'algemeen bestuur'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen).\n\nMETHODE-WIJZIGING (2026-09-06): iBabs-regelingen worden niet langer via de SOAP-API (Public.svc, vereist per-IP whitelisting door iBabs) benaderd, maar via HTML-scraping van het publieke, ongeauthenticeerde iBabs-portaal op https://<sitename>.bestuurlijkeinformatie.nl/ — hetzelfde portaal waar burgers vergaderstukken op inzien. Zie README ('Hoe iBabs-regelingen werken') voor de technische achtergrond. Dit loste in één sessie 16 van de 19 eerder 'ibabs-geblokkeerd-ip-whitelisting'-regelingen op tot geverifieerd.\n\nSTATUS (september 2026, na vier verificatierondes): van de oorspronkelijke 166 regelingen zijn er 9 verwijderd wegens opheffing/fusie zonder zelfstandige opvolger (hoeksche-waard, grd-drechtsteden, omgevingsdienst-regio-nijmegen, permar-ws, ggd-amsterdam-amstelland, delta, presikhaaf-bedrijven, samenwerkingsregeling-noord-veluwe, sociale-dienst-veluwerand). Van de resterende 157 zijn er 98 'geverifieerd': true (portaaltype echt getest met --droog, of een handmatige vergaderstukkenpagina met bevestigde directe downloadlinks). De overige 59 hebben een 'reden'-veld dat aangeeft waarom er (nog) geen bruikbare bron is: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling/ambtelijke fusie die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder eigen publiek AB-vergadercircuit), 'geen-vergaderarchief-alleen-jaarstukken' (eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-downloadbare-bijlagen' (vergaderpagina/-lijst bestaat, maar zonder confirmeerbare downloadbare documenten), 'portaal-blokkeert-onderzoek' (een portaal bestaat aantoonbaar, maar bot-/anti-scraping-bescherming verhinderde verder onderzoek naar de exacte sitename of inhoud), 'ibabs-portaal-geen-toegang' (sitename bevestigd, maar het publieke iBabs-portaal zelf antwoordt met 'Geen toegang tot iBabsOnline!' — een organisatie-specifieke afscherming, geen IP-probleem), 'ibabs-categorie-verouderd' (sitename en vergadercategorie bevestigd, maar de categorie bevat geen vergaderingen meer binnen de gebruikelijke terugkijkperiode — mogelijk verhuisd naar een andere categorie of portaal). Ontbreekt zowel 'geverifieerd': true als 'reden', dan is die regeling nog niet onderzocht.\n\nGebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. Let op: dit environment heeft geen werkende 'python3' voor dit script (macOS system Python 3.9 mist PEP 604-syntax) — gebruik expliciet python3.10+ (bijv. /opt/homebrew/bin/python3.12).\n\nLes uit eerdere rondes: 'geverifieerd' op enig moment betekent niet blijvend correct (zie hoeksche-waard, orionis-walcheren/meerinzicht die eerder ten onrechte via een dode notubiz_id geverifieerd stonden) — periodieke herverificatie blijft nodig. Vertrouw ook een eerdere '_opmerking'-conclusie niet blind: orionis-walcheren werd hier ooit als 'alleen op aanvraag per mail' bestempeld, wat bij hercontrole niet (meer) klopte. Wees ook alert op AI-samenvattingen van zoekresultaten die een organisatie ten onrechte als 'opgeheven' bestempelen (gebeurde bij waterlands-archief en havenschap-moerdijk, beide gewoon nog actief) — check zulke claims altijd tegen een tweede, specifiekere bron voordat je een regeling verwijdert. En vertrouw een eerder vastgelegde 'ibabs_naam' niet blind: bij de vier Noord-Hollandse recreatieschappen bleek de oude sitename 'bestuursbureau' inmiddels 'Ongeldige site!' te geven — het juiste, gedeelde portaal was inmiddels 'recreatienh' met een aparte agendacategorie per schap (zie 'vergadertypen'-veld).\n\nRonde 3 (2026-09-06, gericht op de 'geen-portaal-gevonden'-groep): van de 39 regelingen met die reden zijn er 4 alsnog geverifieerd — regio-rivierenland (eigen Notubiz), rd4/regio-achterhoek(8RHK)/zaffier (eigen website met bevestigde directe PDF-downloads). 11 regelingen zijn herclassificeerd naar 'verspreid-via-gemeentelijke-portalen' en 1 naar 'portaal-blokkeert-onderzoek' zodra een zoekopdracht dat concreet bevestigde.\n\nRonde 4 (2026-09-06, ontdekking HTML-scraping-methode): tijdens onderzoek naar rd4 bleek dat zijn publieke iBabs-portaal (rd4.bestuurlijkeinformatie.nl) wél browsbare, downloadbare PDF's heeft, terwijl de SOAP-API 'Invalid site!' bleef geven voor elke sitename-variant — een aanwijzing dat sommige iBabs-klanten niet (meer) via de klassieke Public.svc-laag bereikbaar zijn. Dit leidde tot een volledige herbouw van de iBabs-scraper in api.py: in plaats van SOAP-verzoeken te doen scraped 'haal_vergaderingen_ibabs' nu de publieke HTML-pagina's (/Calendar, /Agenda/RetrieveAgendasForYear, /Agenda/Index/<guid>, /Document/LoadAgendaDocument/<docId>?agendaId=<guid>) — zonder whitelisting, want dit IS het portaal dat voor openbare inzage bedoeld is. Van de 19 regelingen met reden 'ibabs-geblokkeerd-ip-whitelisting' zijn er zo 16 alsnog geverifieerd; ggd-hart-voor-brabant bleek nooit een eigen sitename te hebben (-> verspreid-via-gemeentelijke-portalen), ggd-west-brabant blokkeert zelf de publieke toegang tot het portaal (-> ibabs-portaal-geen-toegang), en recreatieschap-twiske-waterland heeft wel een werkende categorie maar zonder recente vergaderingen (-> ibabs-categorie-verouderd).",
+  "_opmerking": "Gemeenschappelijke regelingen (GRs), gekoppeld aan provincies via het veld 'provincies' en/of overlap met de gemeentenlijsten in provincies.json. Veld 'notubiz_id' activeert Notubiz-scraping. Veld 'ibabs_naam' activeert scraping van het publieke iBabs-portaal (sitename = subdomein van bestuurlijkeinformatie.nl, bijv. dcmr.bestuurlijkeinformatie.nl -> 'dcmr'); optioneel veld 'vergadertypen' (lijst van substrings) overschrijft de standaardfilter als het portaal meerdere organisaties/schappen deelt en per-organisatie categorienamen gebruikt (bijv. 'Twiske-Waterland vergadering AB' i.p.v. gewoon 'algemeen bestuur'). Veld 'ori_index' activeert ORI-scraping. Zonder een van deze drie, maar met 'website', is er geen geautomatiseerde bron en moet handmatig geraadpleegd worden. Veiligheidsregio's en waterschappen staan hier niet in (aparte organen).\n\nMETHODE-WIJZIGING (2026-09-06): iBabs-regelingen worden niet langer via de SOAP-API (Public.svc, vereist per-IP whitelisting door iBabs) benaderd, maar via HTML-scraping van het publieke, ongeauthenticeerde iBabs-portaal op https://<sitename>.bestuurlijkeinformatie.nl/ — hetzelfde portaal waar burgers vergaderstukken op inzien. Zie README ('Hoe iBabs-regelingen werken') voor de technische achtergrond. Dit loste in één sessie 16 van de 19 eerder 'ibabs-geblokkeerd-ip-whitelisting'-regelingen op tot geverifieerd.\n\nSTATUS (september 2026, na vijf verificatierondes): van de oorspronkelijke 166 regelingen zijn er 9 verwijderd wegens opheffing/fusie zonder zelfstandige opvolger (hoeksche-waard, grd-drechtsteden, omgevingsdienst-regio-nijmegen, permar-ws, ggd-amsterdam-amstelland, delta, presikhaaf-bedrijven, samenwerkingsregeling-noord-veluwe, sociale-dienst-veluwerand). Van de resterende 157 zijn er 103 'geverifieerd': true (portaaltype echt getest met --droog, of een handmatige vergaderstukkenpagina met bevestigde directe downloadlinks). De overige 54 hebben een 'reden'-veld dat aangeeft waarom er (nog) geen bruikbare bron is: 'geen-portaal-gevonden' (geen enkele vergaderstukkenpagina vindbaar binnen redelijke onderzoekstijd), 'verspreid-via-gemeentelijke-portalen' (stukken staan wel ergens, maar los verspreid over de iBabs/Notubiz-sites van individuele deelnemende gemeenten i.p.v. één eigen GR-portaal), 'geen-eigen-algemeen-bestuur' (bedrijfsvoeringsorganisatie/centrumregeling/ambtelijke fusie die direct door de colleges van deelnemende gemeenten bestuurd wordt, zonder eigen publiek AB-vergadercircuit), 'geen-vergaderarchief-alleen-jaarstukken' (eigen website met jaarverslagen/begrotingen, maar geen agenda/verslag-archief per AB-vergadering), 'geen-downloadbare-bijlagen' (vergaderpagina/-lijst bestaat, maar zonder confirmeerbare downloadbare documenten), 'portaal-blokkeert-onderzoek' (een portaal bestaat aantoonbaar, maar bot-/anti-scraping-bescherming verhinderde verder onderzoek naar de exacte sitename of inhoud), 'ibabs-portaal-geen-toegang' (sitename bevestigd, maar het publieke iBabs-portaal zelf antwoordt met 'Geen toegang tot iBabsOnline!' — een organisatie-specifieke afscherming, geen IP-probleem), 'ibabs-categorie-verouderd' (sitename en vergadercategorie bevestigd, maar de categorie bevat geen vergaderingen meer binnen de gebruikelijke terugkijkperiode — mogelijk verhuisd naar een andere categorie of portaal). Ontbreekt zowel 'geverifieerd': true als 'reden', dan is die regeling nog niet onderzocht.\n\nGebruik 'python3 scraper_gr.py --zoek <naam>' om een Notubiz-ID zelf te bevestigen, en --droog om een portaal te testen voordat je het als geverifieerd markeert. Let op: dit environment heeft geen werkende 'python3' voor dit script (macOS system Python 3.9 mist PEP 604-syntax) — gebruik expliciet python3.10+ (bijv. /opt/homebrew/bin/python3.12).\n\nLes uit eerdere rondes: 'geverifieerd' op enig moment betekent niet blijvend correct (zie hoeksche-waard, orionis-walcheren/meerinzicht die eerder ten onrechte via een dode notubiz_id geverifieerd stonden) — periodieke herverificatie blijft nodig. Vertrouw ook een eerdere '_opmerking'-conclusie niet blind: orionis-walcheren werd hier ooit als 'alleen op aanvraag per mail' bestempeld, wat bij hercontrole niet (meer) klopte. Wees ook alert op AI-samenvattingen van zoekresultaten die een organisatie ten onrechte als 'opgeheven' bestempelen (gebeurde bij waterlands-archief en havenschap-moerdijk, beide gewoon nog actief) — check zulke claims altijd tegen een tweede, specifiekere bron voordat je een regeling verwijdert. En vertrouw een eerder vastgelegde 'ibabs_naam' niet blind: bij de vier Noord-Hollandse recreatieschappen bleek de oude sitename 'bestuursbureau' inmiddels 'Ongeldige site!' te geven — het juiste, gedeelde portaal was inmiddels 'recreatienh' met een aparte agendacategorie per schap (zie 'vergadertypen'-veld).\n\nRonde 3 (2026-09-06, gericht op de 'geen-portaal-gevonden'-groep): van de 39 regelingen met die reden zijn er 4 alsnog geverifieerd — regio-rivierenland (eigen Notubiz), rd4/regio-achterhoek(8RHK)/zaffier (eigen website met bevestigde directe PDF-downloads). 11 regelingen zijn herclassificeerd naar 'verspreid-via-gemeentelijke-portalen' en 1 naar 'portaal-blokkeert-onderzoek' zodra een zoekopdracht dat concreet bevestigde.\n\nRonde 4 (2026-09-06, ontdekking HTML-scraping-methode): tijdens onderzoek naar rd4 bleek dat zijn publieke iBabs-portaal (rd4.bestuurlijkeinformatie.nl) wél browsbare, downloadbare PDF's heeft, terwijl de SOAP-API 'Invalid site!' bleef geven voor elke sitename-variant — een aanwijzing dat sommige iBabs-klanten niet (meer) via de klassieke Public.svc-laag bereikbaar zijn. Dit leidde tot een volledige herbouw van de iBabs-scraper in api.py: in plaats van SOAP-verzoeken te doen scraped 'haal_vergaderingen_ibabs' nu de publieke HTML-pagina's (/Calendar, /Agenda/RetrieveAgendasForYear, /Agenda/Index/<guid>, /Document/LoadAgendaDocument/<docId>?agendaId=<guid>) — zonder whitelisting, want dit IS het portaal dat voor openbare inzage bedoeld is. Van de 19 regelingen met reden 'ibabs-geblokkeerd-ip-whitelisting' zijn er zo 16 alsnog geverifieerd; ggd-hart-voor-brabant bleek nooit een eigen sitename te hebben (-> verspreid-via-gemeentelijke-portalen), ggd-west-brabant blokkeert zelf de publieke toegang tot het portaal (-> ibabs-portaal-geen-toegang), en recreatieschap-twiske-waterland heeft wel een werkende categorie maar zonder recente vergaderingen (-> ibabs-categorie-verouderd).\n\nRonde 5 (2026-09-07, gericht op 'portaal-blokkeert-onderzoek' en een deel van 'geen-portaal-gevonden'): west-brabants-archief bleek met gewone curl-headers (i.p.v. WebFetch) prima bereikbaar — de eerdere 403 kwam blijkbaar van WebFetch's eigen fetcher, niet van de site zelf; publicaties/vergaderstukken-algemeen-bestuur-2 heeft 23 directe PDF-downloads 2016-2025. sociale-dienst-drechtsteden blijkt wél een echte 'Anubis' proof-of-work bot-check te hebben (client-side JS-puzzel) die met curl niet op te lossen is — nog te proberen met een echte browser. In de 'geen-portaal-gevonden'-groep leverde het systematisch volgen van elke org-website-navigatie (i.p.v. alleen de homepage) 4 nieuwe hits op: svhw (beleidsdocumenten-pagina met AB-besluiten 2022-2026), mgr-sociaal-domein-limburg-noord (volledig AB-archief met agenda/verslag/bijlagen per vergadering, 2022-2026), werkzaak-rivierenland (AB-agenda's en besluitenlijsten als directe PDF's), historisch-centrum-limburg ('Besluiten algemeen bestuur'-map, 2023-2026). omgevingsdienst-noord-en-midden-limburg heeft een bevestigd bestaand AB-archief (categorie 'AB stukken', jaren 2021-2026 zichtbaar) maar de documentenlijst wordt client-side geladen via het WordPress File Download-plugin met een nonce-check die curl niet kan omzeilen — kandidaat voor een sessie met browsertoegang. De 'verspreid-via-gemeentelijke-portalen'-groep (17) is in ronde 4 al systematisch getest tegen de meest waarschijnlijke gastgemeente-portalen en bleek niet oplosbaar: geen van de geteste host-portalen had een eigen vergadercategorie voor de betreffende GR, alleen generieke gemeenteraadscategorieën — deze 17 zijn dus correct geclassificeerd en vermoedelijk blijvend zo, tenzij een van de organisaties zelf een eigen portaal opzet.",
   "_vergadertypen_standaard": [
     "algemeen bestuur",
     "dagelijks bestuur",
@@ -1524,7 +1524,8 @@
       "zuid-holland"
     ],
     "website": "https://bestuur.grsociaal.nl/Organisatie/Algemeen-bestuur",
-    "bron_register": "CVDR668607"
+    "bron_register": "CVDR668607",
+    "_opmerking": "portaal zit achter een 'Anubis' proof-of-work bot-check (client-side JS-puzzel, zie /.within.website/x/cmd/anubis/) die curl/WebFetch niet kan oplossen — hiervoor is een echte browser nodig (bijv. claude-in-chrome). Nog niet met een echte browser geprobeerd."
   },
   "dienst-gezondheid-en-jeugd-zhz": {
     "naam": "Dienst Gezondheid & Jeugd Zuid-Holland Zuid",
@@ -1614,8 +1615,7 @@
   },
   "svhw": {
     "naam": "Gemeenschappelijke Regeling SVHW",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "alblasserdam",
       "albrandswaard",
@@ -1633,7 +1633,7 @@
     "provincies": [
       "zuid-holland"
     ],
-    "website": "https://www.svhw.nl/",
+    "website": "https://www.svhw.nl/over-svhw/beleidsdocumenten/",
     "bron_register": "CVDR687094"
   },
   "groenalliantie-midden-holland": {
@@ -2263,8 +2263,7 @@
   },
   "west-brabants-archief": {
     "naam": "Gemeenschappelijke Regeling West-Brabants Archief",
-    "geverifieerd": false,
-    "reden": "portaal-blokkeert-onderzoek",
+    "geverifieerd": true,
     "gemeenten": [
       "bergen-op-zoom",
       "etten-leur",
@@ -2279,6 +2278,7 @@
     "provincies": [
       "noord-brabant"
     ],
+    "website": "https://westbrabantsarchief.nl/over-het-wba/publicaties/2-uncategorised/268-vergaderstukken-algemeen-bestuur-2",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR486645"
   },
   "regionaal-archief-tilburg": {
@@ -2449,8 +2449,9 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://odnml.nl/",
-    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR760191"
+    "website": "https://odnml.nl/vergaderstukken-algemeen-bestuur/",
+    "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR760191",
+    "_opmerking": "echt AB-archief bevestigd (categorie 'AB stukken' met vergaderdata 2021-2026, zichtbaar in de filterlijst), maar de documentenlijst zelf wordt client-side geladen via het WordPress File Download-plugin (wp-admin/admin-ajax.php?action=wpfd&task=files.display) met een nonce-check — ook met de juiste nonce-waarde uit de pagina blijft dit HTTP 400 geven via curl. Met een echte browser (JS-executie) zou dit waarschijnlijk wel lukken."
   },
   "ggd-zuid-limburg": {
     "naam": "Gemeenschappelijke regeling GGD Zuid Limburg",
@@ -2536,8 +2537,7 @@
   },
   "mgr-sociaal-domein-limburg-noord": {
     "naam": "Modulaire Gemeenschappelijke Regeling Sociaal Domein Limburg-Noord",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "beesel",
       "bergen-l",
@@ -2557,7 +2557,7 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://www.sociaaldomein-limburgnoord.nl/",
+    "website": "https://www.sociaaldomein-limburgnoord.nl/sociaal-domein-limburg-noord/publicaties-mgr",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR721611/1"
   },
   "regio-noord-limburg": {
@@ -2710,8 +2710,7 @@
   },
   "werkzaak-rivierenland": {
     "naam": "Gemeenschappelijke Regeling Werkzaak Rivierenland",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "buren",
       "culemborg",
@@ -2725,7 +2724,7 @@
     "provincies": [
       "gelderland"
     ],
-    "website": "https://www.werkzaakrivierenland.nl/",
+    "website": "https://www.werkzaakrivierenland.nl/over-werkzaak-rivierenland/publicaties",
     "bron_register": "https://lokaleregelgeving.overheid.nl/CVDR722332/"
   },
   "avri": {
@@ -3112,8 +3111,7 @@
   },
   "historisch-centrum-limburg": {
     "naam": "Gemeenschappelijke Regeling Regionaal Historisch Centrum Limburg (HCL)",
-    "geverifieerd": false,
-    "reden": "geen-portaal-gevonden",
+    "geverifieerd": true,
     "gemeenten": [
       "beek",
       "brunssum",
@@ -3132,7 +3130,7 @@
     "provincies": [
       "limburg"
     ],
-    "website": "https://historischcentrumlimburg.nl/",
+    "website": "https://historischcentrumlimburg.nl/over-ons/beleid-en-jaarverslagen",
     "bron_register": "https://wetten.overheid.nl/BWBR0039744/"
   },
   "ict-nml": {
