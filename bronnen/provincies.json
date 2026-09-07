@@ -24,7 +24,9 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "eigen-website-nog-niet-gebouwd",
+      "website": "https://www.provincie.drenthe.nl/organisatie-bestuur/gedeputeerde-staten/gs-vergaderingen/",
+      "_opmerking": "Bevestigd echt: jaar->maand-subpaginas met wekelijkse besluitenlijst-PDF's vanaf 1 januari 2023 (GS vergadert wekelijks op dinsdag, behalve vakanties). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd (tweetraps-crawl: jaar-pagina -> maand-pagina -> PDF's)."
     }
   },
   "flevoland": {
@@ -40,7 +42,9 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "eigen-website-nog-niet-gebouwd",
+      "website": "https://www.flevoland.nl/loket/openbare-documenten/overzicht-openbare-documenten/besluitenlijsten-gedeputeerde-staten",
+      "_opmerking": "Bevestigd echt: overzichtspagina met 31 directe PDF-links naar besluitenlijsten (sinds juni 2023 ook agenda's). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd."
     }
   },
   "fryslan": {
@@ -68,7 +72,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "nog-niet-onderzocht",
+      "_opmerking": "Individuele besluitenlijst-pagina's bevestigd te bestaan (bijv. fryslan.frl/besluitenlijst-gedeputeerde-staten-26-mei-2026), maar het overzicht op fryslan.frl/besluiten-gedeputeerde-staten toonde geen directe PDF-links bij een eerste check — structuur (jaar/maand-navigatie? aparte per-besluit-pagina's zoals Zuid-Holland?) nog niet uitgezocht."
     }
   },
   "gelderland": {
@@ -153,7 +158,9 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "eigen-website-nog-niet-gebouwd",
+      "website": "https://www.provinciegroningen.nl/actueel/besluitenlijsten-gedeputeerde-staten/",
+      "_opmerking": "Bevestigd echt: overzichtspagina met 15 directe PDF-links naar besluitenlijsten, per jaar/week georganiseerd (GS vergadert wekelijks op dinsdag, behalve schoolvakanties). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd."
     }
   },
   "limburg": {
@@ -194,7 +201,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "ibabs-categorie-verouderd",
+      "_opmerking": "Limburg heeft een eigen iBabs-portaal (limburg.bestuurlijkeinformatie.nl, gebruikt voor PS) met een categorie '(GS-P) GS-Presidium' (id 128) — maar die bevat aantoonbaar 0 vergaderingen in elk jaar 2022-2026 (RetrieveAgendasForYear leeg). Vermoedelijk een ongebruikte/verlaten categorienaam, geen echte GS-besluitenbron."
     }
   },
   "noord-brabant": {
@@ -357,7 +365,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "nog-niet-onderzocht",
+      "_opmerking": "Notubiz wordt genoemd als bron voor GS-besluitenlijsten (overijssel.notubiz.nl/zoeken), maar de twee voor de hand liggende organisatie-ID's leverden niets op: 'Provincie Overijssel - GS' (2175) heeft maar 1 event ooit (2020-2026), en het hoofdaccount 'Provincie Overijssel' (1750) bevat geen GS-vergaderingen, alleen PS/Statencommissie. GS-besluiten lijken dus als individuele documenten aan iets anders gekoppeld te zijn, niet als eigen vergadering-type — of de bron is toch de eigen website (overijssel.nl/bestuur/gedeputeerde-staten), nog niet gecontroleerd."
     }
   },
   "utrecht": {
@@ -392,7 +401,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "portaal-zonder-documenten",
+      "_opmerking": "provincieutrecht.bestuurlijkeinformatie.nl (apart iBabs-portaal, los van het ORI-gebruik voor PS) heeft een categorie 'GS-Besluiten' met wekelijkse vergaderingen sinds 2023 — maar geen enkele vergadering heeft bijgevoegde documenten (geen 'Agenda documenten'-sectie op de detailpagina's die gecontroleerd zijn). Twee andere aanwijzingen nog niet met succes onderzocht: provincie-utrecht.nl/actueel/gs-besluiten en stateninformatie.provincie-utrecht.nl/documenten/Besluitenlijst leken beide client-side gerenderd (lege HTML via curl) — kandidaat voor een sessie met browsertoegang (claude-in-chrome)."
     }
   },
   "zeeland": {
