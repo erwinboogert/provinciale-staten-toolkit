@@ -103,6 +103,14 @@ def veilige_naam(tekst: str) -> str:
     return tekst[:80]
 
 
+def _veilige_pdf_naam(naam: str) -> str:
+    """Zoals veilige_naam, maar behoudt de .pdf-extensie in plaats van hem
+    weg te saneren en dan (dubbel) opnieuw aan te plakken."""
+    if naam.lower().endswith(".pdf"):
+        naam = naam[:-4]
+    return veilige_naam(naam) + ".pdf"
+
+
 def download(url: str, bestemming: Path) -> int:
     """Download een bestand en geef de grootte in bytes terug."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
@@ -437,7 +445,7 @@ def download_vergaderingen_ori(vergaderingen: list[dict], index: str,
 
         doelmap = output_map / veilige_naam(verg["naam"]) / verg["datum"]
         nieuwe_docs = [d for d in docs
-                       if not (doelmap / (veilige_naam(d["naam"]) + ".pdf")).exists()]
+                       if not (doelmap / _veilige_pdf_naam(d["naam"])).exists()]
 
         if not nieuwe_docs:
             totaal_overgeslagen += len(docs)
@@ -449,7 +457,7 @@ def download_vergaderingen_ori(vergaderingen: list[dict], index: str,
             doelmap.mkdir(parents=True, exist_ok=True)
 
         for doc in docs:
-            bestandsnaam = veilige_naam(doc["naam"]) + ".pdf"
+            bestandsnaam = _veilige_pdf_naam(doc["naam"])
             bestemming = doelmap / bestandsnaam
 
             if bestemming.exists():
@@ -526,7 +534,7 @@ def download_vergaderingen_ibabs(vergaderingen: list[dict],
 
         doelmap = output_map / veilige_naam(verg["naam"]) / verg["datum"]
         nieuwe_docs = [d for d in docs
-                       if not (doelmap / (veilige_naam(d["naam"]) + ".pdf")).exists()]
+                       if not (doelmap / _veilige_pdf_naam(d["naam"])).exists()]
 
         if not nieuwe_docs:
             totaal_overgeslagen += len(docs)
@@ -538,7 +546,7 @@ def download_vergaderingen_ibabs(vergaderingen: list[dict],
             doelmap.mkdir(parents=True, exist_ok=True)
 
         for doc in docs:
-            bestandsnaam = veilige_naam(doc["naam"]) + ".pdf"
+            bestandsnaam = _veilige_pdf_naam(doc["naam"])
             bestemming = doelmap / bestandsnaam
 
             if bestemming.exists():
@@ -690,13 +698,17 @@ def haal_besluiten_zuid_holland(terugkijk_dagen: int = 730) -> list[dict]:
 # een simpel overzicht met directe PDF-links (bijv. Flevoland, Groningen).
 # Deze generieke scraper is bedoeld voor dat patroon.
 
-def _besluitenlijst_datum(tekst: str) -> str:
+def _besluitenlijst_datum(tekst: str, fallback_jaar_maand: tuple[int, int] | None = None) -> str:
     """Best-effort datum-extractie uit een bestandsnaam/linktekst.
 
     Probeert 'dd-maandnaam-yyyy', 'dd-mm-yyyy' en 'yyyy ... week nn' (ISO-
-    weeknummer, maandag als datum). Geeft 'YYYY-MM-DD', of 'onbekende-datum'
-    als niets herkend wordt — het document wordt dan alsnog gedownload,
-    alleen niet op datum gegroepeerd.
+    weeknummer, maandag als datum). Geeft 'YYYY-MM-DD'.
+
+    Als niets herkend wordt: met fallback_jaar_maand (jaar, maand) — gebruikt
+    door de geneste crawl (haal_besluiten_pdf_index_genest), waar de
+    maand-subpagina zelf al een betrouwbare jaar/maand-context geeft — de 1e
+    van die maand; anders 'onbekende-datum' (document wordt alsnog
+    gedownload, alleen niet op datum gegroepeerd).
     """
     tekst_laag = tekst.lower()
     maandpatroon = "|".join(_DUTCH_MAANDEN.keys())
@@ -724,6 +736,10 @@ def _besluitenlijst_datum(tekst: str) -> str:
             return datetime.fromisocalendar(jaar, week, 1).strftime("%Y-%m-%d")
         except ValueError:
             pass
+
+    if fallback_jaar_maand:
+        jaar, maand = fallback_jaar_maand
+        return datetime(jaar, maand, 1).strftime("%Y-%m-%d")
 
     return "onbekende-datum"
 
@@ -778,6 +794,67 @@ def haal_besluiten_pdf_index(basis_url: str, terugkijk_dagen: int = 730,
         pagina += 1
         if pagina > 100:
             break
+
+    return [
+        {"id": datum, "naam": "GS-besluiten", "datum": datum, "documenten": docs}
+        for datum, docs in per_datum.items()
+    ]
+
+
+def haal_besluiten_pdf_index_genest(overzicht_url: str, terugkijk_dagen: int = 730) -> list[dict]:
+    """Haal GS-besluiten op van een tweetraps-index: jaaroverzicht met
+    maand-subpagina's, elk met besluitenlijst-PDF's (bijv. Drenthe).
+
+    Anders dan haal_besluiten_pdf_index staan de PDF's niet direct op de
+    overzichtspagina maar op per-maand-subpagina's (linktekst 'Januari
+    2026' e.d., iprox-CMS 'siteLink'-patroon). De bestandsnamen zelf zijn
+    inconsistent (soms zonder jaar of dag) — de maand-subpagina is de enige
+    betrouwbare datumbron, dus een PDF zonder herkenbare eigen datum krijgt
+    de 1e van die maand toegewezen via _besluitenlijst_datum's
+    fallback_jaar_maand (weekprecisie is voor dit doel voldoende).
+    """
+    vroegste = datetime.now() - timedelta(days=terugkijk_dagen)
+
+    html = _http_get_text(overzicht_url)
+    maand_links = []
+    for url, linktekst in re.findall(r'<a class="siteLink" href="([^"]+)">([^<]+)</a>', html):
+        m = re.search(r'([a-zA-Z]+)\s+(\d{4})', linktekst)
+        if not m:
+            continue
+        maand_nr = _DUTCH_MAANDEN.get(m.group(1).lower())
+        if not maand_nr:
+            continue
+        jaar = int(m.group(2))
+        try:
+            if datetime(jaar, maand_nr, 1) < vroegste.replace(day=1):
+                continue
+        except ValueError:
+            continue
+        maand_links.append((url, jaar, maand_nr))
+
+    per_datum: dict[str, list[dict]] = {}
+    for maand_url, jaar, maand_nr in maand_links:
+        try:
+            maand_html = _http_get_text(maand_url)
+        except Exception as e:
+            log(f"  ! FOUT bij ophalen maandpagina '{maand_url}': {e}")
+            continue
+
+        for match in re.finditer(r'<a\s+[^>]*href="([^"]+\.pdf)"[^>]*>(.*?)</a>',
+                                  maand_html, re.IGNORECASE | re.DOTALL):
+            href, binnentekst = match.groups()
+            titel_attr = re.search(r'title="([^"]*)"', match.group(0))
+            binnentekst_schoon = re.sub(r"<[^>]+>", " ", binnentekst).strip()
+            bestandsnaam = href.rsplit("/", 1)[-1]
+            datum_bron = " ".join(filter(None, [
+                titel_attr.group(1) if titel_attr else "", binnentekst_schoon, bestandsnaam]))
+            datum = _besluitenlijst_datum(datum_bron, fallback_jaar_maand=(jaar, maand_nr))
+
+            if datetime.strptime(datum, "%Y-%m-%d") < vroegste:
+                continue
+
+            volledige_url = urllib.parse.urljoin(maand_url, href)
+            per_datum.setdefault(datum, []).append({"naam": bestandsnaam, "url": volledige_url})
 
     return [
         {"id": datum, "naam": "GS-besluiten", "datum": datum, "documenten": docs}

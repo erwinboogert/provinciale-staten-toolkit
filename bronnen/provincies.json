@@ -23,10 +23,10 @@
       "westerveld"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "eigen-website-nog-niet-gebouwd",
-      "website": "https://www.provincie.drenthe.nl/organisatie-bestuur/gedeputeerde-staten/gs-vergaderingen/",
-      "_opmerking": "Bevestigd echt: jaar->maand-subpaginas met wekelijkse besluitenlijst-PDF's vanaf 1 januari 2023 (GS vergadert wekelijks op dinsdag, behalve vakanties). Eén PDF succesvol gedownload ter verificatie. Nog geen scraper voor gebouwd (tweetraps-crawl: jaar-pagina -> maand-pagina -> PDF's)."
+      "backend": "pdf-index-genest",
+      "index_url": "https://www.provincie.drenthe.nl/organisatie-bestuur/gedeputeerde-staten/gs-vergaderingen/",
+      "geverifieerd": true,
+      "_opmerking": "Jaar->maand-subpaginas met wekelijkse besluitenlijst-PDF's vanaf 1 januari 2023 (GS vergadert wekelijks op dinsdag, behalve vakanties). Overzichtspagina toont alleen huidig+vorig jaar; oudere jaren alleen via webarchief (niet ondersteund). Geverifieerd: --droog --jaren 0.5 vond 26 documenten over 14 vergaderingen; één besluitenlijst (7 pagina's) echt gedownload en gecontroleerd."
     }
   },
   "flevoland": {
