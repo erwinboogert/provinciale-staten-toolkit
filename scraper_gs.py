@@ -41,7 +41,7 @@ from api import (
     setup_logging, log, log_samenvatting, parse_jaren_arg,
     haal_en_download_vergaderingen,
     haal_besluiten_zuid_holland, haal_besluiten_pdf_index,
-    haal_besluiten_pdf_index_genest,
+    haal_besluiten_pdf_index_genest, haal_besluiten_fryslan,
     download_vergaderingen_ibabs,
 )
 
@@ -143,7 +143,8 @@ def main():
     gs_config = provincie_config.get("gs", {})
     heeft_bron = any(gs_config.get(v) for v in ("notubiz_id", "ibabs_naam", "ori_index"))
     backend = gs_config.get("backend")
-    if not heeft_bron and backend not in ("zuid-holland-website", "pdf-index", "pdf-index-genest"):
+    if not heeft_bron and backend not in (
+            "zuid-holland-website", "pdf-index", "pdf-index-genest", "fryslan-website"):
         reden = gs_config.get("reden", "nog-niet-onderzocht")
         print(f"FOUT: van GS van '{naam}' is geen geautomatiseerde bron bekend (reden: {reden}).")
         if gs_config.get("dataset_url"):
@@ -190,6 +191,16 @@ def main():
         log(f"Bron: eigen website (jaar->maand-index met besluitenlijst-PDF's) — {gs_config.get('index_url', '')}")
         besluiten = haal_besluiten_pdf_index_genest(
             gs_config["index_url"], terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(besluiten)} besluiten gevonden")
+        if not besluiten:
+            log("Geen besluiten gevonden in dit tijdvenster.")
+        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(besluiten, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return
+
+    if backend == "fryslan-website":
+        log("Bron: eigen website Provincie Fryslân (één pagina per jaar, geen vergaderportaal)")
+        besluiten = haal_besluiten_fryslan(terugkijk_dagen=terugkijk_dagen)
         log(f"{len(besluiten)} besluiten gevonden")
         if not besluiten:
             log("Geen besluiten gevonden in dit tijdvenster.")

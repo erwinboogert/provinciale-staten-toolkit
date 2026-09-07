@@ -71,9 +71,9 @@
       "weststellingwerf"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "nog-niet-onderzocht",
-      "_opmerking": "Individuele besluitenlijst-pagina's bevestigd te bestaan (bijv. fryslan.frl/besluitenlijst-gedeputeerde-staten-26-mei-2026), maar het overzicht op fryslan.frl/besluiten-gedeputeerde-staten toonde geen directe PDF-links bij een eerste check — structuur (jaar/maand-navigatie? aparte per-besluit-pagina's zoals Zuid-Holland?) nog niet uitgezocht."
+      "backend": "fryslan-website",
+      "geverifieerd": true,
+      "_opmerking": "Eén statische pagina per jaar (/besluitenlijsten-<jaar>, bijv. besluitenlijsten-2026) met directe PDF-links, server-side gerenderd (Next.js maar geen JS nodig om de links te zien). Datum staat meestal in de bestandsnaam ('GS Besluitenlijst DD-MM-YYYY.pdf' / 'gs_besluitenlijst_DD-MM-YYYY.pdf'); één Friestalige uitzondering per jaar ('...beslutelist...') valt terug op onbekende-datum, wordt alsnog gedownload. Vóór 2021 verwijst de provincie zelf naar een eigen webarchief (fryslan.archiefweb.eu), niet ondersteund. Geverifieerd: --droog vond 75 documenten over 2 jaar; één PDF (6 pagina's) echt gedownload en gecontroleerd."
     }
   },
   "gelderland": {
@@ -331,7 +331,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht"
+      "reden": "geen-gs-categorie-in-portaal",
+      "_opmerking": "Eigen iBabs-portaal (noordholland.bestuurlijkeinformatie.nl, los van de ORI-feed die voor PS gebruikt wordt) gecontroleerd via /Calendar — alleen PS-vergadering, Presidium en Statencommissies als categorieën, geen GS-besluitenlijst-achtige categorie."
     }
   },
   "overijssel": {
@@ -366,8 +367,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "nog-niet-onderzocht",
-      "_opmerking": "Notubiz wordt genoemd als bron voor GS-besluitenlijsten (overijssel.notubiz.nl/zoeken), maar de twee voor de hand liggende organisatie-ID's leverden niets op: 'Provincie Overijssel - GS' (2175) heeft maar 1 event ooit (2020-2026), en het hoofdaccount 'Provincie Overijssel' (1750) bevat geen GS-vergaderingen, alleen PS/Statencommissie. GS-besluiten lijken dus als individuele documenten aan iets anders gekoppeld te zijn, niet als eigen vergadering-type — of de bron is toch de eigen website (overijssel.nl/bestuur/gedeputeerde-staten), nog niet gecontroleerd."
+      "reden": "vereist-browser",
+      "_opmerking": "overijssel.nl/bestuur/gedeputeerde-staten (eigen website) linkt door naar overijssel.notubiz.nl/modules/1/Ingekomen%20stukken — een Notubiz-'modules'-frontend (documenten los van vergaderingen), niet de events/meetings-feed die elders gebruikt wordt. Dat domein zit achter een Cloudflare JS-challenge (HTTP 403 'cf-mitigated: challenge' voor elk verzoek zonder browser). De onderliggende API (api.notubiz.nl/documents?organisation_id=2175) bestaat wel maar geeft 'Zonder authenticatie token kunnen er geen resultaten getoond worden' — geen publiek toegankelijk token bekend. De twee voor de hand liggende org-ID's op de gewone events-API leverden niets op (2175: 1 event ooit; 1750: alleen PS/Statencommissie), dus dat spoor is dood. Genuine browser-blocker, zelfde categorie als Utrecht — kandidaat voor claude-in-chrome."
     }
   },
   "utrecht": {

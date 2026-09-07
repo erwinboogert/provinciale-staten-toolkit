@@ -862,6 +862,50 @@ def haal_besluiten_pdf_index_genest(overzicht_url: str, terugkijk_dagen: int = 7
     ]
 
 
+# ── Provincie Fryslân: GS-besluiten (eigen website, één pagina per jaar) ──────
+
+def haal_besluiten_fryslan(terugkijk_dagen: int = 730) -> list[dict]:
+    """Haal GS-besluiten van Fryslân op via hun eigen website.
+
+    Anders dan de andere eigen-website-backends staat elk jaar op een eigen,
+    voorspelbare statische pagina (`/besluitenlijsten-<jaar>`, bijv.
+    `besluitenlijsten-2026`) in plaats van één doorlopende of geneste index.
+    De pagina is een Next.js-app maar de PDF-links staan gewoon
+    server-side-gerenderd in de HTML (geen JS-uitvoering nodig). De
+    bestandsnaam bevat altijd een dd-mm-yyyy-datum ('GS Besluitenlijst
+    02-06-2026.pdf' / 'gs_besluitenlijst_17-12-2024_0.pdf'), dus
+    _besluitenlijst_datum() vindt hem zonder fallback. Fryslân verwijst zelf
+    naar een eigen webarchief voor besluiten van vóór 2021 — die jaren
+    worden hier niet opgehaald.
+    """
+    vroegste = datetime.now() - timedelta(days=terugkijk_dagen)
+    jaar_van = max(vroegste.year, 2021)
+
+    per_datum: dict[str, list[dict]] = {}
+    for jaar in range(datetime.now().year, jaar_van - 1, -1):
+        url = f"https://www.fryslan.frl/besluitenlijsten-{jaar}"
+        try:
+            html = _http_get_text(url)
+        except Exception as e:
+            log(f"  ! FOUT bij ophalen '{url}': {e}")
+            continue
+
+        for href in re.findall(r'<a\s+[^>]*href="([^"]+\.pdf[^"]*)"[^>]*>', html, re.IGNORECASE):
+            href_schoon = urllib.parse.unquote(href)
+            bestandsnaam = href_schoon.rsplit("/", 1)[-1].split("?")[0]
+            datum = _besluitenlijst_datum(bestandsnaam)
+
+            if datum != "onbekende-datum" and datetime.strptime(datum, "%Y-%m-%d") < vroegste:
+                continue
+
+            per_datum.setdefault(datum, []).append({"naam": bestandsnaam, "url": href})
+
+    return [
+        {"id": datum, "naam": "GS-besluiten", "datum": datum, "documenten": docs}
+        for datum, docs in per_datum.items()
+    ]
+
+
 def parse_jaren_arg(standaard_dagen: int = 730) -> tuple[str | None, int]:
     """Lees --jaren N uit sys.argv. Geeft (vanaf_datum, terugkijk_dagen).
 
