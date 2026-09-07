@@ -38,10 +38,9 @@ from api import (
     setup_logging, log, log_samenvatting, parse_jaren_arg,
     alle_indices,
     notubiz_verzoek,
-    haal_vergaderingen_notubiz,
-    haal_vergaderingen_ibabs,
-    download_vergaderingen_ori, download_vergaderingen_notubiz, download_vergaderingen_ibabs,
-    haal_vergaderingen_ori, haal_documenten_ori,
+    download_vergaderingen_ori,
+    haal_vergaderingen_ori,
+    haal_en_download_vergaderingen,
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -297,44 +296,26 @@ def main():
 
     vanaf, terugkijk_dagen = parse_jaren_arg()
 
-    notubiz_id = config.get("notubiz_id")
-    ibabs_naam = config.get("ibabs_naam")
+    if haal_en_download_vergaderingen(config, vergadertypen, terugkijk_dagen, output_map, droog):
+        return
 
-    if notubiz_id:
-        log(f"Bron: Notubiz API (org_id={notubiz_id})")
-        vergaderingen = haal_vergaderingen_notubiz(
-            notubiz_id, vergadertypen, terugkijk_dagen=terugkijk_dagen)
-        log(f"{len(vergaderingen)} vergaderingen gevonden")
-        nieuw, overgeslagen, fouten = download_vergaderingen_notubiz(
-            vergaderingen, output_map, droog)
+    index = find_index_gr(naam)
+    if not index:
+        log(f"FOUT: geen ORI-index, notubiz_id of ibabs_naam gevonden voor '{naam}'.")
+        log("Gebruik --lijst-ori om beschikbare GRs in ORI te ontdekken.")
+        log("Gebruik --zoek <naam> om een Notubiz-organisatie op te zoeken.")
+        sys.exit(1)
+    log(f"Bron: ORI API (index={index})")
 
-    elif ibabs_naam:
-        log(f"Bron: iBabs Publieksportaal (sitename={ibabs_naam})")
-        vergaderingen = haal_vergaderingen_ibabs(
-            ibabs_naam, vergadertypen, terugkijk_dagen=terugkijk_dagen)
-        log(f"{len(vergaderingen)} vergaderingen gevonden")
-        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(
-            vergaderingen, output_map, droog)
+    vergaderingen = haal_vergaderingen_ori(index, vergadertypen, MAX_VERGADERINGEN, vanaf)
+    log(f"{len(vergaderingen)} vergaderingen gevonden")
 
-    else:
-        index = find_index_gr(naam)
-        if not index:
-            log(f"FOUT: geen ORI-index, notubiz_id of ibabs_naam gevonden voor '{naam}'.")
-            log("Gebruik --lijst-ori om beschikbare GRs in ORI te ontdekken.")
-            log("Gebruik --zoek <naam> om een Notubiz-organisatie op te zoeken.")
-            sys.exit(1)
-        log(f"Bron: ORI API (index={index})")
+    if not vergaderingen:
+        log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
+        log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
 
-        vergaderingen = haal_vergaderingen_ori(index, vergadertypen, MAX_VERGADERINGEN, vanaf)
-        log(f"{len(vergaderingen)} vergaderingen gevonden")
-
-        if not vergaderingen:
-            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
-            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
-
-        nieuw, overgeslagen, fouten = download_vergaderingen_ori(
-            vergaderingen, index, output_map, droog)
-
+    nieuw, overgeslagen, fouten = download_vergaderingen_ori(
+        vergaderingen, index, output_map, droog)
     log_samenvatting(nieuw, overgeslagen, fouten, output_map)
 
 

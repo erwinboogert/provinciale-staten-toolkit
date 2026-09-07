@@ -560,6 +560,50 @@ def download_vergaderingen_ibabs(vergaderingen: list[dict],
     return totaal_nieuw, totaal_overgeslagen, totaal_fout
 
 
+# ── Bron-dispatch (gedeeld tussen scraper_provincie.py, scraper_gr.py, scraper_gs.py) ──
+
+def haal_en_download_vergaderingen(config: dict, vergadertypen: dict[str, bool],
+                                    terugkijk_dagen: int, output_map: Path,
+                                    droog: bool) -> bool:
+    """Haal vergaderingen op en download ze via Notubiz of iBabs, afhankelijk van de config.
+
+    Logt voortgang en de samenvatting op dezelfde manier als de ORI-download-lus.
+    Geeft True terug als de config een notubiz_id of ibabs_naam bevat en is
+    afgehandeld; False als geen van beide geconfigureerd is — de aanroeper valt
+    dan zelf terug op ORI (de indexresolutie daarvoor verschilt per bron-type
+    qua prefix en normalisatie, en blijft dus entiteit-specifiek).
+    """
+    notubiz_id = config.get("notubiz_id")
+    if notubiz_id:
+        log(f"Bron: Notubiz API (organisatie-ID {notubiz_id})")
+        vergaderingen = haal_vergaderingen_notubiz(
+            int(notubiz_id), vergadertypen, terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(vergaderingen)} vergaderingen gevonden")
+        if not vergaderingen:
+            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
+            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
+        nieuw, overgeslagen, fouten = download_vergaderingen_notubiz(
+            vergaderingen, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return True
+
+    ibabs_naam = config.get("ibabs_naam")
+    if ibabs_naam:
+        log(f"Bron: iBabs Publieksportaal (sitename={ibabs_naam})")
+        vergaderingen = haal_vergaderingen_ibabs(
+            ibabs_naam, vergadertypen, terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(vergaderingen)} vergaderingen gevonden")
+        if not vergaderingen:
+            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
+            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
+        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(
+            vergaderingen, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return True
+
+    return False
+
+
 def parse_jaren_arg(standaard_dagen: int = 730) -> tuple[str | None, int]:
     """Lees --jaren N uit sys.argv. Geeft (vanaf_datum, terugkijk_dagen).
 

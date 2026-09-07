@@ -28,8 +28,8 @@ from api import (
     OUTPUT_BASIS, BRONNEN_MAP,
     setup_logging, log, log_samenvatting, parse_jaren_arg,
     alle_indices,
-    haal_vergaderingen_ori, haal_vergaderingen_notubiz, haal_vergaderingen_ibabs,
-    download_vergaderingen_ori, download_vergaderingen_notubiz, download_vergaderingen_ibabs,
+    haal_vergaderingen_ori, download_vergaderingen_ori,
+    haal_en_download_vergaderingen,
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -177,37 +177,7 @@ def main():
 
     vanaf, terugkijk_dagen = parse_jaren_arg()
 
-    # Notubiz
-    notubiz_id = config.get("notubiz_id")
-    if notubiz_id:
-        log(f"Bron: Notubiz (organisatie-ID {notubiz_id})")
-        vergaderingen = haal_vergaderingen_notubiz(
-            int(notubiz_id), vergadertypen, terugkijk_dagen=terugkijk_dagen)
-        log(f"{len(vergaderingen)} vergaderingen gevonden")
-        if not vergaderingen:
-            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
-            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
-
-        nieuw, overgeslagen, fouten = download_vergaderingen_notubiz(
-            vergaderingen, output_map, droog)
-        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
-        toon_gerelateerde_regelingen(naam)
-        return
-
-    # iBabs Publieksportaal
-    ibabs_naam = config.get("ibabs_naam")
-    if ibabs_naam:
-        log(f"Bron: iBabs Publieksportaal (sitename={ibabs_naam})")
-        vergaderingen = haal_vergaderingen_ibabs(
-            ibabs_naam, vergadertypen, terugkijk_dagen=terugkijk_dagen)
-        log(f"{len(vergaderingen)} vergaderingen gevonden")
-        if not vergaderingen:
-            log("Geen vergaderingen gevonden met de geconfigureerde vergadertypen.")
-            log(f"Actieve types: {', '.join(k for k, v in vergadertypen.items() if v)}")
-
-        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(
-            vergaderingen, output_map, droog)
-        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+    if haal_en_download_vergaderingen(config, vergadertypen, terugkijk_dagen, output_map, droog):
         toon_gerelateerde_regelingen(naam)
         return
 
