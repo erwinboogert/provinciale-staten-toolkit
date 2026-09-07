@@ -201,9 +201,10 @@
       "weert"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "ibabs-categorie-verouderd",
-      "_opmerking": "Limburg heeft een eigen iBabs-portaal (limburg.bestuurlijkeinformatie.nl, gebruikt voor PS) met een categorie '(GS-P) GS-Presidium' (id 128) — maar die bevat aantoonbaar 0 vergaderingen in elk jaar 2022-2026 (RetrieveAgendasForYear leeg). Vermoedelijk een ongebruikte/verlaten categorienaam, geen echte GS-besluitenbron."
+      "ibabs_naam": "limburggs",
+      "vergadertypen": ["gedeputeerde staten"],
+      "geverifieerd": true,
+      "_opmerking": "Niet dezelfde bron als de dode '(GS-P) GS-Presidium'-categorie (id 128) op het PS-portaal (limburg.bestuurlijkeinformatie.nl) — Limburg heeft een apart, actief GS-portaal op limburggs.bestuurlijkeinformatie.nl (zelfde patroon als Utrecht: los subdomein per orgaan), gevonden via de link op limburg.nl/actueel/gs-besluiten/. Categorie 'Vergadering Gedeputeerde Staten' (id 100486773), draait op de standaard generieke iBabs-dispatcher (haal_en_download_vergaderingen) — geen eigen backend-code nodig. Anders dan Utrecht hangen hier wél echte documenten aan elke vergadering. Geverifieerd: 27 vergaderingen in 2026, een echte PDF-download (2 pagina's) bevestigd."
     }
   },
   "noord-brabant": {
@@ -274,9 +275,11 @@
       "zundert"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "geen-gs-categorie-in-portaal",
-      "_opmerking": "Noord-Brabant heeft een eigen iBabs-portaal (noordbrabant.bestuurlijkeinformatie.nl, gebruikt voor PS), maar daar staat geen GS-categorie in — alleen Statendagen, Presidium en Thema-commissies."
+      "backend": "pdf-index",
+      "index_url": "https://www.brabant.nl/bestuur/gedeputeerde-staten/gedeputeerde-staten/besluitenlijst-gedeputeerde-staten/",
+      "pagina_param": "pager_page",
+      "geverifieerd": true,
+      "_opmerking": "Het iBabs-portaal (noordbrabant.bestuurlijkeinformatie.nl, gebruikt voor PS) heeft geen GS-categorie — maar Noord-Brabant publiceert GS-besluitenlijsten wél, als eigen-website-index (iprox CMS, zelfde patroon als Zuid-Holland/Drenthe) met '?pager_page='-paginering. Bestandsnamen als '20260831_obl_activiteiten.pdf' (yyyymmdd, geen scheidingstekens) — _besluitenlijst_datum() uitgebreid met dat patroon. Geverifieerd: besluiten gevonden, een echte PDF-download (4 pagina's) bevestigd."
     }
   },
   "noord-holland": {
@@ -330,9 +333,10 @@
       "zandvoort"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "geen-gs-categorie-in-portaal",
-      "_opmerking": "Eigen iBabs-portaal (noordholland.bestuurlijkeinformatie.nl, los van de ORI-feed die voor PS gebruikt wordt) gecontroleerd via /Calendar — alleen PS-vergadering, Presidium en Statencommissies als categorieën, geen GS-besluitenlijst-achtige categorie."
+      "backend": "pdf-index",
+      "index_url": "https://www.noord-holland.nl/Bestuur/Gedeputeerde_Staten/GS_besluitenlijst",
+      "geverifieerd": true,
+      "_opmerking": "Het aparte iBabs-portaal (noordholland.bestuurlijkeinformatie.nl, los van de ORI-feed die voor PS gebruikt wordt) heeft geen GS-categorie — maar Noord-Holland publiceert GS-besluitenlijsten wél, als simpele eigen-website-index (één pagina, geen paginering gevonden — dekt het huidige jaar). Bestandsnamen wisselend: meestal 'GS besluitenlijst 25 augustus 2026.pdf' (spatie-gescheiden, _besluitenlijst_datum() uitgebreid met spatie als scheidingsteken naast -/_), één uitzondering 'GS2026-09-01OBV.pdf' (yyyy-mm-dd, ook toegevoegd). Geverifieerd: 29 van de 30 besluiten kregen een datum, één echte PDF-download bevestigd."
     }
   },
   "overijssel": {
@@ -426,9 +430,9 @@
       "vlissingen"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "geen-gs-categorie-in-portaal",
-      "_opmerking": "Zeeland heeft een eigen iBabs-portaal (zeeland.bestuurlijkeinformatie.nl, gebruikt voor PS), maar daar staat geen GS-categorie in — alleen Provinciale Staten en Statencommissies."
+      "backend": "zeeland-website",
+      "geverifieerd": true,
+      "_opmerking": "Het iBabs-portaal (zeeland.bestuurlijkeinformatie.nl, gebruikt voor PS) heeft geen GS-categorie — maar Zeeland publiceert GS-agenda's en -besluitenlijsten wél, als doorzoekbare Woo-index op zeeland.nl/loket/woo/agendas-en-besluitenlijsten-gedeputeerde-staten (Drupal Search API + Facets, ?page=0,1,2,... nul-geïndexeerd). Elk resultaat linkt rechtstreeks naar het PDF-bestand (geen tussenpagina, geen '.pdf' in de URL zelf). Geverifieerd: besluiten gevonden, een echte PDF-download bevestigd."
     }
   },
   "zuid-holland": {

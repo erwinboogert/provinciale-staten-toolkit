@@ -43,6 +43,7 @@ from api import (
     haal_besluiten_zuid_holland, haal_besluiten_pdf_index,
     haal_besluiten_pdf_index_genest, haal_besluiten_fryslan,
     haal_besluiten_utrecht, schrijf_besluiten_utrecht,
+    haal_besluiten_zeeland,
     download_vergaderingen_ibabs,
 )
 
@@ -146,7 +147,7 @@ def main():
     backend = gs_config.get("backend")
     if not heeft_bron and backend not in (
             "zuid-holland-website", "pdf-index", "pdf-index-genest",
-            "fryslan-website", "utrecht-tekst"):
+            "fryslan-website", "utrecht-tekst", "zeeland-website"):
         reden = gs_config.get("reden", "nog-niet-onderzocht")
         print(f"FOUT: van GS van '{naam}' is geen geautomatiseerde bron bekend (reden: {reden}).")
         if gs_config.get("dataset_url"):
@@ -217,6 +218,16 @@ def main():
         if not besluiten:
             log("Geen vergaderingen gevonden in dit tijdvenster.")
         nieuw, overgeslagen, fouten = schrijf_besluiten_utrecht(besluiten, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return
+
+    if backend == "zeeland-website":
+        log("Bron: eigen website Provincie Zeeland (Woo-index, geen vergaderportaal)")
+        besluiten = haal_besluiten_zeeland(terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(besluiten)} besluiten gevonden")
+        if not besluiten:
+            log("Geen besluiten gevonden in dit tijdvenster.")
+        nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(besluiten, output_map, droog)
         log_samenvatting(nieuw, overgeslagen, fouten, output_map)
         return
 
