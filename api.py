@@ -797,7 +797,7 @@ def haal_besluiten_pdf_index(basis_url: str, terugkijk_dagen: int = 730,
             binnentekst_schoon = re.sub(r"<[^>]+>", " ", binnentekst).strip()
             bestandsnaam = href.rsplit("/", 1)[-1]
             datum_bron = " ".join(filter(None, [
-                titel_attr.group(1) if titel_attr else "", binnentekst_schoon, bestandsnaam]))
+                bestandsnaam, binnentekst_schoon, titel_attr.group(1) if titel_attr else ""]))
             datum = _besluitenlijst_datum(datum_bron)
 
             if datum != "onbekende-datum":
@@ -866,7 +866,7 @@ def haal_besluiten_pdf_index_genest(overzicht_url: str, terugkijk_dagen: int = 7
             binnentekst_schoon = re.sub(r"<[^>]+>", " ", binnentekst).strip()
             bestandsnaam = href.rsplit("/", 1)[-1]
             datum_bron = " ".join(filter(None, [
-                titel_attr.group(1) if titel_attr else "", binnentekst_schoon, bestandsnaam]))
+                bestandsnaam, binnentekst_schoon, titel_attr.group(1) if titel_attr else ""]))
             datum = _besluitenlijst_datum(datum_bron, fallback_jaar_maand=(jaar, maand_nr))
 
             if datetime.strptime(datum, "%Y-%m-%d") < vroegste:
