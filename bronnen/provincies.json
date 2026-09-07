@@ -367,8 +367,8 @@
     ],
     "gs": {
       "geverifieerd": false,
-      "reden": "vereist-browser",
-      "_opmerking": "overijssel.nl/bestuur/gedeputeerde-staten (eigen website) linkt door naar overijssel.notubiz.nl/modules/1/Ingekomen%20stukken — een Notubiz-'modules'-frontend (documenten los van vergaderingen), niet de events/meetings-feed die elders gebruikt wordt. Dat domein zit achter een Cloudflare JS-challenge (HTTP 403 'cf-mitigated: challenge' voor elk verzoek zonder browser). De onderliggende API (api.notubiz.nl/documents?organisation_id=2175) bestaat wel maar geeft 'Zonder authenticatie token kunnen er geen resultaten getoond worden' — geen publiek toegankelijk token bekend. De twee voor de hand liggende org-ID's op de gewone events-API leverden niets op (2175: 1 event ooit; 1750: alleen PS/Statencommissie), dus dat spoor is dood. Genuine browser-blocker, zelfde categorie als Utrecht — kandidaat voor claude-in-chrome."
+      "reden": "cloudflare-bot-detectie",
+      "_opmerking": "overijssel.nl/bestuur/gedeputeerde-staten (eigen website) linkt door naar overijssel.notubiz.nl/modules/1/Ingekomen%20stukken — een Notubiz-'modules'-frontend (alle post aan PS, filterbaar op 'besluitenlijst'), niet de events/meetings-feed die elders gebruikt wordt. Bevestigd met claude-in-chrome (2026-09-07): de besluitenlijsten staan echt en volledig publiek (geen inlog nodig, 'Openbare besluitenlijst vergadering Gedeputeerde Staten van 1 september 2026' etc. gewoon zichtbaar en aanklikbaar), en de data wordt server-side in de pagina zelf gerenderd — geen aparte API-call te onderscheppen. Zowel de lijstpagina als de individuele documenten (bijv. /document/17344265/2) staan op hetzelfde domein, dat volledig achter een Cloudflare JS-challenge zit (HTTP 403 'cf-mitigated: challenge' voor elk verzoek zonder browser, ook voor de PDF's zelf — geen onbeschermde asset-host als omweg). De onderliggende publieke Notubiz-events-API (api.notubiz.nl) kent deze content niet; org-ID's 1750/2175 leverden op dat spoor niets op. Bewust NIET geautomatiseerd: dit zou vereisen dat de Cloudflare-botdetectie omzeild wordt (bijv. door een cf_clearance-cookie te hergebruiken), en dat doen we niet — ook niet voor legitieme transparantiedoeleinden. Enige optie is een periodieke handmatige/browser-assisted check via claude-in-chrome, geen staande scraper."
     }
   },
   "utrecht": {
@@ -402,9 +402,9 @@
       "zeist"
     ],
     "gs": {
-      "geverifieerd": false,
-      "reden": "portaal-zonder-documenten",
-      "_opmerking": "provincieutrecht.bestuurlijkeinformatie.nl (apart iBabs-portaal, los van het ORI-gebruik voor PS) heeft een categorie 'GS-Besluiten' met wekelijkse vergaderingen sinds 2023 — maar geen enkele vergadering heeft bijgevoegde documenten (geen 'Agenda documenten'-sectie op de detailpagina's die gecontroleerd zijn). Twee andere aanwijzingen nog niet met succes onderzocht: provincie-utrecht.nl/actueel/gs-besluiten en stateninformatie.provincie-utrecht.nl/documenten/Besluitenlijst leken beide client-side gerenderd (lege HTML via curl) — kandidaat voor een sessie met browsertoegang (claude-in-chrome)."
+      "backend": "utrecht-tekst",
+      "geverifieerd": true,
+      "_opmerking": "provincieutrecht.bestuurlijkeinformatie.nl (apart iBabs-portaal, los van het ORI-gebruik voor PS) heeft een categorie 'GS-Besluiten' met wekelijkse vergaderingen sinds 2023. Er hangen geen PDF-bijlagen aan de vergaderingen, maar de volledige besluitenlijst (per agendapunt: nummer, titel, essentie/samenvatting, besluit) staat gewoon als platte server-gerenderde HTML op de vergaderpagina zelf — geen browser nodig, bevestigd met een kaal curl-verzoek. Eerdere conclusie 'portaal-zonder-documenten' was te somber: er zíjn geen documenten, maar de inhoud staat wél gewoon publiek. Traag (één verzoek per vergadering, geen bulk-API — net als Zuid-Holland): 2 jaar duurt >2 minuten. Geverifieerd met --droog --jaren 0.5 (207 agendapunten over ~13 vergaderingen) en echte bestanden op schijf gecontroleerd op leesbaarheid."
     }
   },
   "zeeland": {

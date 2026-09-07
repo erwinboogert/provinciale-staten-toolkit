@@ -42,6 +42,7 @@ from api import (
     haal_en_download_vergaderingen,
     haal_besluiten_zuid_holland, haal_besluiten_pdf_index,
     haal_besluiten_pdf_index_genest, haal_besluiten_fryslan,
+    haal_besluiten_utrecht, schrijf_besluiten_utrecht,
     download_vergaderingen_ibabs,
 )
 
@@ -144,7 +145,8 @@ def main():
     heeft_bron = any(gs_config.get(v) for v in ("notubiz_id", "ibabs_naam", "ori_index"))
     backend = gs_config.get("backend")
     if not heeft_bron and backend not in (
-            "zuid-holland-website", "pdf-index", "pdf-index-genest", "fryslan-website"):
+            "zuid-holland-website", "pdf-index", "pdf-index-genest",
+            "fryslan-website", "utrecht-tekst"):
         reden = gs_config.get("reden", "nog-niet-onderzocht")
         print(f"FOUT: van GS van '{naam}' is geen geautomatiseerde bron bekend (reden: {reden}).")
         if gs_config.get("dataset_url"):
@@ -205,6 +207,16 @@ def main():
         if not besluiten:
             log("Geen besluiten gevonden in dit tijdvenster.")
         nieuw, overgeslagen, fouten = download_vergaderingen_ibabs(besluiten, output_map, droog)
+        log_samenvatting(nieuw, overgeslagen, fouten, output_map)
+        return
+
+    if backend == "utrecht-tekst":
+        log("Bron: eigen iBabs-portaal Provincie Utrecht (platte tekst per agendapunt, geen PDF's)")
+        besluiten = haal_besluiten_utrecht(terugkijk_dagen=terugkijk_dagen)
+        log(f"{len(besluiten)} vergaderingen gevonden")
+        if not besluiten:
+            log("Geen vergaderingen gevonden in dit tijdvenster.")
+        nieuw, overgeslagen, fouten = schrijf_besluiten_utrecht(besluiten, output_map, droog)
         log_samenvatting(nieuw, overgeslagen, fouten, output_map)
         return
 

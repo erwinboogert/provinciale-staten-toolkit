@@ -16,6 +16,7 @@ import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta
+from html import unescape as html_unescape
 from pathlib import Path
 
 
@@ -904,6 +905,150 @@ def haal_besluiten_fryslan(terugkijk_dagen: int = 730) -> list[dict]:
         {"id": datum, "naam": "GS-besluiten", "datum": datum, "documenten": docs}
         for datum, docs in per_datum.items()
     ]
+
+
+# ── Provincie Utrecht: GS-besluiten (eigen iBabs-portaal, platte tekst) ───────
+
+def haal_besluiten_utrecht(terugkijk_dagen: int = 730) -> list[dict]:
+    """Haal GS-besluiten van Utrecht op — als platte tekst, niet als PDF.
+
+    Utrecht heeft een eigen iBabs-portaal (provincieutrecht.bestuurlijkeinformatie.nl,
+    los van het ORI-portaal dat voor Provinciale Staten gebruikt wordt) met een
+    categorie 'GS-Besluiten' en wekelijkse vergaderingen sinds 2023. Anders dan
+    bij elke andere bron in dit project hangen daar geen documenten aan de
+    vergaderingen — maar de volledige besluitenlijst (per agendapunt: nummer,
+    titel, essentie/samenvatting, besluit) staat gewoon als platte,
+    server-gerenderde HTML op de vergaderpagina zelf. Geen browser nodig
+    (geverifieerd met een kaal 'curl'-verzoek, geen JavaScript-afhankelijkheid
+    zoals eerder vermoed).
+
+    Geeft [{id, naam, datum, documenten: [{naam, tekst}]}] terug — met 'tekst'
+    in plaats van 'url', want er valt niets te downloaden. Wordt daarom niet
+    met download_vergaderingen_ibabs verwerkt maar met de eigen
+    schrijf_besluiten_utrecht().
+    """
+    sitename = "provincieutrecht"
+    categorieen = haal_categorieen_ibabs(sitename)
+    gs_categorieen = [cid for cid, naam in categorieen.items()
+                       if "gs-besluiten" in naam.strip().lower()]
+    if not gs_categorieen:
+        return []
+
+    vandaag = datetime.now()
+    vroegste = vandaag - timedelta(days=terugkijk_dagen)
+
+    vergaderingen = []
+    for cat_id in gs_categorieen:
+        for jaar in range(vroegste.year, vandaag.year + 1):
+            try:
+                jaar_html = _ibabs_get(
+                    sitename, f"/Agenda/RetrieveAgendasForYear?agendatypeId={cat_id}&year={jaar}")
+            except Exception as e:
+                log(f"  ! iBabs-fout bij ophalen {jaar}: {e}")
+                continue
+
+            for guid, dag, maand, jaartal in re.findall(
+                r'href="/Agenda/Index/([0-9a-f-]{36})"[^>]*>\s*'
+                r'<div class="agenda-link-title">\w+ (\d{1,2}) ([a-zA-Zéï]+) '
+                r'<span class="sr-only">(\d{4})</span></div>',
+                jaar_html,
+            ):
+                maand_nr = _DUTCH_MAANDEN.get(maand.lower())
+                if not maand_nr:
+                    continue
+                try:
+                    datum_obj = datetime(int(jaartal), maand_nr, int(dag))
+                except ValueError:
+                    continue
+                if not (vroegste <= datum_obj <= vandaag):
+                    continue
+
+                try:
+                    detail_html = _ibabs_get(sitename, f"/Agenda/Index/{guid}")
+                except Exception as e:
+                    log(f"  ! iBabs-fout bij ophalen vergadering {guid}: {e}")
+                    continue
+
+                agendapunten = []
+                for chunk in re.split(
+                        r'<div\s+class="panel panel-default agenda-item"', detail_html)[1:]:
+                    chunk = re.sub(r'^[^<]*>', '', chunk, count=1)
+                    m_id = re.search(r'class="panel-id">([^<]*)</div>', chunk)
+                    m_titel = re.search(
+                        r'class="panel-title-label"[^>]*>\s*(.*?)\s*</span>', chunk, re.DOTALL)
+                    nummer = m_id.group(1).strip() if m_id else ""
+                    titel = html_unescape(re.sub(r'\s+', ' ', m_titel.group(1)).strip()) if m_titel else "agendapunt"
+
+                    tekst = re.sub(r'<[^>]+>', ' ', chunk)
+                    tekst = tekst.replace('\xa0', ' ').replace('\r\n', '\n').replace('\r', '\n')
+                    tekst = re.sub(r'[ \t]+', ' ', tekst)
+                    tekst = re.sub(r' *\n *', '\n', tekst)
+                    tekst = re.sub(r'\n{2,}', '\n\n', tekst).strip()
+                    tekst = html_unescape(tekst)
+
+                    bestandsnaam = f"{nummer}-{titel}".strip("-") if nummer else titel
+                    agendapunten.append({"naam": bestandsnaam, "tekst": tekst})
+
+                vergaderingen.append({
+                    "id": guid,
+                    "naam": "GS-Besluiten",
+                    "datum": datum_obj.strftime("%Y-%m-%d"),
+                    "documenten": agendapunten,
+                })
+
+    return vergaderingen
+
+
+def schrijf_besluiten_utrecht(vergaderingen: list[dict], output_map: Path,
+                               droog: bool = False) -> tuple[int, int, int]:
+    """Schrijf Utrecht se GS-besluiten (platte tekst per agendapunt) naar bestand.
+
+    Analoog aan download_vergaderingen_ibabs, maar schrijft tekst rechtstreeks
+    weg in plaats van een URL te downloaden — Utrecht's bron heeft geen
+    document-bijlagen (zie haal_besluiten_utrecht).
+    """
+    totaal_nieuw = totaal_overgeslagen = totaal_fout = 0
+
+    for verg in vergaderingen:
+        agendapunten = verg["documenten"]
+        if not agendapunten:
+            continue
+
+        doelmap = output_map / veilige_naam(verg["naam"]) / verg["datum"]
+        nieuwe = [a for a in agendapunten
+                  if not (doelmap / (veilige_naam(a["naam"]) + ".txt")).exists()]
+
+        if not nieuwe:
+            totaal_overgeslagen += len(agendapunten)
+            continue
+
+        log(f"\n  {verg['naam']} ({verg['datum']}) — {len(nieuwe)} nieuw van {len(agendapunten)}")
+
+        if not droog:
+            doelmap.mkdir(parents=True, exist_ok=True)
+
+        for punt in agendapunten:
+            bestandsnaam = veilige_naam(punt["naam"]) + ".txt"
+            bestemming = doelmap / bestandsnaam
+
+            if bestemming.exists():
+                totaal_overgeslagen += 1
+                continue
+
+            if droog:
+                log(f"    [DROOG] {bestandsnaam}")
+                totaal_nieuw += 1
+                continue
+
+            try:
+                bestemming.write_text(punt["tekst"], encoding="utf-8")
+                log(f"    + {bestandsnaam} ({len(punt['tekst'])} tekens)")
+                totaal_nieuw += 1
+            except Exception as e:
+                log(f"    ! FOUT bij schrijven {bestandsnaam}: {e}")
+                totaal_fout += 1
+
+    return totaal_nieuw, totaal_overgeslagen, totaal_fout
 
 
 def parse_jaren_arg(standaard_dagen: int = 730) -> tuple[str | None, int]:
